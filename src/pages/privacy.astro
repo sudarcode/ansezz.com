@@ -1,9 +1,41 @@
 ---
 import Page from "@/layouts/Page.astro";
 import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import TagPillRow from "@/components/neobrutalist/TagPillRow.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import { Icon } from "astro-icon/components";
 import { SITE } from "@/consts";
 
-const updated = "2026-05-16";
+import { statSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+const updatedAt = statSync(fileURLToPath(import.meta.url)).mtime;
+const updatedLabel = updatedAt.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
+const tldr = [
+  { label: "No accounts", tone: "green" as const },
+  { label: "No forms", tone: "green" as const },
+  { label: "No cookies set by me", tone: "green" as const },
+  { label: "No tracking pixels", tone: "green" as const },
+  { label: "No selling data — ever", tone: "yellow" as const },
+];
+
+const sections = [
+  { id: "collect", label: "What I collect", icon: "lucide:database", tone: "paper" as const },
+  { id: "analytics", label: "Analytics", icon: "lucide:bar-chart-3", tone: "cyan" as const },
+  { id: "cookies", label: "Cookies", icon: "lucide:cookie", tone: "green" as const },
+  { id: "hosting", label: "Hosting & CDN", icon: "lucide:cloud", tone: "blue" as const },
+  { id: "third-party", label: "Third-party", icon: "lucide:external-link", tone: "yellow" as const },
+  { id: "email", label: "Email & booking", icon: "lucide:mail", tone: "pink" as const },
+  { id: "rights", label: "Your rights", icon: "lucide:shield-check", tone: "purple" as const },
+  { id: "changes", label: "Changes", icon: "lucide:history", tone: "paper" as const },
+];
 ---
 
 <Page
@@ -11,79 +43,205 @@ const updated = "2026-05-16";
   description={`Privacy notice for ${SITE.TITLE} — what data is collected, why, and your rights.`}
   eyebrow="Legal"
   heading="Privacy notice."
-  intro="Short version: this site does not collect personal data. No accounts, no forms, no cookies set by me. Long version below."
+  intro="Short version: this site collects nothing about you personally. No accounts, no forms, no cookies set by me. Long version below — written in plain English."
 >
-  <div class="mx-auto max-w-3xl px-5 pb-16 space-y-6">
-    <p class="mono text-xs opacity-60 uppercase tracking-widest">
-      Last updated: {updated}
-    </p>
+  <div class="mx-auto max-w-4xl px-5 pb-20">
+    <div class="flex flex-wrap items-center gap-3 mb-8">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border-[2.5px] border-ink bg-paper shadow-neo-xs mono text-[11px] font-bold uppercase tracking-widest">
+        <Icon name="lucide:calendar" class="h-3.5 w-3.5" />
+        Updated {updatedLabel}
+      </span>
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border-[2.5px] border-ink bg-green shadow-neo-xs mono text-[11px] font-bold uppercase tracking-widest">
+        <Icon name="lucide:lock" class="h-3.5 w-3.5" />
+        GDPR-friendly
+      </span>
+    </div>
 
-    <NeoCard tone="paper">
-      <h2 class="heading text-2xl uppercase mb-3">What I collect</h2>
-      <p class="text-sm leading-relaxed">
-        This site is a static blog and portfolio. It does <strong>not</strong>{" "}
-        store any personal information on its own. No login, no comments, no
-        contact form. The only way to reach me is via email, phone, LinkedIn, or
-        my Google Calendar booking link — and any data you share that way is
-        handled by those services under their own privacy terms.
+    <NeoCard tone="yellow" class="mb-10 p-6">
+      <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-70 mb-3">
+        ▸ TL;DR
       </p>
+      <ul class="flex flex-wrap gap-2">
+        {tldr.map((t) => (
+          <li>
+            <TagPill tone={t.tone}>
+              <Icon name="lucide:check" class="h-3 w-3" />
+              {t.label}
+            </TagPill>
+          </li>
+        ))}
+      </ul>
     </NeoCard>
 
-    <NeoCard tone="paper">
-      <h2 class="heading text-2xl uppercase mb-3">Analytics</h2>
-      <p class="text-sm leading-relaxed">
-        I use <a
-          href="https://plausible.io/privacy-focused-web-analytics"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline decoration-[3px] underline-offset-4 hover:bg-yellow">
-          Plausible Analytics
-        </a>, a privacy-respecting service hosted in the EU. Plausible does not use
-        cookies, does not collect personal data, and does not track you across sites.
-        I see aggregated traffic only (which pages were visited, where visitors came
-        from, what device class they used). No GDPR consent banner is required.
-      </p>
-    </NeoCard>
+    <TagPillRow label="Jump to" class="mb-12" scrollOnMobile>
+      {sections.map((s) => (
+        <li>
+          <TagPill tone="paper" href={`#${s.id}`}>{s.label}</TagPill>
+        </li>
+      ))}
+    </TagPillRow>
 
-    <NeoCard tone="paper">
-      <h2 class="heading text-2xl uppercase mb-3">Hosting & CDN</h2>
-      <p class="text-sm leading-relaxed">
-        The site is hosted on Cloudflare Pages / Vercel. The host stores access
-        logs (IP, user agent, requested URL, timestamp) for security and
-        performance, retained under their own retention policies.
-      </p>
-    </NeoCard>
+    <div class="space-y-6">
+      <NeoCard id="collect" tone="paper" class="p-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
+            <Icon name="lucide:database" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">What I collect</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          This site is a static blog and portfolio. It does <strong>not</strong>
+          store any personal information on its own. No login, no comments, no
+          contact form. The only way to reach me is via email, phone, LinkedIn,
+          or my Google Calendar booking link — and any data you share that way
+          is handled by those services under their own privacy terms.
+        </p>
+      </NeoCard>
 
-    <NeoCard tone="paper">
-      <h2 class="heading text-2xl uppercase mb-3">Third-party content</h2>
-      <p class="text-sm leading-relaxed">
-        Fonts are loaded via the Astro font provider (self-hosted at build
-        time). Images are served from this domain. External links in blog posts
-        point to other companies' sites — once you leave this domain, their
-        privacy policies apply.
-      </p>
-    </NeoCard>
+      <NeoCard id="analytics" tone="cyan" class="p-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
+            <Icon name="lucide:bar-chart-3" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Analytics</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          I use <a
+            href="https://plausible.io/privacy-focused-web-analytics"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline decoration-[3px] underline-offset-4 hover:bg-yellow"
+          >
+            Plausible Analytics
+          </a>, a privacy-respecting service hosted in the EU. Plausible does
+          not use cookies, does not collect personal data, and does not track
+          you across sites. I see aggregated traffic only (which pages were
+          visited, where visitors came from, what device class they used). No
+          GDPR consent banner is required.
+        </p>
+      </NeoCard>
 
-    <NeoCard tone="paper">
-      <h2 class="heading text-2xl uppercase mb-3">Your rights</h2>
-      <p class="text-sm leading-relaxed">
-        Under GDPR and similar regulations, you may request access to, or
-        deletion of, any personal data I hold about you. Since I do not collect
-        any, this typically means: nothing to access, nothing to delete. If you
-        have specific questions, email <a
-          href={`mailto:${SITE.EMAIL}`}
-          class="underline decoration-[3px] underline-offset-4 hover:bg-yellow">
-          {SITE.EMAIL}
-        </a>.
-      </p>
-    </NeoCard>
+      <NeoCard id="cookies" tone="green" class="p-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
+            <Icon name="lucide:cookie" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Cookies</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          None. This site sets zero cookies, zero localStorage, zero session
+          identifiers. If your browser stores anything for this domain, it came
+          from a browser extension — not from me.
+        </p>
+      </NeoCard>
 
-    <NeoCard tone="yellow">
-      <h2 class="heading text-2xl uppercase mb-3">Changes</h2>
-      <p class="text-sm leading-relaxed">
-        If the site starts collecting data (e.g. a newsletter signup), this
-        notice will be updated and the "last updated" date above will change.
+      <NeoCard id="hosting" tone="blue" class="p-6 scroll-mt-24 text-paper">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper text-ink">
+            <Icon name="lucide:cloud" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Hosting & CDN</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          Hosted on Cloudflare Pages / Vercel. The host stores access logs (IP,
+          user agent, requested URL, timestamp) for security and performance,
+          retained under their own retention policies. I do not link those logs
+          to any identity and cannot match them to a person.
+        </p>
+      </NeoCard>
+
+      <NeoCard id="third-party" tone="yellow" class="p-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
+            <Icon name="lucide:external-link" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Third-party content</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          Fonts are loaded via the Astro font provider (self-hosted at build
+          time). Images are served from this domain. External links in blog
+          posts point to other companies' sites — once you leave this domain,
+          their privacy policies apply.
+        </p>
+      </NeoCard>
+
+      <NeoCard id="email" tone="pink" class="p-6 scroll-mt-24 text-paper">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper text-ink">
+            <Icon name="lucide:mail" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Email & booking</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          If you email me at <a
+            href={`mailto:${SITE.EMAIL}`}
+            class="underline decoration-[3px] underline-offset-4 hover:bg-yellow hover:text-ink"
+          >{SITE.EMAIL}</a> or book a call via Google Calendar, I keep that
+          thread / event only as long as needed to reply or run the engagement.
+          I do not add you to any list, do not share your address, and will
+          delete on request.
+        </p>
+      </NeoCard>
+
+      <NeoCard id="rights" tone="purple" class="p-6 scroll-mt-24 text-paper">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper text-ink">
+            <Icon name="lucide:shield-check" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Your rights</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          Under GDPR and similar regulations, you may request access to, or
+          deletion of, any personal data I hold about you. Since I collect
+          basically none, this typically means: nothing to access, nothing to
+          delete. If you have specific questions, email <a
+            href={`mailto:${SITE.EMAIL}`}
+            class="underline decoration-[3px] underline-offset-4 hover:bg-yellow hover:text-ink"
+          >{SITE.EMAIL}</a>.
+        </p>
+      </NeoCard>
+
+      <NeoCard id="changes" tone="paper" class="p-6 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
+            <Icon name="lucide:history" class="h-4 w-4" />
+          </span>
+          <h2 class="heading text-xl uppercase">Changes</h2>
+        </div>
+        <p class="text-sm leading-relaxed">
+          If the site starts collecting data (e.g. a newsletter signup), this
+          notice will be updated and the "Last updated" date above will change.
+          No retroactive changes — anything new applies forward only.
+        </p>
+      </NeoCard>
+    </div>
+
+    <div class="relative mt-12 border-[3px] border-ink rounded-[6px] bg-bg-alt shadow-neo-md p-6 md:p-8">
+      <div class="absolute -top-4 -right-3 hidden md:block">
+        <StickyNote tone="yellow" tilt={4} class="max-w-[180px]">
+          <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+            ▸ Plain English
+          </p>
+          <p class="text-xs font-bold leading-snug">
+            Questions? Just ask. No legal form needed.
+          </p>
+        </StickyNote>
+      </div>
+      <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">
+        ▸ Got a question?
       </p>
-    </NeoCard>
+      <h3 class="display text-2xl md:text-3xl mb-4">
+        Need clarification on any of this?
+      </h3>
+      <div class="flex flex-wrap gap-3">
+        <NeoButton href={`mailto:${SITE.EMAIL}`} variant="primary">
+          <Icon name="lucide:mail" class="h-4 w-4" />
+          Email me
+        </NeoButton>
+        <NeoButton href="/contact/" variant="secondary">
+          Contact options →
+        </NeoButton>
+      </div>
+    </div>
   </div>
 </Page>

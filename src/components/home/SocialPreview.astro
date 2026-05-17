@@ -1,0 +1,59 @@
+---
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import { Icon } from "astro-icon/components";
+import { X_HANDLE } from "@/consts";
+---
+
+<section class="bg-bg border-t-[3px] border-ink py-16 md:py-20">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+      <div>
+        <p class="mono text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">
+          ▸ Social
+        </p>
+        <h2 class="display text-3xl md:text-4xl mt-2">Live from the feed.</h2>
+        <p class="mt-3 text-base text-ink-soft max-w-xl">
+          Production logs, shipping notes, contrarian takes — Laravel, Shopify,
+          AI. Real-time on X.
+        </p>
+      </div>
+      <NeoButton href="/feed/" variant="primary" size="sm">
+        Open feed →
+      </NeoButton>
+    </div>
+
+    <NeoCard
+      tone="paper"
+      href={`https://x.com/${X_HANDLE}`}
+      hover
+      class="block p-6 md:p-8"
+      ariaLabel="Open X profile"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="inline-flex items-center justify-center h-10 w-10 rounded-[4px] border-[2.5px] border-ink bg-ink text-paper">
+          <Icon name="lucide:twitter" class="h-5 w-5" />
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border-[2.5px] border-ink bg-green shadow-neo-xs mono text-[10px] font-bold uppercase tracking-widest">
+          <span class="relative inline-flex h-1.5 w-1.5">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-ink opacity-75 animate-ping"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-ink"></span>
+          </span>
+          Live
+        </span>
+      </div>
+      <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-60">
+        ▸ X · @{X_HANDLE}
+      </p>
+      <p class="display text-2xl md:text-3xl mt-1 leading-tight">
+        Real-time timeline.
+      </p>
+      <p class="text-sm md:text-base opacity-70 mt-3 leading-snug max-w-2xl">
+        Engineering threads, shipping logs, hot takes — auto-pulled live.
+      </p>
+      <p class="mt-5 mono text-[10px] font-bold uppercase tracking-widest">
+        Open profile →
+      </p>
+    </NeoCard>
+  </div>
+</section>

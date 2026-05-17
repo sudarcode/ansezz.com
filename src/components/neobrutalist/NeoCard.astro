@@ -1,7 +1,16 @@
 ---
 import { externalLinkAttrs } from "@/lib/links";
 
-type Tone = "paper" | "yellow" | "pink" | "blue" | "cyan" | "green" | "red" | "ink";
+type Tone =
+  | "paper"
+  | "yellow"
+  | "pink"
+  | "blue"
+  | "cyan"
+  | "green"
+  | "red"
+  | "purple"
+  | "ink";
 type Shadow = "sm" | "md" | "lg" | "xl";
 type ElementTag = "div" | "article" | "section" | "a" | "li";
 
@@ -33,6 +42,7 @@ const toneClass: Record<Tone, string> = {
   cyan: "bg-cyan text-ink",
   green: "bg-green text-ink",
   red: "bg-red text-ink",
+  purple: "bg-purple text-paper",
   ink: "bg-ink text-paper",
 };
 
@@ -56,7 +66,7 @@ const style = tilt ? `transform: rotate(${tilt}deg);` : undefined;
   {...externalAttrs}
   aria-label={ariaLabel}
   class:list={[
-    "block border-[3px] border-ink rounded-[3px] p-5",
+    "block border-[3px] border-ink rounded-[4px] p-6 md:p-7",
     toneClass[tone],
     shadowClass[shadow],
     hoverClass,

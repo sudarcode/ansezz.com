@@ -4,8 +4,21 @@ import Page from "@/layouts/Page.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import PostMeta from "@/components/blog/PostMeta.astro";
 import TagPill from "@/components/neobrutalist/TagPill.astro";
+import TagPillRow from "@/components/neobrutalist/TagPillRow.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import NewsletterCallout from "@/components/home/NewsletterCallout.astro";
+import { Icon } from "astro-icon/components";
 import { getReadingTime } from "@/lib/reading";
-import { BLOG, BLOG_CATEGORIES, CATEGORY_LABEL, CATEGORY_TONE } from "@/consts";
+import {
+  BLOG,
+  BLOG_CATEGORIES,
+  CATEGORY_LABEL,
+  CATEGORY_TONE,
+} from "@/consts";
 
 const all = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) =>
@@ -16,6 +29,40 @@ const all = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 const [featured, ...rest] = all;
 const featuredRt = featured ? getReadingTime(featured.body) : "";
 const featuredHero = featured?.data.heroImage;
+
+const PAGE_SIZE = 9;
+const visible = rest.slice(0, PAGE_SIZE);
+const hasMore = rest.length > PAGE_SIZE;
+
+const totalPosts = all.length;
+const latestDate = all[0]?.data.publishDate;
+const latestDateStr = latestDate
+  ? latestDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  : "";
+
+const categoryIcons: Record<string, string> = {
+  laravel: "lucide:server",
+  ai: "lucide:brain-circuit",
+  shopify: "lucide:shopping-bag",
+  devops: "lucide:cloud",
+  architecture: "lucide:layers",
+  career: "lucide:user",
+};
+
+const categoryCounts = Object.fromEntries(
+  BLOG_CATEGORIES.map((c) => [
+    c,
+    all.filter((p) => p.data.category === c).length,
+  ]),
+) as Record<(typeof BLOG_CATEGORIES)[number], number>;
+
+const allTags = new Set<string>();
+all.forEach((p) => p.data.tags.forEach((t) => allTags.add(t)));
+const topTags = [...allTags].slice(0, 12);
 ---
 
 <Page
@@ -23,70 +70,147 @@ const featuredHero = featured?.data.heroImage;
   description={BLOG.DESCRIPTION}
   eyebrow="Blog"
   heading="Notes from the trenches."
-  intro="Laravel deep-dives, AI engineering patterns, Shopify Plus, and the occasional hot take."
+  intro="Laravel internals, AI engineering with Claude + MCP, RAG pipelines, Shopify Plus, DevOps. Production lessons from shipped work — every post earns its slot. Featured = hand-picked or most recent."
 >
-  <div class="mx-auto max-w-4xl px-5 pb-16 space-y-12">
-    <div>
-      <p
-        class="mono text-xs font-bold uppercase tracking-widest opacity-60 mb-3"
+  <section class="mx-auto max-w-6xl px-5 pb-6">
+    <div class="flex flex-wrap items-center gap-4">
+      <StickyNote tone="yellow" tilt={-2} class="max-w-[300px]">
+        <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+          ▸ {totalPosts} posts · last updated
+        </p>
+        <p class="text-sm font-bold leading-snug">{latestDateStr}</p>
+      </StickyNote>
+      <a
+        href="/rss.xml"
+        class="inline-flex items-center gap-2 border-[2.5px] border-ink rounded-full bg-paper px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm hover:bg-yellow"
       >
-        Filter by category
-      </p>
-      <ul class="flex flex-wrap gap-2">
-        <li><TagPill tone="ink" href="/blog/">All</TagPill></li>
+        <Icon name="lucide:rss" class="h-3.5 w-3.5" />
+        RSS feed
+      </a>
+    </div>
+  </section>
+
+  <HalftoneSection tone="bg" class="pb-2">
+    <div class="mx-auto max-w-6xl px-5">
+      <TagPillRow scrollOnMobile sticky class="!top-[60px] md:!top-[64px]">
+        <li>
+          <TagPill tone="ink" href="/blog/" active>All · {totalPosts}</TagPill>
+        </li>
         {
           BLOG_CATEGORIES.map((c) => (
             <li>
               <TagPill tone={CATEGORY_TONE[c]} href={`/blog/category/${c}/`}>
-                {CATEGORY_LABEL[c]}
+                {CATEGORY_LABEL[c]} · {categoryCounts[c]}
               </TagPill>
             </li>
           ))
         }
-      </ul>
+      </TagPillRow>
     </div>
+  </HalftoneSection>
+
+  <div class="mx-auto max-w-6xl px-5 pb-16 space-y-14 pt-10">
+    <section>
+      <div class="mb-6">
+        <BurstBadge tone="cyan" size="sm" class="mb-4">01</BurstBadge>
+        <h2 class="display text-2xl md:text-3xl leading-tight">
+          Browse by topic.
+        </h2>
+        <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+          ▸ Pick a lane · click a card to filter
+        </p>
+      </div>
+      <ul class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        {
+          BLOG_CATEGORIES.map((c, i) => (
+            <li>
+              <NeoCard
+                href={`/blog/category/${c}/`}
+                tone={CATEGORY_TONE[c]}
+                shadow="sm"
+                hover
+                tilt={i % 2 === 0 ? -0.4 : 0.4}
+                class="!p-4 text-center flex flex-col gap-2 items-center"
+              >
+                <span
+                  class="inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-ink rounded-full bg-paper text-ink shadow-neo-xs"
+                  aria-hidden="true"
+                >
+                  <Icon name={categoryIcons[c] ?? "lucide:tag"} class="h-5 w-5" />
+                </span>
+                <p class="heading text-sm uppercase">{CATEGORY_LABEL[c]}</p>
+                <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+                  {categoryCounts[c]} {categoryCounts[c] === 1 ? "post" : "posts"}
+                </p>
+              </NeoCard>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
     {
       featured ? (
-        <a
-          href={`/blog/${featured.id}/`}
-          aria-label={`Read ${featured.data.title}`}
-          class="group block border-[3px] border-ink shadow-neo-lg bg-yellow overflow-hidden transition-all hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl"
-        >
-          {featuredHero && (
-            <div class="relative aspect-[2/1] overflow-hidden border-b-[3px] border-ink bg-ink">
-              <img
-                src={featuredHero.url}
-                alt={featuredHero.alt}
-                width="1200"
-                height="600"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-          )}
-          <div class="p-6 md:p-10">
-            <p class="mono text-xs font-bold uppercase tracking-widest mb-3">
-              ▸ Latest
-            </p>
-            <h2 class="display text-3xl md:text-5xl mb-4 leading-tight">
-              {featured.data.title}
+        <section>
+          <div class="mb-6">
+            <BurstBadge tone="pink" size="sm" class="mb-4">02</BurstBadge>
+            <h2 class="display text-2xl md:text-3xl leading-tight">
+              Latest drop.
             </h2>
-            <p class="text-base md:text-lg mb-4">
-              {featured.data.description}
+            <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+              ▸ Most recent · or pinned by hand
             </p>
-            <PostMeta
-              date={featured.data.publishDate}
-              updatedDate={featured.data.updatedDate}
-              category={featured.data.category}
-              readingTime={featuredRt}
-            />
           </div>
-        </a>
+          <a
+            href={`/blog/${featured.id}/`}
+            aria-label={`Read ${featured.data.title}`}
+            data-neo-hover
+            class="group block border-[3px] border-ink rounded-[4px] shadow-neo-lg bg-yellow overflow-hidden transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl"
+          >
+            <div class="grid md:grid-cols-[1.1fr_1fr] items-stretch">
+              {featuredHero && (
+                <div class="relative aspect-[2/1] md:aspect-auto md:h-full overflow-hidden border-b-[3px] md:border-b-0 md:border-r-[3px] border-ink bg-ink min-h-[280px]">
+                  <img
+                    src={featuredHero.url}
+                    alt={featuredHero.alt}
+                    width="1200"
+                    height="800"
+                    loading="eager"
+                    decoding="async"
+                    fetchpriority="high"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div class="p-6 md:p-10 flex flex-col gap-4">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <BurstBadge tone="pink" size="sm">NEW</BurstBadge>
+                  <span class="mono text-xs font-bold uppercase tracking-widest">
+                    ▸ Featured post
+                  </span>
+                </div>
+                <h3 class="display text-3xl md:text-5xl leading-tight">
+                  {featured.data.title}
+                </h3>
+                <p class="text-base md:text-lg leading-snug">
+                  {featured.data.description}
+                </p>
+                <PostMeta
+                  date={featured.data.publishDate}
+                  updatedDate={featured.data.updatedDate}
+                  category={featured.data.category}
+                  readingTime={featuredRt}
+                  linkCategory={false}
+                />
+                <p class="mt-2 font-bold underline underline-offset-4 decoration-[3px]">
+                  Read post →
+                </p>
+              </div>
+            </div>
+          </a>
+        </section>
       ) : (
-        <div class="border-[3px] border-dashed border-ink p-12 text-center">
+        <div class="border-[3px] border-dashed border-ink rounded-[4px] p-12 text-center">
           <p class="display text-3xl mb-2">No posts yet</p>
           <p class="opacity-70">First post lands soon.</p>
         </div>
@@ -94,13 +218,101 @@ const featuredHero = featured?.data.heroImage;
     }
 
     {
-      rest.length > 0 && (
-        <div class="grid gap-6 sm:grid-cols-2">
-          {rest.map((post, i) => (
-            <PostCard post={post} eager={i < 2} />
-          ))}
-        </div>
+      visible.length > 0 && (
+        <section>
+          <div class="mb-6 flex items-end justify-between gap-4 flex-wrap">
+            <div>
+              <BurstBadge tone="yellow" size="sm" class="mb-4">
+                03
+              </BurstBadge>
+              <h2 class="display text-2xl md:text-3xl leading-tight">
+                More posts.
+              </h2>
+              <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+                ▸ {visible.length} of {rest.length} · paginated below
+              </p>
+            </div>
+            <NeoButton href="#newsletter" variant="secondary" size="md">
+              <Icon name="lucide:mail" class="h-4 w-4" />
+              Subscribe
+            </NeoButton>
+          </div>
+          <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {visible.map((post, i) => (
+              <li>
+                <PostCard post={post} eager={i < 6} />
+              </li>
+            ))}
+          </ul>
+        </section>
       )
     }
+
+    {
+      topTags.length > 0 && (
+        <section>
+          <div class="mb-5">
+            <BurstBadge tone="purple" size="sm" class="mb-4">
+              04
+            </BurstBadge>
+            <h2 class="display text-2xl md:text-3xl leading-tight">
+              Tags.
+            </h2>
+            <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+              ▸ Search by specific tech
+            </p>
+          </div>
+          <ul class="flex flex-wrap gap-2">
+            {topTags.map((t, i) => {
+              const tones = [
+                "yellow",
+                "pink",
+                "cyan",
+                "green",
+                "red",
+                "blue",
+                "purple",
+                "paper",
+              ] as const;
+              const tagSlug = t.toLowerCase().replace(/\s+/g, "-");
+              return (
+                <li>
+                  <TagPill
+                    tone={tones[i % tones.length]}
+                    size="sm"
+                    href={`/blog/tag/${tagSlug}/`}
+                  >
+                    #{t}
+                  </TagPill>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      hasMore && (
+        <nav
+          class="flex items-center justify-between gap-4 flex-wrap border-t-[3px] border-ink pt-8"
+          aria-label="Blog pagination"
+        >
+          <NeoButton variant="secondary" size="md" disabled>
+            ← Newer
+          </NeoButton>
+          <p class="mono text-xs font-bold uppercase tracking-widest opacity-70">
+            Page 1 · {Math.ceil(rest.length / PAGE_SIZE)} total
+          </p>
+          <NeoButton href="/blog/page/2/" variant="primary" size="md">
+            Older →
+          </NeoButton>
+        </nav>
+      )
+    }
+  </div>
+
+  <div id="newsletter">
+    <NewsletterCallout />
   </div>
 </Page>

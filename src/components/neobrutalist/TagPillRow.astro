@@ -1,0 +1,40 @@
+---
+interface Props {
+  label?: string;
+  scrollOnMobile?: boolean;
+  sticky?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  scrollOnMobile = true,
+  sticky = false,
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    sticky ? "sticky top-[64px] z-30 bg-bg/95 border-y-[2px] border-ink py-3" : "",
+    className,
+  ]}
+>
+  {
+    label && (
+      <p class="mono text-xs font-bold uppercase tracking-widest opacity-60 mb-2">
+        {label}
+      </p>
+    )
+  }
+  <ul
+    class:list={[
+      "flex gap-2",
+      scrollOnMobile
+        ? "tag-row-scroll overflow-x-auto sm:overflow-visible sm:flex-wrap -mx-5 px-5 sm:mx-0 sm:px-0"
+        : "flex-wrap",
+    ]}
+  >
+    <slot />
+  </ul>
+</div>

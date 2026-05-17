@@ -3,6 +3,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Hero from "@/components/home/Hero.astro";
 import Stats from "@/components/home/Stats.astro";
 import FeaturedPosts from "@/components/home/FeaturedPosts.astro";
+import WhatIDo from "@/components/home/WhatIDo.astro";
+import Services from "@/components/home/Services.astro";
+import TaglineBand from "@/components/home/TaglineBand.astro";
+import SocialPreview from "@/components/home/SocialPreview.astro";
+import NewsletterCallout from "@/components/home/NewsletterCallout.astro";
 import { HOME, SITE, OWNER, SOCIALS } from "@/consts";
 
 const personLd = {
@@ -22,20 +27,51 @@ const personLd = {
     addressLocality: "Meknes",
     addressCountry: "MA",
   },
+  worksFor: undefined,
   knowsAbout: [
     "Laravel",
     "PHP",
+    "Laravel Octane",
+    "Horizon",
+    "Filament",
     "Shopify Plus",
+    "Shopify App Development",
+    "Shopify GraphQL Admin API",
+    "Shopify Functions",
     "AI Engineering",
     "Anthropic Claude",
+    "Claude API",
     "Model Context Protocol",
+    "MCP Servers",
     "Retrieval-Augmented Generation",
+    "RAG",
+    "Agentic AI",
+    "AI Agents",
+    "OpenAI",
+    "Vector Search",
     "PostgreSQL",
     "pgvector",
+    "Redis",
+    "Multi-tenant SaaS",
+    "B2B SaaS",
+    "Clean Architecture",
+    "Domain-Driven Design",
+    "Test-Driven Development",
     "Docker",
     "Coolify",
     "Software Architecture",
+    "Fractional CTO",
   ],
+  knowsLanguage: ["ar", "en", "fr"],
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "Senior Lead Backend Engineer",
+    occupationLocation: {
+      "@type": "Country",
+      name: "Morocco",
+    },
+    skills: "Laravel, Shopify Plus, AI Engineering, Anthropic Claude, MCP, RAG, PostgreSQL, pgvector, Multi-tenant SaaS, Clean Architecture, TDD",
+  },
   sameAs: SOCIALS.filter((s) => s.HREF.startsWith("http")).map((s) => s.HREF),
 };
 
@@ -49,14 +85,65 @@ const websiteLd = {
   inLanguage: "en",
   publisher: { "@id": `${SITE.URL}#person` },
 };
+
+const professionalServiceLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE.URL}#service`,
+  name: `${OWNER.NAME} — Software Engineering & AI Consulting`,
+  description:
+    "Senior Laravel backend engineering, Shopify Plus app development, AI feature integration (Claude, MCP, RAG), software architecture audits, and fractional CTO engagements.",
+  url: SITE.URL,
+  provider: { "@id": `${SITE.URL}#person` },
+  areaServed: ["United States", "European Union", "MENA", "Worldwide"],
+  serviceType: [
+    "Laravel Development",
+    "Shopify Plus App Development",
+    "AI Integration",
+    "Software Architecture",
+    "Fractional CTO",
+    "Technical Consulting",
+  ],
+  offers: [
+    {
+      "@type": "Offer",
+      name: "MVP Build (4–12 weeks)",
+      description:
+        "End-to-end Laravel SaaS MVP — auth, multi-tenancy, billing, dashboards, deployment.",
+    },
+    {
+      "@type": "Offer",
+      name: "AI Integration Sprint (2–4 weeks)",
+      description:
+        "Add production AI to an existing product — Claude, MCP, RAG, agents, with evals and cost guardrails.",
+    },
+    {
+      "@type": "Offer",
+      name: "Shopify Plus App",
+      description:
+        "Custom Shopify app — embedded admin, billing, GraphQL Admin & Catalog API, Functions, agentic commerce.",
+    },
+    {
+      "@type": "Offer",
+      name: "Architecture Audit",
+      description:
+        "Senior architecture review — code, schema, infra, deployment, risk. One-week sprint with remediation plan.",
+    },
+  ],
+};
 ---
 
 <BaseLayout
   title={SITE.TITLE}
   description={HOME.DESCRIPTION}
-  structuredData={[personLd, websiteLd]}
+  structuredData={[personLd, websiteLd, professionalServiceLd]}
 >
   <Hero />
   <Stats />
+  <WhatIDo />
+  <Services />
   <FeaturedPosts />
+  <SocialPreview />
+  <TaglineBand />
+  <NewsletterCallout />
 </BaseLayout>

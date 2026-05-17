@@ -30,7 +30,7 @@ const all = (await getCollection("blog", ({ data }) => !data.draft))
       b.data.publishDate.getTime() - a.data.publishDate.getTime(),
   );
 
-const tones = ["paper", "yellow", "cyan", "green", "pink", "red"] as const;
+const tones = ["paper", "yellow", "cyan", "green", "pink", "red", "purple"] as const;
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -88,13 +88,19 @@ const breadcrumbLd = {
 
     {
       all.length > 0 ? (
-        <div class="grid gap-6 sm:grid-cols-2">
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {all.map((post, i) => (
-            <PostCard post={post} eager={i < 2} />
+            <li>
+              <PostCard
+                post={post}
+                eager={i < 3}
+                tone={tones[i % tones.length]}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
-        <div class="border-[3px] border-dashed border-ink p-12 text-center">
+        <div class="border-[3px] border-dashed border-ink rounded-[4px] p-12 text-center">
           <p class="display text-3xl mb-2">Nothing here yet</p>
           <p class="opacity-70">
             No posts in {label} yet. Check back soon.

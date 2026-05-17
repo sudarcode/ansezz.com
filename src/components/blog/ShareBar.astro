@@ -1,0 +1,133 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  title: string;
+  url: string;
+  class?: string;
+  vertical?: boolean;
+  label?: string;
+}
+
+const {
+  title,
+  url,
+  class: className = "",
+  vertical = false,
+  label = "Share this post",
+} = Astro.props;
+
+const encoded = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+const channels = [
+  {
+    name: "X",
+    href: `https://x.com/intent/tweet?url=${encoded}&text=${encodedTitle}`,
+    icon: "lucide:twitter",
+    hover: "hover:bg-cyan",
+  },
+  {
+    name: "LinkedIn",
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`,
+    icon: "lucide:linkedin",
+    hover: "hover:bg-blue hover:text-paper",
+  },
+  {
+    name: "Facebook",
+    href: `https://www.facebook.com/sharer/sharer.php?u=${encoded}`,
+    icon: "lucide:facebook",
+    hover: "hover:bg-blue hover:text-paper",
+  },
+  {
+    name: "WhatsApp",
+    href: `https://wa.me/?text=${encodedTitle}%20${encoded}`,
+    icon: "lucide:message-circle",
+    hover: "hover:bg-green",
+  },
+  {
+    name: "Reddit",
+    href: `https://www.reddit.com/submit?url=${encoded}&title=${encodedTitle}`,
+    icon: "lucide:message-square",
+    hover: "hover:bg-red hover:text-paper",
+  },
+  {
+    name: "Hacker News",
+    href: `https://news.ycombinator.com/submitlink?u=${encoded}&t=${encodedTitle}`,
+    icon: "lucide:newspaper",
+    hover: "hover:bg-yellow",
+  },
+  {
+    name: "Email",
+    href: `mailto:?subject=${encodedTitle}&body=${encoded}`,
+    icon: "lucide:mail",
+    hover: "hover:bg-purple hover:text-paper",
+  },
+];
+---
+
+<div
+  class:list={[
+    "flex items-center gap-2",
+    vertical ? "flex-col" : "flex-wrap",
+    className,
+  ]}
+  data-share-bar
+  data-share-url={url}
+  data-share-title={title}
+>
+  <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-60">
+    ▸ {label}
+  </p>
+  {channels.map((c) => (
+    <a
+      href={c.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[
+        "inline-flex items-center justify-center h-9 w-9 border-[2.5px] border-ink rounded-[4px] bg-paper shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm",
+        c.hover,
+      ]}
+      aria-label={`Share on ${c.name}`}
+      title={`Share on ${c.name}`}
+    >
+      <Icon name={c.icon} class="h-4 w-4" />
+    </a>
+  ))}
+  <button
+    type="button"
+    data-copy-link
+    class="inline-flex items-center justify-center h-9 w-9 border-[2.5px] border-ink rounded-[4px] bg-paper shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm hover:bg-pink hover:text-paper"
+    aria-label="Copy link to clipboard"
+    title="Copy link"
+    data-copy-label="Copy link"
+    data-copied-label="Copied!"
+  >
+    <Icon name="lucide:link" class="h-4 w-4" data-copy-icon />
+    <span class="sr-only" data-copy-status>Copy link</span>
+  </button>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-copy-link]",
+  );
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const bar = btn.closest<HTMLElement>("[data-share-bar]");
+      const url = bar?.dataset.shareUrl ?? window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.classList.add("!bg-green");
+        const status = btn.querySelector<HTMLElement>("[data-copy-status]");
+        if (status) status.textContent = "Copied to clipboard";
+        setTimeout(() => {
+          btn.classList.remove("!bg-green");
+          if (status) status.textContent = "Copy link";
+        }, 1400);
+      } catch {
+        // ignore
+      }
+    });
+  });
+</script>

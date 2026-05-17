@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 const featured = posts
@@ -11,36 +12,44 @@ const featured = posts
       b.data.publishDate.getTime() - a.data.publishDate.getTime(),
   )
   .slice(0, 3);
+
+const tones = ["yellow", "cyan", "green"] as const;
 ---
 
-<section class="mx-auto max-w-5xl px-5 py-16 md:py-20 relative">
-  <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
-    <div>
-      <BurstBadge tone="yellow" size="sm" class="mb-4">02</BurstBadge>
-      <h2 class="display text-3xl md:text-4xl">From the blog</h2>
-      <p class="mt-3 text-ink/70 max-w-md">
-        Notes from the trenches — Laravel internals, AI agent design, Shopify
-        Plus.
+<section class="mx-auto max-w-6xl px-5 py-16 md:py-24 relative">
+  <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end mb-10">
+    <div class="max-w-2xl">
+      <BurstBadge tone="yellow" size="sm" class="mb-5">02</BurstBadge>
+      <h2 class="display text-[clamp(2rem,4.5vw,3.25rem)] leading-[0.95]">
+        From the
+        <span class="bg-yellow inline-block px-2 -mx-1">trenches</span>.
+      </h2>
+      <p class="mt-4 text-base md:text-lg text-ink-soft leading-snug">
+        Notes on Laravel internals, AI agent design, Shopify Plus, and the
+        occasional hot take. No fluff.
       </p>
     </div>
-    <a
-      href="/blog/"
-      class="inline-flex items-center gap-2 border-[3px] border-ink bg-paper px-5 py-2.5 font-bold uppercase text-sm shadow-neo-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-md hover:bg-yellow"
-    >
+    <NeoButton href="/blog/" variant="secondary" size="lg">
       All posts →
-    </a>
+    </NeoButton>
   </div>
   {
     featured.length === 0 ? (
-      <p class="border-[3px] border-dashed border-ink p-8 text-center font-bold">
+      <p class="border-[3px] border-dashed border-ink rounded-[4px] p-8 text-center font-bold">
         Blog post coming soon. Pinky promise.
       </p>
     ) : (
-      <div class="grid gap-6 md:grid-cols-3">
-        {featured.map((post) => (
-          <PostCard post={post} />
+      <ul class="grid gap-6 md:grid-cols-3">
+        {featured.map((post, i) => (
+          <li>
+            <PostCard
+              post={post}
+              eager={i < 3}
+              tone={tones[i % tones.length]}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
     )
   }
 </section>

@@ -1,0 +1,79 @@
+---
+import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import SocialButton from "@/components/neobrutalist/SocialButton.astro";
+import AvailabilityBadge from "@/components/neobrutalist/AvailabilityBadge.astro";
+import { Icon } from "astro-icon/components";
+import { OWNER, SITE } from "@/consts";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<aside
+  class:list={[
+    "relative border-[3px] border-ink rounded-[4px] bg-paper shadow-neo-md p-6 md:p-10",
+    className,
+  ]}
+>
+  <div class="grid gap-6 md:grid-cols-[160px_1fr] md:gap-10 items-start">
+    <div
+      class="relative flex justify-center md:justify-start"
+      data-mascot="author"
+    >
+      <RobotMascot tone="yellow" size={160} />
+    </div>
+    <div>
+      <p
+        class="mono text-xs font-bold uppercase tracking-widest text-pink-deep mb-2"
+      >
+        ▸ Written by
+      </p>
+      <h2 class="display text-3xl md:text-4xl mb-1">{OWNER.NAME}</h2>
+      <p class="text-base md:text-lg text-ink/80 leading-snug mb-4">
+        {OWNER.TAGLINE}
+      </p>
+
+      <div class="mb-5">
+        <AvailabilityBadge />
+      </div>
+
+      <div class="flex flex-wrap gap-3 items-center">
+        <NeoButton href="/contact/" variant="primary" size="md">
+          <Icon name="lucide:mail" class="h-4 w-4" />
+          Hire me
+        </NeoButton>
+        <NeoButton href="/about/" variant="secondary" size="md">
+          More about me →
+        </NeoButton>
+
+        <span class="inline-flex items-center gap-2 ml-1">
+          <SocialButton
+            href="https://github.com/ansezz"
+            icon="lucide:github"
+            label="GitHub"
+            tone="paper"
+            size="sm"
+          />
+          <SocialButton
+            href="https://linkedin.com/in/ansezz"
+            icon="lucide:linkedin"
+            label="LinkedIn"
+            tone="cyan"
+            size="sm"
+          />
+          <SocialButton
+            href={`mailto:${SITE.EMAIL}`}
+            icon="lucide:mail"
+            label="Email"
+            tone="yellow"
+            size="sm"
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+</aside>

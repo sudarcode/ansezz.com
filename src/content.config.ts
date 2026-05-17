@@ -29,7 +29,7 @@ const work = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    category: z.enum(["ai", "shopify", "saas", "open-source"]),
+    category: z.enum(["ai", "shopify", "saas"]),
     stack: z.array(z.string()).default([]),
     outcome: z.string().optional(),
     liveUrl: z.url().optional(),

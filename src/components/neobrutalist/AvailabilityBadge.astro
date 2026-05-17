@@ -1,0 +1,39 @@
+---
+interface Props {
+  label?: string;
+  available?: boolean;
+  class?: string;
+}
+
+const {
+  label = "Available for hire",
+  available = true,
+  class: className = "",
+} = Astro.props;
+
+const dotColor = available ? "bg-green" : "bg-red";
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-2.5 border-[2px] border-ink rounded-full bg-paper px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide shadow-neo-xs",
+    className,
+  ]}
+>
+  <span class="relative inline-flex h-2.5 w-2.5">
+    <span
+      class:list={[
+        "absolute inset-0 rounded-full neo-pulse-dot",
+        dotColor,
+      ]}
+      aria-hidden="true"
+    ></span>
+    <span
+      class:list={[
+        "relative inline-flex h-2.5 w-2.5 rounded-full border-[1.5px] border-ink",
+        dotColor,
+      ]}
+    ></span>
+  </span>
+  {label}
+</span>

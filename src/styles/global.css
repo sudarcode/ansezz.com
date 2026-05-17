@@ -10,7 +10,9 @@
 
   /* neobrutalist palette */
   --color-bg: #fafaf5;
+  --color-bg-alt: #f0efe6;
   --color-ink: #0a0a0a;
+  --color-ink-soft: #2a2a2a;
   --color-yellow: #ffd93d;
   --color-pink: #ff2d87;
   --color-pink-deep: #c7005f;
@@ -18,16 +20,26 @@
   --color-cyan: #3dd9c9;
   --color-green: #7ae582;
   --color-red: #ff5a5f;
+  --color-purple: #9b5de5;
   --color-paper: #ffffff;
   --color-muted: #4a4a4a;
 
   /* hard offset shadows */
+  --shadow-neo-xs: 2px 2px 0 var(--color-ink);
   --shadow-neo-sm: 4px 4px 0 var(--color-ink);
   --shadow-neo-md: 6px 6px 0 var(--color-ink);
   --shadow-neo-lg: 8px 8px 0 var(--color-ink);
   --shadow-neo-xl: 12px 12px 0 var(--color-ink);
+
+  /* type scale (clamps) */
+  --type-display-xl: clamp(3rem, 8vw, 7rem);
+  --type-display-l: clamp(2.25rem, 5vw, 4rem);
+  --type-display-m: clamp(1.75rem, 3vw, 2.5rem);
 }
 
+@utility shadow-neo-xs {
+  box-shadow: 2px 2px 0 var(--color-ink);
+}
 @utility shadow-neo-sm {
   box-shadow: 4px 4px 0 var(--color-ink);
 }
@@ -43,9 +55,25 @@
 @utility shadow-neo-none {
   box-shadow: 0 0 0 var(--color-ink);
 }
+@utility shadow-neo-yellow {
+  box-shadow: 6px 6px 0 var(--color-yellow);
+}
+@utility shadow-neo-pink {
+  box-shadow: 6px 6px 0 var(--color-pink);
+}
 
 @utility border-ink {
   border-color: var(--color-ink);
+}
+
+@utility display-xl {
+  font-size: var(--type-display-xl);
+}
+@utility display-l {
+  font-size: var(--type-display-l);
+}
+@utility display-m {
+  font-size: var(--type-display-m);
 }
 
 html {
@@ -95,6 +123,35 @@ body {
     transparent 1px
   );
   background-size: 8px 8px;
+}
+
+/* availability pulsing dot */
+@keyframes neo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
+}
+.neo-pulse-dot {
+  animation: neo-pulse 1.8s ease-in-out infinite;
+}
+
+/* tag pill row mobile scroll snap */
+.tag-row-scroll {
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.tag-row-scroll::-webkit-scrollbar {
+  display: none;
+}
+.tag-row-scroll > * {
+  scroll-snap-align: start;
 }
 
 /* prose tuning for blog posts */
@@ -216,6 +273,12 @@ article.prose tbody th:last-child {
     scroll-behavior: auto !important;
   }
   .group:hover img {
+    transform: none !important;
+  }
+  .neo-pulse-dot {
+    animation: none !important;
+  }
+  [data-neo-hover]:hover {
     transform: none !important;
   }
 }

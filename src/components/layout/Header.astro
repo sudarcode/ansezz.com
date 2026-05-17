@@ -2,10 +2,11 @@
 import Nav from "./Nav.astro";
 import { Icon } from "astro-icon/components";
 import { SITE } from "@/consts";
+import { externalLinkAttrs } from "@/lib/links";
 ---
 
 <header
-  class="sticky top-0 z-40 border-b-[3px] border-ink bg-bg/95 backdrop-blur supports-[backdrop-filter]:bg-bg/80"
+  class="sticky top-0 z-40 border-b-[3px] border-ink bg-bg"
 >
   <div
     class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3 gap-4"
@@ -16,8 +17,16 @@ import { SITE } from "@/consts";
     >
       {SITE.SHORT_TITLE}<span class="text-pink">.</span>
     </a>
-    <div class="hidden md:block">
+    <div class="hidden md:flex items-center gap-3">
       <Nav />
+      <a
+        href="/contact/"
+        class="inline-flex items-center gap-1.5 border-[2.5px] border-ink bg-pink text-paper px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm"
+        aria-label="Contact me"
+      >
+        <Icon name="lucide:mail" class="h-3.5 w-3.5" />
+        Hire me
+      </a>
     </div>
 
     <button
@@ -38,16 +47,47 @@ import { SITE } from "@/consts";
     hidden
     class="md:hidden border-t-[3px] border-ink bg-bg"
   >
-    <div class="mx-auto max-w-5xl px-5 py-4">
+    <div class="mx-auto max-w-5xl px-5 py-4 space-y-3">
       <Nav vertical />
+      <a
+        href="/contact/"
+        class="flex items-center justify-center gap-2 border-[3px] border-ink bg-pink text-paper px-4 py-3 font-bold uppercase text-sm shadow-neo-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-md"
+        aria-label="Contact me"
+      >
+        <Icon name="lucide:mail" class="h-4 w-4" />
+        Hire me
+      </a>
+      <a
+        href={SITE.RESUME_URL}
+        {...externalLinkAttrs(SITE.RESUME_URL)}
+        class="flex items-center justify-center gap-2 border-[2.5px] border-ink bg-paper px-4 py-2.5 font-bold uppercase text-xs shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm"
+        aria-label="Download resume PDF"
+      >
+        <Icon name="lucide:download" class="h-4 w-4" />
+        Resume (PDF)
+      </a>
     </div>
   </div>
 
   <noscript>
     <style>#mobile-menu-toggle { display: none !important; }</style>
     <div class="md:hidden border-t-[3px] border-ink bg-bg">
-      <div class="mx-auto max-w-5xl px-5 py-4">
+      <div class="mx-auto max-w-5xl px-5 py-4 space-y-3">
         <Nav vertical />
+        <a
+          href="/contact/"
+          class="flex items-center justify-center gap-2 border-[3px] border-ink bg-pink text-paper px-4 py-3 font-bold uppercase text-sm shadow-neo-sm"
+        >
+          <Icon name="lucide:mail" class="h-4 w-4" />
+          Hire me
+        </a>
+        <a
+          href={SITE.RESUME_URL}
+          class="flex items-center justify-center gap-2 border-[2.5px] border-ink bg-paper px-4 py-2.5 font-bold uppercase text-xs shadow-neo-xs"
+        >
+          <Icon name="lucide:download" class="h-4 w-4" />
+          Resume (PDF)
+        </a>
       </div>
     </div>
   </noscript>

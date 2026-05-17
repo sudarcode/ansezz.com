@@ -41,10 +41,3 @@ export function webPage({ url, title, description, image }: WebPageOpts) {
   };
 }
 
-export function toneFromId(id: string, tones: readonly string[]): string {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = (hash * 31 + id.charCodeAt(i)) | 0;
-  }
-  return tones[Math.abs(hash) % tones.length];
-}

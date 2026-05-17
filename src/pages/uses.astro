@@ -2,78 +2,295 @@
 import Page from "@/layouts/Page.astro";
 import NeoCard from "@/components/neobrutalist/NeoCard.astro";
 import TagPill from "@/components/neobrutalist/TagPill.astro";
-import { USES } from "@/consts";
+import TagPillRow from "@/components/neobrutalist/TagPillRow.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import PanelDivider from "@/components/neobrutalist/PanelDivider.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
+import { Icon } from "astro-icon/components";
+import { USES, SITE } from "@/consts";
 
-type Tone = "paper" | "yellow" | "pink" | "cyan" | "green" | "red" | "blue";
+type Tone =
+  | "paper"
+  | "yellow"
+  | "pink"
+  | "cyan"
+  | "green"
+  | "red"
+  | "blue"
+  | "purple";
 
-const groups: {
+interface Tool {
+  name: string;
+  note?: string;
+  daily?: boolean;
+}
+
+interface Group {
+  slug: string;
   title: string;
+  eyebrow: string;
+  icon: string;
   tone: Tone;
-  items: { name: string; note?: string }[];
+  items: Tool[];
+}
+
+const dailyDrivers: {
+  tool: string;
+  tag: string;
+  blurb: string;
+  icon: string;
+  tone: Tone;
 }[] = [
   {
+    tool: "Laravel + PHP 8.3",
+    tag: "Backend",
+    blurb:
+      "Workhorse. Filament, Octane, Horizon, Pest. Every backend I ship.",
+    icon: "lucide:server",
+    tone: "red",
+  },
+  {
+    tool: "Anthropic Claude",
+    tag: "AI",
+    blurb:
+      "Daily driver model. Claude Code for pairing, Claude API + MCP in product.",
+    icon: "lucide:brain-circuit",
+    tone: "purple",
+  },
+  {
+    tool: "Docker + Coolify + GH Actions",
+    tag: "DevOps",
+    blurb:
+      "Self-hosted infra. Containers, CI/CD, zero-downtime deploys. No vendor lock-in.",
+    icon: "lucide:cloud",
+    tone: "blue",
+  },
+  {
+    tool: "Shopify Plus",
+    tag: "Commerce",
+    blurb:
+      "App Bridge, GraphQL Admin, Functions, Catalog API. Embedded apps + Plus theming.",
+    icon: "lucide:shopping-bag",
+    tone: "green",
+  },
+];
+
+const groups: Group[] = [
+  {
+    slug: "backend",
     title: "Backend",
+    eyebrow: "Where the business logic lives",
+    icon: "lucide:server",
     tone: "red",
     items: [
-      { name: "Laravel 12", note: "Workhorse" },
-      { name: "PHP 8.3" },
-      { name: "Octane (Swoole)", note: "When latency matters" },
-      { name: "Horizon", note: "Queues" },
+      { name: "Laravel 12", note: "Default framework", daily: true },
+      { name: "PHP 8.3", daily: true },
+      { name: "Octane (FrankenPHP)", note: "Default · RoadRunner or Swoole when needed" },
+      { name: "Horizon", note: "Queue workers, retries, observability" },
       { name: "Filament v4", note: "Admin panels in hours, not weeks" },
-      { name: "PostgreSQL", note: "Default datastore" },
-      { name: "pgvector", note: "Embeddings" },
-      { name: "Redis" },
-      { name: "Meilisearch" },
+      { name: "Livewire", note: "Server-driven UI for admin tools" },
+      { name: "Symfony", note: "When PHP needs framework-free libraries" },
+      { name: "Node.js + Express", note: "For Shopify Remix / lightweight services" },
+      { name: "Python", note: "ML scripts, data pipelines, scraping" },
+      { name: "TypeScript", note: "Everywhere outside PHP", daily: true },
     ],
   },
   {
+    slug: "ai",
+    title: "AI engineering",
+    eyebrow: "Production-grade AI features",
+    icon: "lucide:brain-circuit",
+    tone: "purple",
+    items: [
+      { name: "Anthropic Claude API", daily: true },
+      { name: "Claude Code", note: "Pair programming + agent loops", daily: true },
+      { name: "Model Context Protocol (MCP)", note: "Tool exposure to agents" },
+      { name: "Provider SDKs", note: "Anthropic, OpenAI, Mistral" },
+      { name: "OpenAI", note: "Embeddings + fallback model" },
+      { name: "Cohere Rerank", note: "Hybrid-search reranker" },
+      { name: "Vector embeddings", note: "OpenAI text-embedding-3-large" },
+      { name: "Eval harness (Pest)", note: "AI quality regressions" },
+    ],
+  },
+  {
+    slug: "frontend",
     title: "Frontend",
+    eyebrow: "When the API hits a browser",
+    icon: "lucide:layout-grid",
     tone: "cyan",
     items: [
-      { name: "Vue 3 + Inertia.js" },
-      { name: "React 19" },
-      { name: "Tailwind CSS v4" },
-      { name: "TypeScript (strict)" },
-      { name: "Astro", note: "This site" },
-      { name: "Vite" },
+      { name: "Vue 3 + Inertia.js", note: "Default Laravel SPA" },
+      { name: "React 19", note: "Shopify Remix admin apps" },
+      { name: "Remix", note: "Shopify app framework" },
+      { name: "Astro", note: "Static + content sites (this one)", daily: true },
+      { name: "Nuxt.js", note: "Heavy SSR projects" },
+      { name: "Tailwind CSS v4", daily: true },
+      { name: "shadcn/ui", note: "Radix-based design system" },
+      { name: "Polaris", note: "Shopify admin UI kit" },
+      { name: "Vite", note: "Build tool, default" },
     ],
   },
   {
-    title: "AI / ML",
+    slug: "data",
+    title: "Database & caching",
+    eyebrow: "Where the data actually lives",
+    icon: "lucide:database",
+    tone: "blue",
+    items: [
+      { name: "PostgreSQL", note: "Default datastore", daily: true },
+      { name: "pgvector", note: "Embeddings + hybrid search", daily: true },
+      { name: "Redis", note: "Cache, queues, locks", daily: true },
+      { name: "MySQL", note: "Legacy + Shopify Plus workloads" },
+      { name: "Elasticsearch", note: "Full-text + faceted search" },
+      { name: "MongoDB", note: "Doc store when justified" },
+      { name: "Meilisearch", note: "Self-hosted search alternative" },
+    ],
+  },
+  {
+    slug: "shopify",
+    title: "Shopify ecosystem",
+    eyebrow: "The commerce stack I ship apps on",
+    icon: "lucide:shopping-bag",
     tone: "green",
     items: [
-      { name: "Anthropic Claude", note: "Daily driver" },
-      { name: "MCP (Model Context Protocol)" },
-      { name: "Prism PHP", note: "Multi-provider abstraction" },
-      { name: "OpenAI", note: "Embeddings + fallback" },
-      { name: "pgvector + hybrid search" },
-      { name: "Claude Code", note: "Pair programming" },
+      { name: "Shopify Plus", daily: true },
+      { name: "Shopify GraphQL Admin API", daily: true },
+      { name: "Shopify Catalog API", note: "inferredFields + agentic SEO" },
+      { name: "App Bridge", note: "Embedded admin UI" },
+      { name: "Polaris", note: "Native admin look" },
+      { name: "Shopify Functions", note: "Discounts + cart transform" },
+      { name: "Theme App Extensions", note: "Storefront UI without theme edits" },
+      { name: "Shopify Billing API", note: "Subscriptions + dunning" },
+      { name: "Webhooks + Bulk Ops", note: "Data sync at scale" },
+      { name: "Protected Customer Data", note: "Scope approval workflow" },
     ],
   },
   {
-    title: "DevOps",
+    slug: "devops",
+    title: "Cloud & DevOps",
+    eyebrow: "Where it runs in production",
+    icon: "lucide:cloud",
     tone: "yellow",
     items: [
-      { name: "Docker" },
-      { name: "Coolify", note: "Self-host all the things" },
-      { name: "Laravel Forge" },
-      { name: "GitHub Actions" },
-      { name: "Cloudflare" },
+      { name: "Docker", note: "Default packaging", daily: true },
+      { name: "Coolify", note: "Self-host all the things", daily: true },
+      { name: "Laravel Forge", note: "Managed deploys" },
+      { name: "GitHub Actions", note: "CI/CD pipelines", daily: true },
+      { name: "GitLab CI/CD", note: "Self-hosted runners" },
+      { name: "Google Cloud (GCP)", note: "Pub/Sub, Cloud Run, GCS" },
+      { name: "AWS", note: "S3, SES, CloudFront, ECS" },
+      { name: "Cloudflare", note: "CDN, R2, Workers, DNS", daily: true },
       { name: "Cloudflare Pages / Vercel", note: "Static sites" },
+      { name: "Nginx", note: "Reverse proxy + tuning" },
     ],
   },
   {
-    title: "Tools",
+    slug: "testing",
+    title: "Testing & quality",
+    eyebrow: "Tests before optimism",
+    icon: "lucide:shield-check",
     tone: "pink",
     items: [
-      { name: "Neovim + LazyVim" },
-      { name: "PhpStorm" },
-      { name: "Ghostty" },
-      { name: "1Password" },
-      { name: "Linear" },
-      { name: "Raycast" },
+      { name: "Pest PHP", note: "Default test runner", daily: true },
+      { name: "PHPUnit", note: "Legacy + interop" },
+      { name: "Jest / Vitest", note: "JS / TS unit tests" },
+      { name: "Cypress", note: "E2E for admin UIs" },
+      { name: "Playwright", note: "Cross-browser flows" },
+      { name: "PHPStan + Larastan", note: "Static analysis, level max" },
+      { name: "ESLint + Prettier", note: "TS / JS formatting" },
     ],
   },
+  {
+    slug: "tools",
+    title: "Tools & flow",
+    eyebrow: "Editor, terminal, brain",
+    icon: "lucide:terminal",
+    tone: "paper",
+    items: [
+      { name: "Neovim + LazyVim", note: "Daily editor", daily: true },
+      { name: "PhpStorm", note: "When refactoring large codebases" },
+      { name: "Ghostty", note: "Terminal" },
+      { name: "Claude Code (CLI)", note: "Agent pairing", daily: true },
+      { name: "1Password", note: "Secrets + SSH" },
+      { name: "Linear", note: "Issue tracking" },
+      { name: "Notion", note: "Docs + spec writing" },
+      { name: "Raycast", note: "Launcher + workflows" },
+      { name: "Figma", note: "Design handoff" },
+      { name: "Postman", note: "API debugging" },
+    ],
+  },
+];
+
+const totalTools = groups.reduce((acc, g) => acc + g.items.length, 0);
+const dailyCount = groups.reduce(
+  (acc, g) => acc + g.items.filter((t) => t.daily).length,
+  0,
+);
+
+const stats = [
+  {
+    v: String(totalTools),
+    l: "Tools in production",
+    icon: "lucide:package-check",
+    tone: "yellow" as const,
+  },
+  {
+    v: String(groups.length),
+    l: "Stack lanes",
+    icon: "lucide:layers",
+    tone: "cyan" as const,
+  },
+  {
+    v: String(dailyCount),
+    l: "Daily drivers ⚡",
+    icon: "lucide:zap",
+    tone: "pink" as const,
+  },
+  {
+    v: "12+",
+    l: "Years curating",
+    icon: "lucide:rocket",
+    tone: "purple" as const,
+  },
+];
+
+const architecture = [
+  "Clean Architecture",
+  "Domain-Driven Design",
+  "SOLID",
+  "Test-Driven Development",
+  "Multi-tenant SaaS",
+  "Event-Driven",
+  "Microservices",
+  "REST + GraphQL",
+  "OAuth 2.0 + JWT",
+  "Async-first",
+  "Idempotency",
+  "Observability",
+];
+
+const currentlyLearning = [
+  "FrankenPHP worker mode tuning at scale",
+  "Bun runtime for Node services",
+  "Postgres logical replication for tenant fan-out",
+  "Cloudflare Workers + Durable Objects",
+];
+
+const wouldNotShip = [
+  "Vector-only RAG without reranker",
+  "MongoDB as a primary OLTP store",
+  "Hand-rolled auth in 2026",
+  "Untested AI features in customer-facing flows",
+];
+
+const recentlyDropped = [
+  "Heroku — cost / lock-in",
+  "Algolia — Meilisearch caught up",
+  "Vercel for Laravel apps — Coolify wins",
+  "OpenAI as default model — Claude now is",
 ];
 ---
 
@@ -81,33 +298,323 @@ const groups: {
   title={USES.TITLE}
   description={USES.DESCRIPTION}
   eyebrow="The stack"
-  heading="What I reach for, by default."
-  intro="An honest list. Tools earn their spot by shipping production work, not hype."
+  heading="The stack I actually ship on."
+  intro="Honest list. Tools earn their spot by surviving paid customer work, not because they trended on Twitter. Daily drivers tagged ⚡ — used on customer work in the last 7 days."
 >
-  <div class="mx-auto max-w-5xl px-5 pb-16 grid gap-6 md:grid-cols-2">
-    {
-      groups.map((group) => (
-        <NeoCard tone={group.tone} class="h-full">
-          <h2 class="heading text-2xl uppercase mb-4">{group.title}</h2>
-          <ul class="space-y-2.5">
-            {group.items.map((it) => (
-              <li class="flex items-baseline gap-2 flex-wrap">
-                <span class="font-bold">{it.name}</span>
-                {it.note && (
-                  <span class="text-xs opacity-70 mono">— {it.note}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-          <div class="mt-5 flex flex-wrap gap-1.5">
-            {group.items.slice(0, 6).map((it) => (
-              <TagPill tone="paper" size="sm">
-                {it.name}
+  <section class="mx-auto max-w-6xl px-5 pb-8">
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <StickyNote tone="yellow" tilt={-2} class="max-w-[320px]">
+        <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+          ▸ Last reviewed
+        </p>
+        <p class="text-sm font-bold leading-snug">
+          {new Date().toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          })} · revisit each quarter
+        </p>
+      </StickyNote>
+      <SpeechBubble tone="pink" tail="bl" class="hidden md:inline-block max-w-[280px]">
+        <span class="text-sm leading-snug font-bold text-paper">
+          "If it's not used this quarter, it's off the list."
+        </span>
+      </SpeechBubble>
+    </div>
+
+    <ul class="grid gap-4 grid-cols-2 md:grid-cols-4">
+      {
+        stats.map((s, i) => (
+          <li>
+            <NeoCard
+              tone={s.tone}
+              shadow="sm"
+              tilt={i % 2 === 0 ? -0.3 : 0.3}
+              class="text-center flex flex-col gap-2 !p-4"
+            >
+              <span
+                class="inline-flex h-10 w-10 mx-auto items-center justify-center border-[2.5px] border-ink rounded-full bg-paper text-ink shadow-neo-xs"
+                aria-hidden="true"
+              >
+                <Icon name={s.icon} class="h-5 w-5" />
+              </span>
+              <p class="display text-4xl md:text-5xl leading-none">{s.v}</p>
+              <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+                {s.l}
+              </p>
+            </NeoCard>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-8">
+    <div class="mb-6">
+      <BurstBadge tone="yellow" size="sm" class="mb-4">01</BurstBadge>
+      <h2 class="display text-2xl md:text-3xl leading-tight">
+        Daily drivers.
+      </h2>
+      <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+        ▸ Used on customer work in the last 7 days
+      </p>
+    </div>
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        dailyDrivers.map((d, i) => (
+          <li>
+            <NeoCard
+              tone={d.tone}
+              shadow="md"
+              tilt={i % 2 === 0 ? -0.4 : 0.4}
+              class="h-full flex flex-col gap-3"
+            >
+              <span
+                class="inline-flex h-12 w-12 items-center justify-center border-[2.5px] border-ink rounded-full bg-paper text-ink shadow-neo-xs"
+                aria-hidden="true"
+              >
+                <Icon name={d.icon} class="h-5 w-5" />
+              </span>
+              <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+                ▸ {d.tag}
+              </p>
+              <h3 class="heading text-xl uppercase leading-tight">{d.tool}</h3>
+              <p class="text-sm leading-snug opacity-90 mt-auto">{d.blurb}</p>
+            </NeoCard>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5">
+    <PanelDivider shape="zigzag" tone="yellow" />
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-8">
+    <div class="mb-6">
+      <BurstBadge tone="cyan" size="sm" class="mb-4">02</BurstBadge>
+      <h2 class="display text-2xl md:text-3xl leading-tight">
+        Jump to a lane.
+      </h2>
+      <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-2">
+        ▸ {totalTools} tools across {groups.length} lanes
+      </p>
+    </div>
+    <TagPillRow scrollOnMobile>
+      {
+        groups.map((g) => (
+          <li>
+            <TagPill tone={g.tone} size="md" href={`#lane-${g.slug}`}>
+              {g.title} · {g.items.length}
+            </TagPill>
+          </li>
+        ))
+      }
+    </TagPillRow>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-12">
+    <ul class="grid gap-6 md:grid-cols-2">
+      {
+        groups.map((group, gi) => (
+          <li id={`lane-${group.slug}`} class="scroll-mt-24">
+            <NeoCard
+              tone={group.tone}
+              shadow="md"
+              tilt={gi % 2 === 0 ? -0.2 : 0.2}
+              class="h-full flex flex-col gap-4"
+            >
+              <header class="flex items-start gap-3">
+                <span
+                  class="inline-flex h-11 w-11 shrink-0 items-center justify-center border-[2.5px] border-ink rounded-[6px] bg-paper text-ink shadow-neo-xs"
+                  aria-hidden="true"
+                >
+                  <Icon name={group.icon} class="h-5 w-5" />
+                </span>
+                <div class="flex-1 min-w-0">
+                  <h3 class="heading text-xl md:text-2xl uppercase leading-tight">
+                    {group.title}
+                  </h3>
+                  <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80 mt-1">
+                    {group.eyebrow}
+                  </p>
+                </div>
+                <span
+                  class="inline-flex h-8 w-8 shrink-0 items-center justify-center border-[2px] border-ink rounded-full bg-ink text-bg font-black text-xs"
+                  aria-hidden="true"
+                >
+                  {String(gi + 1).padStart(2, "0")}
+                </span>
+              </header>
+              <ul class="space-y-1.5">
+                {group.items.map((it) => (
+                  <li class="flex items-baseline gap-2 flex-wrap border-b border-ink/15 last:border-0 py-1.5">
+                    <span class="font-bold text-sm flex items-center gap-1.5">
+                      {it.daily && (
+                        <span
+                          class="inline-flex items-center justify-center h-4 w-4 bg-yellow border-[1.5px] border-ink rounded-full"
+                          title="Daily driver"
+                          aria-label="Daily driver"
+                        >
+                          <Icon name="lucide:zap" class="h-2.5 w-2.5" />
+                        </span>
+                      )}
+                      {it.name}
+                    </span>
+                    {it.note && (
+                      <span class="mono text-[11px] opacity-70 leading-snug">
+                        — {it.note}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </NeoCard>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <HalftoneSection tone="ink" bordered class="py-14 text-bg">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="grid gap-10 md:grid-cols-[1fr_auto] md:items-end mb-8">
+        <div>
+          <BurstBadge tone="yellow" size="sm" class="mb-4">03</BurstBadge>
+          <h2 class="display text-3xl md:text-4xl leading-tight">
+            How I architect.
+          </h2>
+          <p class="mt-3 text-base text-bg/80 max-w-2xl">
+            Methodologies and patterns I default to. Boring, opinionated, hard
+            to argue with under pressure.
+          </p>
+        </div>
+        <SpeechBubble tone="yellow" tail="br" class="max-w-[280px]">
+          <span class="text-sm leading-snug">
+            "Clean Architecture is a feature flag for sanity."
+          </span>
+        </SpeechBubble>
+      </div>
+      <ul class="flex flex-wrap gap-2">
+        {
+          architecture.map((a) => (
+            <li>
+              <TagPill tone="yellow" size="md">
+                {a}
               </TagPill>
-            ))}
-          </div>
-        </NeoCard>
-      ))
-    }
-  </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </HalftoneSection>
+
+  <section class="mx-auto max-w-6xl px-5 py-14">
+    <div class="mb-6">
+      <BurstBadge tone="purple" size="sm" class="mb-4">04</BurstBadge>
+      <h2 class="display text-3xl md:text-4xl leading-tight">
+        Honest curation.
+      </h2>
+      <p class="mt-3 text-base md:text-lg text-ink-soft leading-snug max-w-2xl">
+        New tools earn a slot only after shipping on customer work. List shrinks
+        more than it grows — by design.
+      </p>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      <NeoCard tone="green" shadow="md" tilt={-0.4} class="space-y-3 h-full">
+        <div class="flex items-center gap-3">
+          <span
+            class="inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-ink rounded-full bg-paper shadow-neo-xs"
+            aria-hidden="true"
+          >
+            <Icon name="lucide:flame" class="h-5 w-5" />
+          </span>
+          <h3 class="heading text-lg uppercase">Currently learning</h3>
+        </div>
+        <ul class="space-y-2">
+          {
+            currentlyLearning.map((c) => (
+              <li class="flex items-start gap-2 text-sm font-medium">
+                <Icon name="lucide:plus" class="h-4 w-4 mt-1 shrink-0" />
+                <span>{c}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </NeoCard>
+
+      <NeoCard tone="yellow" shadow="md" tilt={0} class="space-y-3 h-full">
+        <div class="flex items-center gap-3">
+          <span
+            class="inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-ink rounded-full bg-paper shadow-neo-xs"
+            aria-hidden="true"
+          >
+            <Icon name="lucide:trash-2" class="h-5 w-5" />
+          </span>
+          <h3 class="heading text-lg uppercase">Recently dropped</h3>
+        </div>
+        <ul class="space-y-2">
+          {
+            recentlyDropped.map((c) => (
+              <li class="flex items-start gap-2 text-sm font-medium">
+                <Icon name="lucide:minus" class="h-4 w-4 mt-1 shrink-0" />
+                <span>{c}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </NeoCard>
+
+      <NeoCard tone="red" shadow="md" tilt={0.4} class="space-y-3 h-full">
+        <div class="flex items-center gap-3">
+          <span
+            class="inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-ink rounded-full bg-paper shadow-neo-xs"
+            aria-hidden="true"
+          >
+            <Icon name="lucide:x" class="h-5 w-5" />
+          </span>
+          <h3 class="heading text-lg uppercase">Would not ship</h3>
+        </div>
+        <ul class="space-y-2">
+          {
+            wouldNotShip.map((c) => (
+              <li class="flex items-start gap-2 text-sm font-medium">
+                <Icon name="lucide:slash" class="h-4 w-4 mt-1 shrink-0" />
+                <span>{c}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </NeoCard>
+    </div>
+  </section>
+
+  <HalftoneSection tone="bg" bordered class="py-14">
+    <div class="mx-auto max-w-6xl px-5 grid gap-6 md:grid-cols-[1fr_auto] items-center">
+      <div>
+        <p class="display text-3xl md:text-4xl leading-tight">
+          Want this stack on
+          <span class="bg-yellow inline-block px-2 -mx-1">your project?</span>
+        </p>
+        <p class="mt-3 text-base text-ink/80 max-w-2xl">
+          Same defaults, same speed. Fewer surprises in production.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <NeoButton href="/contact/" variant="ink" size="lg">
+          <Icon name="lucide:mail" class="h-4 w-4" />
+          Hire me
+        </NeoButton>
+        <NeoButton
+          href={SITE.RESUME_URL}
+          variant="primary"
+          size="lg"
+          ariaLabel="Download resume PDF"
+        >
+          <Icon name="lucide:download" class="h-4 w-4" />
+          Resume (PDF)
+        </NeoButton>
+      </div>
+    </div>
+  </HalftoneSection>
 </Page>

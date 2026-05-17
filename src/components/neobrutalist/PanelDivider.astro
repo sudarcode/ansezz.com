@@ -1,0 +1,78 @@
+---
+type Shape = "zigzag" | "bolt" | "burst" | "dots";
+type Tone = "ink" | "yellow" | "pink" | "cyan" | "green" | "purple";
+
+interface Props {
+  shape?: Shape;
+  tone?: Tone;
+  class?: string;
+}
+
+const { shape = "zigzag", tone = "yellow", class: className = "" } = Astro.props;
+
+const toneVar: Record<Tone, string> = {
+  ink: "var(--color-ink)",
+  yellow: "var(--color-yellow)",
+  pink: "var(--color-pink)",
+  cyan: "var(--color-cyan)",
+  green: "var(--color-green)",
+  purple: "var(--color-purple)",
+};
+
+const accentColor = tone === "ink" ? "var(--color-yellow)" : toneVar[tone];
+---
+
+<div
+  class:list={["relative flex items-center w-full my-10", className]}
+  aria-hidden="true"
+>
+  <span class="block h-[3px] flex-1 bg-ink"></span>
+  <span
+    class="relative mx-3 inline-flex h-12 w-12 items-center justify-center border-[3px] border-ink rounded-[4px]"
+    style={`background:${accentColor};`}
+  >
+    {
+      shape === "zigzag" && (
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none">
+          <path
+            d="M3 18 L9 6 L12 14 L15 6 L21 18"
+            stroke="var(--color-ink)"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      )
+    }
+    {
+      shape === "bolt" && (
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none">
+          <path
+            d="M13 2 L4 14 L11 14 L9 22 L20 9 L13 9 Z"
+            fill="var(--color-ink)"
+            stroke="var(--color-ink)"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+        </svg>
+      )
+    }
+    {
+      shape === "burst" && (
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="var(--color-ink)">
+          <path d="M12 2 L14 8 L20 6 L17 12 L22 14 L16 16 L19 22 L13 18 L12 24 L11 18 L5 22 L8 16 L2 14 L7 12 L4 6 L10 8 Z" />
+        </svg>
+      )
+    }
+    {
+      shape === "dots" && (
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="var(--color-ink)">
+          <circle cx="5" cy="12" r="2.5" />
+          <circle cx="12" cy="12" r="2.5" />
+          <circle cx="19" cy="12" r="2.5" />
+        </svg>
+      )
+    }
+  </span>
+  <span class="block h-[3px] flex-1 bg-ink"></span>
+</div>

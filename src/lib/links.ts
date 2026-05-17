@@ -7,7 +7,7 @@ try {
   siteHost = "";
 }
 
-export function isExternalUrl(href: string | undefined | null): boolean {
+function isExternalUrl(href: string | undefined | null): boolean {
   if (!href) return false;
   if (
     href.startsWith("mailto:") ||

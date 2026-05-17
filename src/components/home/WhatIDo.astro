@@ -1,0 +1,103 @@
+---
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import { Icon } from "astro-icon/components";
+import { WHAT_I_DO } from "@/consts";
+
+const cardStacks: Record<string, string[]> = {
+  "Laravel SaaS that scales": ["Laravel", "PostgreSQL", "Octane", "Filament", "Horizon"],
+  "Shopify Plus apps": ["Remix", "GraphQL Admin", "App Bridge", "Polaris", "Functions"],
+  "AI engineering": ["Claude API", "MCP", "RAG", "pgvector", "Evals"],
+  "Architecture & leadership": ["Clean Arch", "DDD", "TDD", "Audits", "Mentorship"],
+};
+
+const cardTagTones: Record<string, "yellow" | "paper" | "ink"> = {
+  red: "yellow",
+  green: "paper",
+  purple: "yellow",
+  cyan: "paper",
+};
+---
+
+<section
+  class="relative mx-auto max-w-6xl px-5 py-16 md:py-24"
+>
+  <div class="mb-10 max-w-2xl">
+    <BurstBadge tone="cyan" size="sm" class="mb-5">04</BurstBadge>
+    <h2
+      class="display text-[clamp(2rem,4.5vw,3.25rem)] leading-[0.95]"
+    >
+      Four lanes. Hire me for
+      <span class="bg-yellow inline-block px-2 -mx-1">any of them</span>.
+    </h2>
+    <p class="mt-4 text-base md:text-lg text-ink-soft leading-snug">
+      Scoped, time-boxed, senior. Pick one — or stack two.
+    </p>
+  </div>
+
+  <ul class="grid gap-6 md:grid-cols-2">
+    {
+      WHAT_I_DO.map((item, i) => {
+        const stacks = cardStacks[item.title] ?? [];
+        const tagTone = cardTagTones[item.tone] ?? "paper";
+        return (
+          <li>
+            <NeoCard
+              tone={item.tone}
+              hover
+              href={item.href}
+              ariaLabel={`${item.title} — ${item.cta}`}
+              class="flex h-full flex-col gap-4 group"
+              tilt={i % 2 === 0 ? -0.4 : 0.4}
+            >
+              <header class="flex items-start gap-3">
+                <span
+                  class="inline-flex h-12 w-12 shrink-0 items-center justify-center border-[2.5px] border-ink rounded-[6px] bg-paper text-ink shadow-neo-xs"
+                  aria-hidden="true"
+                >
+                  <Icon name={item.icon} class="h-5 w-5" />
+                </span>
+                <div class="flex-1 min-w-0">
+                  <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+                    ▸ Lane {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 class="heading text-xl md:text-2xl uppercase leading-tight mt-0.5">
+                    {item.title}
+                  </h3>
+                </div>
+                <span
+                  class="inline-flex h-8 w-8 shrink-0 items-center justify-center border-[2px] border-ink rounded-full bg-ink text-bg font-black text-xs"
+                  aria-hidden="true"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </header>
+
+              <p class="text-sm md:text-base leading-snug opacity-90">
+                {item.body}
+              </p>
+
+              {stacks.length > 0 && (
+                <ul class="flex flex-wrap gap-1.5 mt-1">
+                  {stacks.map((s) => (
+                    <li>
+                      <TagPill tone={tagTone} size="sm">
+                        {s}
+                      </TagPill>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <p class="mt-auto pt-3 font-bold text-sm flex items-center gap-2 border-t-[2px] border-ink/20 group-hover:border-ink/40 transition-colors">
+                <span>{item.cta}</span>
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+              </p>
+            </NeoCard>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>

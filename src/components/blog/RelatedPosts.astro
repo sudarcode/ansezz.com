@@ -15,11 +15,13 @@ const tones = ["yellow", "cyan", "green"] as const;
   posts.length > 0 && (
     <section class="mx-auto max-w-5xl px-5 mt-20 mb-10">
       <h2 class="display text-3xl md:text-4xl mb-8">Keep reading</h2>
-      <div class="grid gap-6 md:grid-cols-3">
+      <ul class="grid gap-6 md:grid-cols-3">
         {posts.map((p, i) => (
-          <PostCard post={p} tone={tones[i % tones.length]} />
+          <li>
+            <PostCard post={p} tone={tones[i % tones.length]} eager />
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   )
 }

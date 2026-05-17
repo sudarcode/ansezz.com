@@ -1,61 +1,167 @@
 ---
 import { Icon } from "astro-icon/components";
-import { SITE, SOCIALS } from "@/consts";
+import { SITE, SOCIALS, OWNER, NAV } from "@/consts";
 import { externalLinkAttrs } from "@/lib/links";
 
 const year = new Date().getFullYear();
+
+const socialIcons = SOCIALS.filter((s) =>
+  ["GitHub", "LinkedIn", "X", "Threads", "Instagram", "Facebook"].includes(s.NAME),
+);
+const directLinks = SOCIALS.filter((s) =>
+  ["Email", "Phone", "Book a call", "Resume (PDF)"].includes(s.NAME),
+);
+
+const bottomLinks = [
+  { label: "Feed", href: "/feed/" },
+  { label: "Privacy", href: "/privacy/" },
+  { label: "Styleguide", href: "/styleguide/" },
+  { label: "RSS", href: "/rss.xml" },
+];
 ---
 
-<footer class="mt-24 border-t-[3px] border-ink bg-ink text-bg">
-  <div class="mx-auto max-w-5xl px-5 py-10 grid gap-8 md:grid-cols-3">
-    <div>
-      <p class="display text-3xl">
-        {SITE.SHORT_TITLE}<span class="text-pink">.</span>
+<footer class="mt-24 border-t-[3px] border-ink bg-ink text-bg relative overflow-hidden">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.08]"
+    style="background-image: radial-gradient(circle, var(--color-paper) 1px, transparent 1px); background-size: 14px 14px;"
+  ></div>
+
+  <div class="relative mx-auto max-w-6xl px-5 pt-14 pb-10 grid gap-10 md:grid-cols-12">
+    <div class="md:col-span-4 space-y-5">
+      <a href="/" class="inline-flex items-baseline group">
+        <span class="display text-4xl tracking-tight group-hover:text-yellow transition-colors">
+          {SITE.SHORT_TITLE}
+        </span>
+        <span class="text-pink text-4xl display">.</span>
+      </a>
+      <p class="text-sm opacity-80 leading-relaxed max-w-sm">
+        {OWNER.ROLES.join(" · ")}. {OWNER.YEARS_EXPERIENCE}+ years shipping
+        Laravel SaaS, Shopify Plus apps, and production AI. Remote-first since
+        {OWNER.REMOTE_SINCE}.
       </p>
-      <p class="mt-3 text-sm opacity-80 max-w-xs">{SITE.DESCRIPTION}</p>
+
+      <div class="flex items-center gap-2 px-3 py-2 rounded-full border-[2.5px] border-bg bg-bg/5 backdrop-blur-sm w-fit">
+        <span class="relative inline-flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full rounded-full bg-green opacity-75 animate-ping"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-green"></span>
+        </span>
+        <span class="mono text-[10px] font-bold uppercase tracking-widest">
+          Open for senior / lead / advisory
+        </span>
+      </div>
     </div>
-    <div>
-      <p class="text-xs font-bold uppercase tracking-wider opacity-60 mb-3">
-        Elsewhere
+
+    <div class="md:col-span-2">
+      <p class="mono text-[10px] font-bold uppercase tracking-[0.2em] opacity-50 mb-4">
+        ▸ Site
       </p>
       <ul class="space-y-2">
-        {
-          SOCIALS.map((s) => (
-            <li>
-              <a
-                href={s.HREF}
-                {...externalLinkAttrs(s.HREF)}
-                class="inline-flex items-center gap-2 text-sm font-bold hover:bg-yellow hover:text-ink px-1 transition-colors"
-              >
-                <Icon name={s.ICON} class="h-4 w-4" />
-                {s.NAME}
-              </a>
-            </li>
-          ))
-        }
+        {NAV.map((n) => (
+          <li>
+            <a
+              href={n.HREF}
+              class="text-sm font-bold opacity-90 hover:opacity-100 hover:text-yellow transition-colors inline-block"
+            >
+              {n.LABEL}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href="/feed/"
+            class="text-sm font-bold opacity-90 hover:opacity-100 hover:text-yellow transition-colors inline-block"
+          >
+            Feed
+          </a>
+        </li>
       </ul>
     </div>
-    <div>
-      <p class="text-xs font-bold uppercase tracking-wider opacity-60 mb-3">
-        Based in
+
+    <div class="md:col-span-3">
+      <p class="mono text-[10px] font-bold uppercase tracking-[0.2em] opacity-50 mb-4">
+        ▸ Connect
       </p>
-      <p class="text-sm font-bold">{SITE.LOCATION}</p>
-      <p class="text-sm opacity-70">{SITE.TZ} · Remote-first</p>
+      <ul class="grid grid-cols-3 gap-2 max-w-[200px] mb-5">
+        {socialIcons.map((s) => (
+          <li>
+            <a
+              href={s.HREF}
+              {...externalLinkAttrs(s.HREF)}
+              aria-label={s.NAME}
+              title={s.NAME}
+              class="inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-bg/30 rounded-[4px] bg-bg/5 hover:bg-yellow hover:text-ink hover:border-bg hover:-translate-y-0.5 transition-all"
+            >
+              <Icon name={s.ICON} class="h-4 w-4" />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ul class="space-y-2">
+        {directLinks.map((s) => (
+          <li>
+            <a
+              href={s.HREF}
+              {...externalLinkAttrs(s.HREF)}
+              class="inline-flex items-center gap-2 text-sm font-bold opacity-90 hover:opacity-100 hover:text-yellow transition-colors"
+            >
+              <Icon name={s.ICON} class="h-3.5 w-3.5" />
+              {s.NAME}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="md:col-span-3 space-y-5">
+      <div>
+        <p class="mono text-[10px] font-bold uppercase tracking-[0.2em] opacity-50 mb-4">
+          ▸ Based in
+        </p>
+        <p class="text-base font-bold">{SITE.LOCATION}</p>
+        <p class="text-sm opacity-70 mt-1">{SITE.TZ} · Remote-first</p>
+      </div>
+
+      <div class="border-[2.5px] border-bg/30 rounded-[4px] p-4 bg-bg/5">
+        <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">
+          ▸ Overlap windows
+        </p>
+        <p class="text-xs leading-relaxed opacity-90">
+          EU <span class="font-bold">09–13 CET</span><br />
+          US East <span class="font-bold">14–18 CET</span><br />
+          Async-first · Reply ≤24h weekdays
+        </p>
+      </div>
     </div>
   </div>
-  <div class="border-t border-bg/20">
+
+  <div class="relative border-t border-bg/15">
     <div
-      class="mx-auto max-w-5xl px-5 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 text-xs"
+      class="mx-auto max-w-6xl px-5 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 text-xs"
     >
-      <span class="opacity-60">© {year} Anass Ez-zouaine</span>
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-        <a href="/privacy/" class="opacity-80 hover:opacity-100 hover:bg-yellow hover:text-ink px-1 transition-colors">
-          Privacy
+      <div class="flex items-center gap-3 opacity-70">
+        <span>© {year} {OWNER.NAME}</span>
+        <span class="mono opacity-60 hidden sm:inline">·</span>
+        <span class="mono opacity-60 hidden sm:inline">
+          Built with Astro + Tailwind ✦
+        </span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        {bottomLinks.map((l) => (
+          <a
+            href={l.href}
+            class="inline-flex items-center px-2.5 py-1 rounded-full border-[2px] border-bg/30 bg-bg/5 mono text-[10px] font-bold uppercase tracking-widest hover:bg-yellow hover:text-ink hover:border-bg transition-all"
+          >
+            {l.label}
+          </a>
+        ))}
+        <a
+          href="#top"
+          aria-label="Back to top"
+          class="inline-flex items-center justify-center h-7 w-7 rounded-full border-[2px] border-bg/30 bg-bg/5 hover:bg-pink hover:text-paper hover:border-bg transition-all"
+        >
+          <Icon name="lucide:arrow-up" class="h-3 w-3" />
         </a>
-        <a href="/rss.xml" class="opacity-80 hover:opacity-100 hover:bg-yellow hover:text-ink px-1 transition-colors">
-          RSS
-        </a>
-        <span class="mono opacity-60">Built with Astro ✦</span>
       </div>
     </div>
   </div>

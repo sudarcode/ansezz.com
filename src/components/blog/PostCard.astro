@@ -2,21 +2,51 @@
 import type { CollectionEntry } from "astro:content";
 import PostMeta from "@/components/blog/PostMeta.astro";
 import { getReadingTime } from "@/lib/reading";
+import { CATEGORY_LABEL, CATEGORY_TONE } from "@/consts";
+
+type Tone = "paper" | "yellow" | "pink" | "cyan" | "green" | "red" | "purple";
 
 interface Props {
   post: CollectionEntry<"blog">;
   eager?: boolean;
+  tone?: Tone;
 }
 
-const { post, eager = false } = Astro.props;
+const { post, eager = false, tone = "paper" } = Astro.props;
 const rt = getReadingTime(post.body, post);
 const hero = post.data.heroImage;
+
+const toneClass: Record<Tone, string> = {
+  paper: "bg-paper text-ink",
+  yellow: "bg-yellow text-ink",
+  pink: "bg-pink text-ink",
+  cyan: "bg-cyan text-ink",
+  green: "bg-green text-ink",
+  red: "bg-red text-ink",
+  purple: "bg-purple text-paper",
+};
+
+const placeholderBg: Record<string, string> = {
+  red: "bg-red",
+  cyan: "bg-cyan",
+  green: "bg-green",
+  blue: "bg-blue text-paper",
+  yellow: "bg-yellow",
+  pink: "bg-pink",
+};
+const phTone = CATEGORY_TONE[post.data.category];
+const phClass = placeholderBg[phTone] ?? "bg-yellow";
+const initials = CATEGORY_LABEL[post.data.category].slice(0, 2).toUpperCase();
 ---
 
 <a
   href={`/blog/${post.id}/`}
   aria-label={`Read ${post.data.title}`}
-  class="group flex h-full flex-col bg-paper border-[3px] border-ink rounded-[3px] shadow-neo-md transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg overflow-hidden"
+  data-neo-hover
+  class:list={[
+    "group flex h-full flex-col border-[3px] border-ink rounded-[4px] shadow-neo-md transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg overflow-hidden",
+    toneClass[tone],
+  ]}
 >
   {
     hero ? (
@@ -33,7 +63,21 @@ const hero = post.data.heroImage;
         />
       </div>
     ) : (
-      <div class="relative aspect-[5/4] border-b-[3px] border-ink bg-ink halftone-dense opacity-90" />
+      <div
+        class:list={[
+          "relative aspect-[5/4] border-b-[3px] border-ink overflow-hidden flex items-center justify-center",
+          phClass,
+        ]}
+        aria-hidden="true"
+      >
+        <span class="absolute inset-0 halftone opacity-30 pointer-events-none" />
+        <span class="absolute top-3 left-3 mono text-[10px] font-bold uppercase tracking-widest bg-ink text-bg px-2 py-0.5">
+          {CATEGORY_LABEL[post.data.category]}
+        </span>
+        <span class="display text-[clamp(3.5rem,9vw,5.5rem)] leading-none drop-shadow-[3px_3px_0_var(--color-ink)]">
+          {initials}
+        </span>
+      </div>
     )
   }
   <div class="flex flex-1 flex-col p-5 gap-3">
@@ -43,11 +87,12 @@ const hero = post.data.heroImage;
       category={post.data.category}
       readingTime={rt}
       showTime={false}
+      linkCategory={false}
     />
     <h3 class="heading text-xl md:text-2xl leading-tight">
       {post.data.title}
     </h3>
-    <p class="text-sm leading-snug text-ink/80 line-clamp-3">
+    <p class="text-sm leading-snug opacity-80 line-clamp-3">
       {post.data.description}
     </p>
     <p class="mt-auto pt-2 font-bold text-sm group-hover:underline underline-offset-4 decoration-[3px]">

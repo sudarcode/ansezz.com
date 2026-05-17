@@ -1,5 +1,5 @@
 ---
-type Tone = "yellow" | "pink" | "cyan" | "green" | "red" | "blue";
+type Tone = "yellow" | "pink" | "cyan" | "green" | "red" | "blue" | "purple";
 type Size = "sm" | "md" | "lg";
 
 interface Props {
@@ -23,6 +23,7 @@ const toneVar: Record<Tone, string> = {
   green: "var(--color-green)",
   red: "var(--color-red)",
   blue: "var(--color-blue)",
+  purple: "var(--color-purple)",
 };
 
 const burstPath =
