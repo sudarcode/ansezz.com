@@ -144,24 +144,38 @@ heroImage: /blog/liquid-vs-headless.webp
 
 ---
 
-## ▸ Deploy — GitHub Pages
+## ▸ Deploy — Cloudflare Pages
 
-Wired via `.github/workflows/deploy.yml`. On push to `main` or `master`:
+Connected to **Cloudflare Pages** project `ansezz-com`. Auto-deploys on push to `main` from GitHub.
 
-1. `pnpm check` — type-check
-2. `pnpm build` — static export to `dist/`
-3. `actions/upload-pages-artifact` + `actions/deploy-pages`
-
-**One-time setup** in your repo:
+**Cloudflare Pages settings** (Settings → Build & deployments):
 
 ```
-Settings → Pages → Source: GitHub Actions
-Settings → Pages → Custom domain: ansezz.com  (CNAME already in public/)
-DNS → A records for @ → 185.199.108.153 .109 .110 .111
-DNS → CNAME for www → <user>.github.io
+Build image:       v3              ← REQUIRED (v1 ships Node 18, Astro 6 needs ≥22.12)
+Framework preset:  Astro
+Build command:     pnpm install --frozen-lockfile && pnpm build
+Build output dir:  dist
+Root directory:    /
 ```
 
-CI runs typecheck + build on every PR (`.github/workflows/ci.yml`).
+**Environment variables** (Settings → Variables):
+
+```
+NODE_VERSION = 22
+```
+
+Repo-level pins (already committed):
+- `.nvmrc` → `22`
+- `.node-version` → `22.12.0`
+- `package.json` `packageManager` → `pnpm@10.8.1` (Cloudflare v3 detects this)
+
+`public/_headers` and `public/_redirects` are honored automatically by Cloudflare Pages — CSP, security headers, immutable cache rules, and SPA-style 404 fallback all ship as-is.
+
+Domain wiring (already live):
+- Production: `ansezz.com` + `ansezz-com.pages.dev`
+- DNS: `ansezz.com` proxied through Cloudflare (orange cloud)
+
+**If a deploy fails** with `Node.js v18 is not supported`, the project is still on Build Image v1. Switch to v3 in Cloudflare dashboard → Settings → Build & deployments → Build image.
 
 ---
 

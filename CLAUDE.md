@@ -6,7 +6,7 @@ Guidance for Claude Code (claude.ai/code) working in this repository.
 
 **ansezz.com** — personal portfolio + blog of Anass Ez-zouaine. Static site. Astro 6 + Tailwind CSS v4 + TypeScript (strict). Neobrutalist design language.
 Package manager: `pnpm` (pinned via `packageManager` in `package.json`).
-Deploy target: **GitHub Pages** (custom domain `ansezz.com` via `public/CNAME`).
+Deploy target: **Cloudflare Pages** (project `ansezz-com`, custom domain `ansezz.com`). Auto-deploys on push to `main`.
 
 ## Commands
 
@@ -73,8 +73,12 @@ Composites: `src/components/home/*`, `src/components/blog/*`, `src/components/wo
 
 ## Deploy
 
-GitHub Actions handle CI + deploy:
-- `.github/workflows/ci.yml` — typecheck + build on PRs to main
-- `.github/workflows/deploy.yml` — typecheck + build + `actions/deploy-pages` on push to `main` / `master`
+**Cloudflare Pages** auto-deploys on push to `main`. No GitHub Actions configured — Cloudflare runs `pnpm install --frozen-lockfile && pnpm build` against `dist/` directly.
 
-Required repo settings: **Settings → Pages → Source: GitHub Actions**. Custom domain `ansezz.com` is set via `public/CNAME`.
+Required Cloudflare settings:
+- **Build image: v3** (Settings → Build & deployments → Build image). v1 ships Node 18, Astro 6 needs ≥22.12.
+- **Env var**: `NODE_VERSION=22`
+- Framework preset: Astro
+- Build output dir: `dist`
+
+Repo pins: `.nvmrc` (22), `.node-version` (22.12.0), `package.json` `packageManager` (pnpm@10.8.1). `public/_headers` + `public/_redirects` honored automatically.
