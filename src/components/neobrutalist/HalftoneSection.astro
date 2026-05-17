@@ -1,0 +1,51 @@
+---
+type Tone = "bg" | "paper" | "yellow" | "pink" | "cyan" | "green" | "blue" | "ink";
+
+interface Props {
+  tone?: Tone;
+  dense?: boolean;
+  bordered?: boolean;
+  class?: string;
+}
+
+const {
+  tone = "bg",
+  dense = false,
+  bordered = false,
+  class: className = "",
+} = Astro.props;
+
+const toneClass: Record<Tone, string> = {
+  bg: "bg-bg",
+  paper: "bg-paper",
+  yellow: "bg-yellow",
+  pink: "bg-pink",
+  cyan: "bg-cyan",
+  green: "bg-green",
+  blue: "bg-blue text-paper",
+  ink: "bg-ink text-paper",
+};
+
+const borderClass = bordered ? "border-y-[3px] border-ink" : "";
+---
+
+<section
+  class:list={[
+    "relative w-full",
+    toneClass[tone],
+    borderClass,
+    className,
+  ]}
+>
+  <div
+    class:list={[
+      "absolute inset-0 pointer-events-none opacity-[0.12]",
+      dense ? "halftone-dense" : "halftone",
+    ]}
+    aria-hidden="true"
+  >
+  </div>
+  <div class="relative">
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+import PostMeta from "@/components/blog/PostMeta.astro";
+import { getReadingTime } from "@/lib/reading";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  eager?: boolean;
+}
+
+const { post, eager = false } = Astro.props;
+const rt = getReadingTime(post.body, post);
+const hero = post.data.heroImage;
+---
+
+<a
+  href={`/blog/${post.id}/`}
+  aria-label={`Read ${post.data.title}`}
+  class="group block bg-paper border-[3px] border-ink rounded-[3px] shadow-neo-md transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg overflow-hidden"
+>
+  {
+    hero ? (
+      <div class="relative aspect-[5/4] overflow-hidden border-b-[3px] border-ink bg-ink">
+        <img
+          src={hero.url}
+          alt={hero.alt}
+          width="800"
+          height="640"
+          loading={eager ? "eager" : "lazy"}
+          decoding="async"
+          fetchpriority={eager ? "high" : "auto"}
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      </div>
+    ) : (
+      <div class="relative aspect-[5/4] border-b-[3px] border-ink bg-ink halftone-dense opacity-90" />
+    )
+  }
+  <div class="p-5 space-y-3">
+    <PostMeta
+      date={post.data.publishDate}
+      updatedDate={post.data.updatedDate}
+      category={post.data.category}
+      readingTime={rt}
+      showTime={false}
+    />
+    <h3 class="heading text-xl md:text-2xl leading-tight">
+      {post.data.title}
+    </h3>
+    <p class="text-sm leading-snug text-ink/80 line-clamp-3">
+      {post.data.description}
+    </p>
+    <p class="pt-1 font-bold text-sm group-hover:underline underline-offset-4 decoration-[3px]">
+      Read post →
+    </p>
+  </div>
+</a>

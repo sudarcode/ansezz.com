@@ -1,0 +1,31 @@
+---
+type Tone = "yellow" | "pink" | "cyan" | "green";
+
+interface Props {
+  tone?: Tone;
+  tilt?: number;
+  class?: string;
+}
+
+const { tone = "yellow", tilt = -2, class: className = "" } = Astro.props;
+
+const toneClass: Record<Tone, string> = {
+  yellow: "bg-yellow",
+  pink: "bg-pink",
+  cyan: "bg-cyan",
+  green: "bg-green",
+};
+
+const style = `transform: rotate(${tilt}deg);`;
+---
+
+<div
+  class:list={[
+    "inline-block border-[3px] border-ink shadow-neo-md p-4 max-w-xs",
+    toneClass[tone],
+    className,
+  ]}
+  style={style}
+>
+  <slot />
+</div>

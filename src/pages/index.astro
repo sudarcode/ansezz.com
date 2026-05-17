@@ -1,0 +1,62 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/home/Hero.astro";
+import Stats from "@/components/home/Stats.astro";
+import FeaturedPosts from "@/components/home/FeaturedPosts.astro";
+import { HOME, SITE, OWNER, SOCIALS } from "@/consts";
+
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE.URL}#person`,
+  name: OWNER.NAME,
+  alternateName: SITE.SHORT_TITLE,
+  jobTitle: OWNER.ROLES.join(", "),
+  description: SITE.DESCRIPTION,
+  url: SITE.URL,
+  email: SITE.EMAIL,
+  telephone: SITE.PHONE,
+  image: new URL("/og.webp", SITE.URL).href,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Meknes",
+    addressCountry: "MA",
+  },
+  knowsAbout: [
+    "Laravel",
+    "PHP",
+    "Shopify Plus",
+    "AI Engineering",
+    "Anthropic Claude",
+    "Model Context Protocol",
+    "Retrieval-Augmented Generation",
+    "PostgreSQL",
+    "pgvector",
+    "Docker",
+    "Coolify",
+    "Software Architecture",
+  ],
+  sameAs: SOCIALS.filter((s) => s.HREF.startsWith("http")).map((s) => s.HREF),
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE.URL}#website`,
+  url: SITE.URL,
+  name: SITE.TITLE,
+  description: SITE.DESCRIPTION,
+  inLanguage: "en",
+  publisher: { "@id": `${SITE.URL}#person` },
+};
+---
+
+<BaseLayout
+  title={SITE.TITLE}
+  description={HOME.DESCRIPTION}
+  structuredData={[personLd, websiteLd]}
+>
+  <Hero />
+  <Stats />
+  <FeaturedPosts />
+</BaseLayout>

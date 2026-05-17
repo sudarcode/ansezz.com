@@ -1,0 +1,70 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Item {
+  label: string;
+  done?: boolean;
+}
+
+interface Props {
+  title: string;
+  items: Item[];
+  tone?: "paper" | "yellow" | "cyan" | "green";
+  class?: string;
+}
+
+const { title, items, tone = "paper", class: className = "" } = Astro.props;
+
+const toneClass = {
+  paper: "bg-paper",
+  yellow: "bg-yellow",
+  cyan: "bg-cyan",
+  green: "bg-green",
+}[tone];
+
+const done = items.filter((i) => i.done).length;
+const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+---
+
+<aside
+  class:list={[
+    "border-[3px] border-ink shadow-neo-md p-5",
+    toneClass,
+    className,
+  ]}
+>
+  <h3 class="heading text-xl uppercase mb-4">{title}</h3>
+  <ul class="space-y-2.5">
+    {
+      items.map((item) => (
+        <li class="flex items-start gap-3">
+          <span
+            class:list={[
+              "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-[2px] border-ink",
+              item.done ? "bg-ink text-bg" : "bg-paper",
+            ]}
+          >
+            {item.done && <Icon name="lucide:check" class="h-3 w-3" />}
+          </span>
+          <span
+            class:list={[
+              "text-sm font-medium leading-snug",
+              item.done && "line-through opacity-70",
+            ]}
+          >
+            {item.label}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="mt-5">
+    <div class="flex justify-between text-xs font-bold uppercase mb-1.5">
+      <span>Progress</span>
+      <span>{pct}%</span>
+    </div>
+    <div class="h-3 border-[2px] border-ink bg-paper">
+      <div class="h-full bg-ink" style={`width:${pct}%`}></div>
+    </div>
+  </div>
+</aside>

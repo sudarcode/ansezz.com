@@ -1,0 +1,59 @@
+---
+type Tone = "paper" | "yellow" | "pink" | "cyan" | "green";
+type Tail = "bl" | "br" | "tl" | "tr";
+
+interface Props {
+  tone?: Tone;
+  tail?: Tail;
+  class?: string;
+}
+
+const { tone = "paper", tail = "bl", class: className = "" } = Astro.props;
+
+const toneClass: Record<Tone, string> = {
+  paper: "bg-paper",
+  yellow: "bg-yellow",
+  pink: "bg-pink",
+  cyan: "bg-cyan",
+  green: "bg-green",
+};
+
+const toneFill: Record<Tone, string> = {
+  paper: "var(--color-paper)",
+  yellow: "var(--color-yellow)",
+  pink: "var(--color-pink)",
+  cyan: "var(--color-cyan)",
+  green: "var(--color-green)",
+};
+
+const tailPos: Record<Tail, string> = {
+  bl: "left-8 -bottom-5",
+  br: "right-8 -bottom-5",
+  tl: "left-8 -top-5 rotate-180",
+  tr: "right-8 -top-5 rotate-180",
+};
+---
+
+<div
+  class:list={[
+    "relative inline-block border-[3px] border-ink rounded-[6px] px-5 py-4 shadow-neo-md font-bold text-ink",
+    toneClass[tone],
+    className,
+  ]}
+>
+  <slot />
+  <svg
+    class:list={["absolute w-8 h-6", tailPos[tail]]}
+    viewBox="0 0 32 24"
+    aria-hidden="true"
+  >
+    <path d="M0 0 L32 0 L8 24 Z" fill={toneFill[tone]} />
+    <path
+      d="M0 0 L32 0 L8 24 Z"
+      fill="none"
+      stroke="var(--color-ink)"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+  </svg>
+</div>

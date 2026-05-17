@@ -1,0 +1,154 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import ChecklistBox from "@/components/neobrutalist/ChecklistBox.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import { ABOUT } from "@/consts";
+
+const timeline = [
+  {
+    year: "2014",
+    title: "Went remote",
+    body: "Left office life. Never looked back. Started shipping for clients across EU and North America.",
+    tone: "cyan" as const,
+  },
+  {
+    year: "2018",
+    title: "Laravel & Shopify deep-dive",
+    body: "Specialized in Laravel + Shopify Plus apps. Octane, Horizon, GraphQL Admin API.",
+    tone: "green" as const,
+  },
+  {
+    year: "2022",
+    title: "Independent consulting",
+    body: "Full-time freelance / fractional CTO work. Architecture, code review, MVP builds.",
+    tone: "yellow" as const,
+  },
+  {
+    year: "2024",
+    title: "XCO Agency",
+    body: "Co-founded XCO. Shopify Plus partner agency focused on agentic commerce.",
+    tone: "pink" as const,
+  },
+  {
+    year: "2025",
+    title: "Highfive Vet",
+    body: "Lead Backend Engineer at Highfive Vet — vet SaaS scaling clinics across Europe.",
+    tone: "red" as const,
+  },
+];
+
+const obsessed = [
+  { label: "Anthropic MCP servers in production", done: true },
+  { label: "Prism PHP for multi-provider LLM apps", done: true },
+  { label: "pgvector + hybrid retrieval", done: true },
+  { label: "Agentic commerce on Shopify", done: false },
+  { label: "Laravel Octane Swoole at scale", done: false },
+];
+---
+
+<Page
+  title={ABOUT.TITLE}
+  description={ABOUT.DESCRIPTION}
+  eyebrow="About"
+  heading="Backend brain. AI heart. Shipped a lot."
+  intro="I'm Anass — 10+ years remote, building backends and AI features that survive production. Based in Meknes, working with teams worldwide."
+>
+  <section
+    class="mx-auto max-w-5xl px-5 grid gap-10 md:grid-cols-[1fr_320px] md:gap-12 pb-12"
+  >
+    <div class="space-y-12">
+      <div class="grid gap-6 md:grid-cols-2">
+        <NeoCard tone="paper">
+          <p
+            class="mono text-xs font-bold uppercase tracking-widest text-blue mb-3"
+          >
+            ▸ What I do
+          </p>
+          <h3 class="heading text-2xl mb-3">Backends that scale</h3>
+          <p class="text-ink/80 leading-snug">
+            Laravel + PostgreSQL + Redis services. Filament admins. Octane
+            workers, Horizon queues, event sourcing, idempotency, observability.
+            Shopify Plus apps using App Bridge, webhooks, GraphQL Admin /
+            Catalog API.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            <TagPill tone="red" size="sm">Laravel</TagPill>
+            <TagPill tone="blue" size="sm">PostgreSQL</TagPill>
+            <TagPill tone="green" size="sm">Shopify</TagPill>
+            <TagPill tone="yellow" size="sm">Filament</TagPill>
+          </div>
+        </NeoCard>
+        <NeoCard tone="cyan">
+          <p class="mono text-xs font-bold uppercase tracking-widest mb-3">
+            ▸ What I love
+          </p>
+          <h3 class="heading text-2xl mb-3">AI that actually works</h3>
+          <p class="text-ink/80 leading-snug">
+            RAG pipelines, agentic systems, Anthropic Claude + MCP, OpenAI,
+            Prism PHP, pgvector, semantic search, eval harnesses. Pragmatic AI
+            engineering, not vibes.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            <TagPill tone="ink" size="sm">Claude</TagPill>
+            <TagPill tone="ink" size="sm">MCP</TagPill>
+            <TagPill tone="ink" size="sm">RAG</TagPill>
+            <TagPill tone="ink" size="sm">pgvector</TagPill>
+          </div>
+        </NeoCard>
+      </div>
+
+      <div class="relative">
+        <BurstBadge tone="pink" size="sm" class="mb-5">03</BurstBadge>
+        <h2 class="display text-3xl md:text-4xl mb-6">Timeline</h2>
+        <ol class="space-y-5">
+          {
+            timeline.map((entry, i) => (
+              <li>
+                <NeoCard
+                  tone={entry.tone}
+                  shadow="sm"
+                  tilt={i % 2 === 0 ? -0.5 : 0.5}
+                >
+                  <div class="flex items-start gap-5 flex-wrap">
+                    <span class="display text-3xl shrink-0">{entry.year}</span>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="heading text-xl uppercase mb-1">
+                        {entry.title}
+                      </h3>
+                      <p class="text-sm leading-snug">{entry.body}</p>
+                    </div>
+                  </div>
+                </NeoCard>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+    <aside class="md:sticky md:top-24 md:self-start">
+      <ChecklistBox
+        title="Currently obsessed with"
+        items={obsessed}
+        tone="yellow"
+      />
+    </aside>
+  </section>
+
+  <HalftoneSection tone="ink" bordered class="py-14">
+    <div class="mx-auto max-w-5xl px-5 text-center text-bg">
+      <p class="display text-3xl md:text-4xl mb-4">Like what you read?</p>
+      <p class="text-bg/80 mb-6 max-w-xl mx-auto">
+        I take on a handful of senior / lead / advisory engagements each year.
+      </p>
+      <a
+        href="/contact/"
+        class="inline-flex items-center gap-2 border-[3px] border-bg bg-pink text-ink px-6 py-3 font-bold uppercase shadow-[6px_6px_0_var(--color-bg)] transition-all hover:-translate-x-1 hover:-translate-y-1"
+      >
+        Get in touch →
+      </a>
+    </div>
+  </HalftoneSection>
+</Page>

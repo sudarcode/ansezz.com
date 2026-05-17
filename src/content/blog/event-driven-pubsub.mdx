@@ -1,0 +1,111 @@
+---
+title: "Mastering event-driven architecture with Google Pub/Sub"
+description: "Decouple your services or drown in latency. Topics, fan-out, push vs pull, dead-letter queues, idempotent consumers, and the Laravel integration I run on Google Cloud — a practical EDA blueprint from a senior engineer."
+publishDate: 2026-05-02
+category: architecture
+tags: [pub-sub, event-driven, gcp, google-cloud, laravel, messaging, scalability, architecture]
+featured: false
+heroImage:
+  url: "/blog/event-driven-pubsub/hero.webp"
+  alt: "Pop-art illustration of a Pub/Sub topic broadcasting events to many consumers"
+---
+
+
+Building a modern web application usually starts simple. You have a request and you send a response. But as your business grows, that simple flow starts to feel heavy. Maybe you need to send a welcome email, update a CRM, and trigger a data warehouse sync all at once. If you do this synchronously, your users are stuck staring at a loading spinner. If one service fails, the whole request dies. Your system becomes a house of cards.
+
+This is the problem of tight coupling. Your application logic is tangled like old headphones in a pocket. Every new feature adds more risk and more latency. You want to scale, but your monolithic approach is holding you back. You need a way to let your services talk without being glued together.
+
+The solution is **event-driven architecture** (EDA). And in the Google Cloud world, the heart of that architecture is **Google Pub/Sub**. It is a globally distributed messaging service that decouples the services that produce events from the services that consume them. It allows you to build systems that are truly scalable, resilient, and ready for the future of AI and big data.
+
+## Understanding topics and subscriptions
+
+![Architecture diagram of a Pub/Sub topic with multiple subscriptions fanning out](/blog/event-driven-pubsub/architecture-diagram.webp)
+
+At its core, Google Pub/Sub is built on two main concepts: **topics** and **subscriptions**. I like to think of a topic as a radio station. It broadcasts information out into the void. It doesn't care who is listening or what they do with the music. It just plays the hits.
+
+On the other side, you have subscriptions. These are the listeners. A subscription represents a stream of messages from a specific topic. The beauty of this system is the decoupling. The service sending the message (the publisher) only needs to know about the topic. It doesn't need to know if there are ten consumers or zero.
+
+In a typical [software development](/) workflow, this is a game changer. When a user signs up on your site, you publish a `UserSignedUp` event to a topic. Your main app is done. It returns a success message to the user immediately. Meanwhile, various subscribers pick up that event and do their jobs in the background.
+
+## The power of fan-out
+
+One of the most effective patterns in Google Pub/Sub is the fan-out. This is where you publish a single message to a topic, but multiple subscriptions receive a copy of that message.
+
+Imagine you are running an e-commerce store. When an order is placed, you might have three different services that need to act:
+
+1. An inventory service to update stock levels.
+2. A shipping service to generate a label.
+3. An analytics service to track revenue.
+
+Instead of your checkout service calling three different APIs, it sends one message to an `order-events` topic. Three separate subscriptions (one for inventory, one for shipping, one for analytics) each get their own copy of that order message. They process it at their own pace. If the analytics service is down for maintenance, it doesn't stop the shipping label from being created. The messages just wait in the queue until the service is back online.
+
+## Pull vs push delivery
+
+![Dashboard mockup comparing pull and push subscription metrics](/blog/event-driven-pubsub/dashboard-mockup.webp)
+
+When you set up a subscription, you have to decide how you want to receive messages. Google Pub/Sub gives you two main options: **pull** and **push**.
+
+**Push subscriptions** are great for serverless architectures. Google Cloud will literally "push" the message to a webhook URL you provide. This is perfect for [cloud infrastructure](/work/) built on Cloud Run or Cloud Functions. It scales automatically and you only pay for what you use. However, you have to make sure your endpoint can handle the sudden spikes in traffic.
+
+**Pull subscriptions** work differently. Your consumer service asks Google Pub/Sub for messages when it is ready. This gives you much more control over backpressure. If your worker is busy, it doesn't ask for more work. This is the preferred method for long-running services or when you are using tools like Laravel's queue workers. Pull delivery is generally more robust for heavy processing tasks where you want to fine-tune concurrency.
+
+## Building resilient systems with DLQs
+
+![Pop-art illustration of a dead-letter queue catching poison messages](/blog/event-driven-pubsub/dlq-illustration.webp)
+
+In a distributed system, things will fail. A database might time out or an external API might be down. If a message can't be processed, you don't want to lose it. This is where **Dead Letter Queues** (DLQs) come in.
+
+A DLQ is just another topic where Google Pub/Sub sends messages that have failed to be acknowledged after a certain number of attempts. Instead of retrying forever and clogging up your main pipeline, the "poison" message is moved aside.
+
+I always recommend setting up a DLQ for every critical subscription. It acts as a safety net. You can then build a separate dashboard or a small script to inspect these failed messages, fix the underlying issue, and replay them. It is a professional approach to error handling that prevents data loss and keeps your system moving.
+
+## Integrating Google Pub/Sub with Laravel
+
+For those of us in the [PHP and Laravel](/) ecosystem, integrating Google Pub/Sub is incredibly smooth. While Laravel comes with great support for Redis and SQS, using a package like `google/cloud-pubsub` allows you to tap into GCP's global scale.
+
+You can treat Google Pub/Sub as a custom queue driver. Here is a quick look at how you might publish a message in a typical service class:
+
+```php
+use Google\Cloud\PubSub\PubSubClient;
+
+$pubsub = new PubSubClient([
+    'projectId' => 'your-gcp-project-id',
+]);
+
+$topic = $pubsub->topic('user-events');
+
+$topic->publish([
+    'data' => json_encode([
+        'user_id' => 123,
+        'action' => 'signup',
+    ]),
+    'attributes' => [
+        'event_type' => 'UserSignedUp',
+        'priority' => 'high',
+    ],
+]);
+```
+
+By using attributes, you can even filter messages at the subscription level. This means a subscriber can choose to only listen for messages where `event_type` is `UserSignedUp`. This saves compute power and money because your worker never even sees the messages it doesn't care about.
+
+## Monitoring and cost management
+
+Monitoring is not an afterthought. It is a requirement. Google Cloud provides deep integration with Cloud Monitoring for Google Pub/Sub. You should keep a close eye on your "unacked message count." If this number is climbing, it means your subscribers can't keep up with the producers.
+
+Cost is another factor to watch. Google Pub/Sub is very cheap for low volumes, but as you scale to millions of messages, those bytes add up. Use batching on the publisher side to reduce the number of API calls. Also, be mindful of message retention. If you don't need to keep messages for seven days, shorten the retention period to save on storage costs.
+
+## Wrap up and takeaways
+
+Moving to an event-driven architecture with Google Pub/Sub is a major step toward building senior-level systems. It gives you the flexibility to grow your application without it becoming a tangled mess. It is the backbone of many high-performance [web applications](/) I build for clients today.
+
+Here are the key takeaways for your next project:
+
+1. **Start by identifying "facts"** in your system (e.g., `OrderPlaced`) and turn them into events.
+2. **Use the fan-out pattern** to keep your services decoupled and focused on one task.
+3. **Always implement a Dead Letter Queue** to handle failures gracefully.
+4. **Use message attributes for efficient filtering** at the subscription level.
+5. **Design your consumers to be idempotent.** If they receive the same message twice, it doesn't cause errors or double-charges.
+
+Building these kinds of systems takes a bit more planning upfront, but the payoff in stability and scalability is worth every second.
+
+Are you still using synchronous API calls for everything, or have you started moving toward an event-driven flow? [Let me know what's stopping you](/contact/) from making the switch.

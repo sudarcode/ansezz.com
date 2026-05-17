@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /styleguide/
+
+# Block AI scrapers that respect robots.txt — flip these to Allow if you want to be crawled
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: ClaudeBot
+# Disallow: /
+
+Sitemap: https://ansezz.com/sitemap-index.xml

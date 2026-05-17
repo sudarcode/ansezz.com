@@ -1,0 +1,115 @@
+---
+title: "Laravel multi-tenancy: how I built a scalable SaaS architecture"
+description: "Single DB vs multi-DB, global scopes that stop data leaks, stancl/tenancy in production, isolated storage, automated migrations, and the Docker + Google Cloud setup I run for high-trust SaaS clients."
+publishDate: 2026-02-08
+category: laravel
+tags: [laravel, multi-tenancy, saas, architecture, stancl-tenancy, docker, postgres]
+featured: false
+heroImage:
+  url: "/blog/laravel-multi-tenancy/hero.webp"
+  alt: "Pop-art illustration of a Laravel SaaS serving many isolated tenants"
+---
+
+
+I still remember the panic of my first SaaS launch. I was watching the logs as the third customer signed up. Suddenly I realized I had no idea if customer A could see customer B's data. That realization is a rite of passage for every developer.
+
+Building a software-as-a-service (SaaS) platform is a massive technical challenge. The biggest hurdle is almost always data isolation. You need to ensure that every tenant feels like they have the whole application to themselves. If you get this wrong early on, it will haunt you forever.
+
+I have spent years refining a scalable architecture using Laravel. It is the most robust way to handle multiple customers on a single codebase. Here is how I approach the architecture to ensure security and scalability.
+
+## Why simple database structures fail SaaS
+
+Most developers start with a single database. They add a `user_id` or `team_id` to every table. It works fine for the first ten users. Then the complexity grows.
+
+You start adding more relationships. You forget to add a `where` clause in one obscure controller. Suddenly one customer is seeing another customer's private invoices. This is a catastrophic failure. It kills trust and can end your business overnight.
+
+Performance also becomes a nightmare. As your database grows to millions of rows the queries get slower. Indexing helps, but it does not solve the fundamental problem of data bloat. You need a strategy that isolates data while keeping your infrastructure manageable.
+
+![Tenant isolation architecture diagram](/blog/laravel-multi-tenancy/architecture.webp)
+
+## Choosing your isolation strategy
+
+When I build custom web solutions I always start by choosing between two main paths. You either go with a single database or a multi-database setup.
+
+The **single database** approach uses a shared schema. Every row has a `tenant_id`. It is cheap to run and easy to update. I recommend this for startups where costs need to stay low. You can manage thousands of small tenants on a single server this way.
+
+The **multi-database** approach is the gold standard for enterprise. Every customer gets their own database. This offers the best security and makes backups easy. If one database crashes the others stay online. I use this for high-value clients who have strict compliance needs.
+
+I often use the `stancl/tenancy` package for Laravel. It is the most flexible tool in the ecosystem. It allows you to switch between these strategies as your business grows. You can find out more about how I handle these complex technical challenges on the [Ansezz work page](/work/).
+
+## Building with global scopes
+
+The secret to sleeping well at night is automation. I never rely on my memory to filter data. Instead I use Laravel global scopes.
+
+A global scope automatically adds a filter to every query on a model. It ensures that `Customer::all()` only returns customers for the current tenant. It happens behind the scenes so you cannot forget it.
+
+![Annotated code snippet showing a BelongsToTenant trait](/blog/laravel-multi-tenancy/code-snippet.webp)
+
+I create a `BelongsToTenant` trait. I apply this trait to every model that needs isolation. It handles the filtering and automatically sets the `tenant_id` when a new record is created. It is a simple solution that prevents 99 percent of data leaks.
+
+Here's what that trait looks like in practice:
+
+```php
+<?php
+
+namespace App\Concerns;
+
+use App\Models\Tenant;
+use App\Scopes\TenantScope;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+trait BelongsToTenant
+{
+    protected static function bootBelongsToTenant(): void
+    {
+        static::addGlobalScope(new TenantScope());
+
+        static::creating(function ($model): void {
+            if (! $model->tenant_id && app()->bound('tenant')) {
+                $model->tenant_id = app('tenant')->id;
+            }
+        });
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+}
+```
+
+You also need to isolate your cache and your file storage. If two tenants upload a file named `logo.png` they should not overwrite each other. I configure Laravel to use tenant-specific prefixes for all storage paths. This creates a true "sandbox" environment for every user.
+
+## Scaling on the cloud
+
+Your architecture is only as good as the infrastructure it runs on. I usually deploy my Laravel apps using Docker and cloud providers like Google Cloud or AWS.
+
+Containerization is key. It allows me to scale the application horizontally. When traffic spikes I can spin up more instances of the web server. Because the multi-tenancy logic is handled at the application level, the infrastructure stays clean.
+
+![Cloud infrastructure diagram for a multi-tenant Laravel deployment](/blog/laravel-multi-tenancy/infrastructure.webp)
+
+I use managed database services like Google Cloud SQL. They handle the heavy lifting of backups and scaling. For multi-database setups I use automated scripts to provision new databases whenever a customer signs up. This "infrastructure as code" approach ensures that scaling is a button click away.
+
+If you are looking to modernize your digital presence with a scalable cloud setup you can see my full range of services at [ansezz.com](/).
+
+## The tenant switcher experience
+
+The final piece of the puzzle is the user interface. Customers need a seamless way to move between different accounts if they own multiple businesses.
+
+I build clean dashboards using Vue. The frontend communicates with the Laravel backend via GraphQL APIs. This setup allows for a very fast and reactive user experience. The tenant switcher is always accessible and shows the user exactly which context they are working in.
+
+![Tenant switcher UI mockup in a Vue dashboard](/blog/laravel-multi-tenancy/tenant-switcher.webp)
+
+I focus on making the transition between tenants feel instant. I cache the tenant configuration in the frontend to avoid unnecessary API calls. It is these small details that separate a basic app from a high-quality pro solution.
+
+## My SaaS architecture checklist
+
+If you are starting a new project today, here are the steps I recommend you follow.
+
+1. **Choose your package early.** I prefer `stancl/tenancy` because of its flexibility. It handles subdomain routing and database switching out of the box.
+2. **Implement global scopes immediately.** Do not wait until you have ten models. Add the trait to your base model and make it a standard part of your workflow.
+3. **Automate your deployment.** Use Docker from day one. It makes local development identical to production. This avoids the "it works on my machine" bugs that plague SaaS launches.
+4. **Plan for data migration.** As you update your schema you need a way to run migrations across hundreds of databases. Tools like `stancl/tenancy` have built-in commands for this.
+5. **Keep it simple.** Don't build a multi-database setup if you only have five users. Start small and scale as the revenue grows. My goal is always to deliver exceptional results without over-complicating the technical stack.
+
+Are you building a SaaS or looking to migrate your current app to a multi-tenant structure? What is the biggest technical hurdle you are facing right now? [Get in touch](/contact/) — I'd love to hear about it. 🤙

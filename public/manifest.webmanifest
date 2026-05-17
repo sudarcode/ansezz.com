@@ -1,0 +1,15 @@
+{
+  "name": "Anass Ez-zouaine — Senior Lead Backend Engineer & AI Engineer",
+  "short_name": "ansezz",
+  "description": "Senior Lead Backend Engineer, Software Architect, and AI Engineer. Laravel, Shopify, RAG, agentic AI.",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "#fafaf5",
+  "theme_color": "#fafaf5",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

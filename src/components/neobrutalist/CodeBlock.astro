@@ -1,0 +1,29 @@
+---
+import { codeToHtml } from "shiki";
+
+interface Props {
+  code: string;
+  lang?: string;
+  filename?: string;
+}
+
+const { code, lang = "ts", filename } = Astro.props;
+
+const html = await codeToHtml(code, {
+  lang,
+  theme: "github-dark",
+});
+---
+
+<figure class="relative">
+  <span
+    class="absolute -top-3 left-4 z-10 inline-flex items-center border-[2px] border-ink bg-yellow px-2 py-0.5 text-xs font-bold uppercase tracking-wider"
+  >
+    {filename ?? lang}
+  </span>
+  <div
+    class="overflow-x-auto border-[3px] border-ink shadow-neo-md rounded-[4px] bg-[#24292e]"
+  >
+    <div class="mono text-sm p-4 [&_pre]:!bg-transparent" set:html={html} />
+  </div>
+</figure>

@@ -1,0 +1,87 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Column {
+  label: string;
+  tone?: "yellow" | "pink" | "cyan" | "green" | "blue" | "red";
+}
+
+interface Row {
+  icon?: string;
+  label: string;
+  cells: (string | boolean)[];
+}
+
+interface Props {
+  columns: Column[];
+  rows: Row[];
+  class?: string;
+}
+
+const { columns, rows, class: className = "" } = Astro.props;
+
+const toneClass: Record<string, string> = {
+  yellow: "bg-yellow",
+  pink: "bg-pink",
+  cyan: "bg-cyan",
+  green: "bg-green",
+  blue: "bg-blue text-paper",
+  red: "bg-red",
+};
+---
+
+<div
+  class:list={[
+    "overflow-x-auto border-[3px] border-ink shadow-neo-md bg-paper",
+    className,
+  ]}
+>
+  <table class="w-full border-collapse">
+    <thead>
+      <tr>
+        <th class="border-b-[3px] border-r-[3px] border-ink p-3 text-left uppercase text-xs">
+          &nbsp;
+        </th>
+        {
+          columns.map((col) => (
+            <th
+              class:list={[
+                "border-b-[3px] border-r-[3px] border-ink p-3 text-left uppercase text-sm font-black last:border-r-0",
+                toneClass[col.tone ?? "yellow"],
+              ]}
+            >
+              {col.label}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row, i) => (
+          <tr class={i % 2 ? "bg-bg" : "bg-paper"}>
+            <th class="border-b-[2px] border-r-[3px] border-ink p-3 text-left font-bold last:border-b-0">
+              <span class="inline-flex items-center gap-2">
+                {row.icon && <Icon name={row.icon} class="h-4 w-4" />}
+                {row.label}
+              </span>
+            </th>
+            {row.cells.map((cell) => (
+              <td class="border-b-[2px] border-r-[3px] border-ink p-3 text-sm last:border-r-0">
+                {typeof cell === "boolean" ? (
+                  cell ? (
+                    <Icon name="lucide:check" class="h-5 w-5 text-ink" />
+                  ) : (
+                    <Icon name="lucide:x" class="h-5 w-5 text-ink/40" />
+                  )
+                ) : (
+                  cell
+                )}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

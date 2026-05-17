@@ -1,0 +1,68 @@
+---
+import { externalLinkAttrs } from "@/lib/links";
+
+type Tone = "paper" | "yellow" | "pink" | "blue" | "cyan" | "green" | "red" | "ink";
+type Shadow = "sm" | "md" | "lg" | "xl";
+type ElementTag = "div" | "article" | "section" | "a" | "li";
+
+export interface Props {
+  tone?: Tone;
+  shadow?: Shadow;
+  hover?: boolean;
+  tilt?: number;
+  as?: ElementTag;
+  href?: string;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const props = Astro.props;
+const tone: Tone = props.tone ?? "paper";
+const shadow: Shadow = props.shadow ?? "md";
+const hover = props.hover ?? false;
+const tilt = props.tilt ?? 0;
+const as: ElementTag = props.as ?? "div";
+const { href, class: className = "", ariaLabel } = props;
+const externalAttrs = href ? externalLinkAttrs(href) : {};
+
+const toneClass: Record<Tone, string> = {
+  paper: "bg-paper text-ink",
+  yellow: "bg-yellow text-ink",
+  pink: "bg-pink text-ink",
+  blue: "bg-blue text-paper",
+  cyan: "bg-cyan text-ink",
+  green: "bg-green text-ink",
+  red: "bg-red text-ink",
+  ink: "bg-ink text-paper",
+};
+
+const shadowClass: Record<Shadow, string> = {
+  sm: "shadow-neo-sm",
+  md: "shadow-neo-md",
+  lg: "shadow-neo-lg",
+  xl: "shadow-neo-xl",
+};
+
+const hoverClass = hover
+  ? "transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg"
+  : "";
+
+const Tag = href ? "a" : as;
+const style = tilt ? `transform: rotate(${tilt}deg);` : undefined;
+---
+
+<Tag
+  href={href}
+  {...externalAttrs}
+  aria-label={ariaLabel}
+  class:list={[
+    "block border-[3px] border-ink rounded-[3px] p-5",
+    toneClass[tone],
+    shadowClass[shadow],
+    hoverClass,
+    className,
+  ]}
+  style={style}
+>
+  <slot />
+</Tag>

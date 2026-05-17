@@ -1,0 +1,68 @@
+---
+title: "Hello, world. Yes, another developer blog."
+description: "Why this site exists, what I'll write about, and why neobrutalism is the right call for an engineer's portfolio in 2026."
+publishDate: 2025-11-16
+category: career
+tags: [meta, intro]
+featured: false
+---
+
+import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import CodeBlock from "@/components/neobrutalist/CodeBlock.astro";
+import ComparisonTable from "@/components/neobrutalist/ComparisonTable.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+
+Most developer blogs read like a LinkedIn post had a baby with a Medium article.
+This one won't. I'm Anass. I ship Laravel + Shopify + AI for a living, and this is
+where I take notes out loud.
+
+## Why now
+
+I've spent 10+ years remote, mostly head-down in client codebases. The patterns I keep
+reaching for — Laravel Octane at scale, RAG done right, agentic commerce — don't show up
+in tutorials. So I'm writing them down.
+
+<SpeechBubble tone="yellow" tail="bl">
+  Strong opinions, loosely held. Code that runs in production.
+</SpeechBubble>
+
+## What you'll find here
+
+- Laravel internals you actually use day-to-day
+- AI engineering with Anthropic Claude + MCP
+- Shopify Plus app patterns
+- Architecture & DevOps lessons learned the hard way
+
+<StickyNote tone="cyan" tilt={-2}>
+  Subscribe via [RSS](/rss.xml) — no newsletter, no popup, no LinkedIn dance.
+</StickyNote>
+
+## A small comparison
+
+<ComparisonTable
+  columns={[
+    { label: "This blog", tone: "yellow" },
+    { label: "AI-slop blog", tone: "red" },
+  ]}
+  rows={[
+    { icon: "lucide:check", label: "Real production code", cells: [true, false] },
+    { icon: "lucide:zap", label: "Opinions", cells: [true, false] },
+    { icon: "lucide:bot", label: "GPT-written filler", cells: [false, true] },
+    { icon: "lucide:smile", label: "Personality", cells: [true, false] },
+  ]}
+/>
+
+## Example code
+
+Every post that needs code gets the syntax treatment:
+
+<CodeBlock
+  code={`use Prism\\Prism\\Prism;\n\n$response = Prism::text()\n    ->using('anthropic', 'claude-opus-4-7')\n    ->withSystemPrompt('You are a senior Laravel engineer.')\n    ->withPrompt('Refactor this controller for clarity.')\n    ->asText();`}
+  lang="php"
+  filename="app/Actions/AskClaude.php"
+/>
+
+<BurstBadge tone="pink" size="sm">01</BurstBadge>
+
+That's it. First post live. More incoming.

@@ -1,0 +1,108 @@
+---
+import { getCollection } from "astro:content";
+import Page from "@/layouts/Page.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import PostMeta from "@/components/blog/PostMeta.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import { getReadingTime } from "@/lib/reading";
+import { BLOG, BLOG_CATEGORIES, CATEGORY_LABEL, CATEGORY_TONE } from "@/consts";
+
+const all = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+
+const [featured, ...rest] = all;
+const featuredRt = featured ? getReadingTime(featured.body) : "";
+const featuredHero = featured?.data.heroImage;
+---
+
+<Page
+  title={BLOG.TITLE}
+  description={BLOG.DESCRIPTION}
+  eyebrow="Blog"
+  heading="Notes from the trenches."
+  intro="Laravel deep-dives, AI engineering patterns, Shopify Plus, and the occasional hot take."
+>
+  <div class="mx-auto max-w-4xl px-5 pb-16 space-y-12">
+    <div>
+      <p
+        class="mono text-xs font-bold uppercase tracking-widest opacity-60 mb-3"
+      >
+        Filter by category
+      </p>
+      <ul class="flex flex-wrap gap-2">
+        <li><TagPill tone="ink" href="/blog/">All</TagPill></li>
+        {
+          BLOG_CATEGORIES.map((c) => (
+            <li>
+              <TagPill tone={CATEGORY_TONE[c]} href={`/blog/category/${c}/`}>
+                {CATEGORY_LABEL[c]}
+              </TagPill>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      featured ? (
+        <a
+          href={`/blog/${featured.id}/`}
+          aria-label={`Read ${featured.data.title}`}
+          class="group block border-[3px] border-ink shadow-neo-lg bg-yellow overflow-hidden transition-all hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl"
+        >
+          <div class="grid md:grid-cols-[1.1fr_1fr] gap-0">
+            {featuredHero && (
+              <div class="relative aspect-[16/10] md:aspect-auto overflow-hidden border-b-[3px] md:border-b-0 md:border-l-[3px] border-ink bg-ink order-1 md:order-2">
+                <img
+                  src={featuredHero.url}
+                  alt={featuredHero.alt}
+                  width="1200"
+                  height="750"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            )}
+            <div class="p-6 md:p-10 order-2 md:order-1 flex flex-col justify-center">
+              <p class="mono text-xs font-bold uppercase tracking-widest mb-3">
+                ▸ Latest
+              </p>
+              <h2 class="display text-3xl md:text-5xl mb-4 leading-tight">
+                {featured.data.title}
+              </h2>
+              <p class="text-base md:text-lg mb-4">
+                {featured.data.description}
+              </p>
+              <PostMeta
+                date={featured.data.publishDate}
+                updatedDate={featured.data.updatedDate}
+                category={featured.data.category}
+                readingTime={featuredRt}
+              />
+            </div>
+          </div>
+        </a>
+      ) : (
+        <div class="border-[3px] border-dashed border-ink p-12 text-center">
+          <p class="display text-3xl mb-2">No posts yet</p>
+          <p class="opacity-70">First post lands soon.</p>
+        </div>
+      )
+    }
+
+    {
+      rest.length > 0 && (
+        <div class="grid gap-6 sm:grid-cols-2">
+          {rest.map((post, i) => (
+            <PostCard post={post} eager={i < 2} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Page>

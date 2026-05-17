@@ -1,0 +1,160 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import PageNumber from "@/components/neobrutalist/PageNumber.astro";
+import ChecklistBox from "@/components/neobrutalist/ChecklistBox.astro";
+import ComparisonTable from "@/components/neobrutalist/ComparisonTable.astro";
+import CodeBlock from "@/components/neobrutalist/CodeBlock.astro";
+import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
+
+const sample = `import { Anthropic } from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
+
+const response = await client.messages.create({
+  model: "claude-opus-4-7",
+  max_tokens: 1024,
+  messages: [{ role: "user", content: "Ship it." }],
+});
+`;
+
+const cols = [
+  { label: "NeoCard", tone: "yellow" as const },
+  { label: "Old card", tone: "blue" as const },
+  { label: "Plain div", tone: "red" as const },
+];
+
+const rows = [
+  { icon: "lucide:zap", label: "Hard shadow", cells: [true, false, false] },
+  { icon: "lucide:square", label: "Thick border", cells: [true, true, false] },
+  {
+    icon: "lucide:rotate-cw",
+    label: "Hover lift",
+    cells: [true, false, false],
+  },
+  { icon: "lucide:smile", label: "Personality", cells: [true, false, false] },
+];
+
+const checklist = [
+  { label: "Build 10 neobrutalist components", done: true },
+  { label: "Wire base layout", done: true },
+  { label: "Stub all pages", done: true },
+  { label: "Write real blog posts", done: false },
+  { label: "Ship OG image generator", done: false },
+];
+---
+
+<BaseLayout title="Styleguide" description="Component playground." noindex>
+  <section class="relative mx-auto max-w-5xl px-5 py-12">
+    <PageNumber n="00" position="tr" />
+    <p class="mono text-sm font-bold uppercase tracking-widest text-pink-deep mb-3">
+      ▸ Internal
+    </p>
+    <h1 class="display text-5xl md:text-7xl">Styleguide</h1>
+    <p class="mt-4 max-w-2xl text-lg opacity-70">
+      Every neobrutalist component, in one place.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-5 py-10 space-y-12">
+    <div>
+      <h2 class="display text-3xl mb-5">NeoCard tones</h2>
+      <div class="grid gap-5 md:grid-cols-4">
+        <NeoCard tone="paper">Paper</NeoCard>
+        <NeoCard tone="yellow">Yellow</NeoCard>
+        <NeoCard tone="pink">Pink</NeoCard>
+        <NeoCard tone="cyan">Cyan</NeoCard>
+        <NeoCard tone="green">Green</NeoCard>
+        <NeoCard tone="red">Red</NeoCard>
+        <NeoCard tone="blue">Blue</NeoCard>
+        <NeoCard tone="ink">Ink</NeoCard>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Speech bubbles</h2>
+      <div class="flex flex-wrap gap-8">
+        <SpeechBubble tone="yellow">Hello world.</SpeechBubble>
+        <SpeechBubble tone="pink" tail="br">Bottom right tail.</SpeechBubble>
+        <SpeechBubble tone="cyan" tail="tl">Top left tail.</SpeechBubble>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Burst badges</h2>
+      <div class="flex flex-wrap items-center gap-6">
+        <BurstBadge tone="yellow" size="sm">01</BurstBadge>
+        <BurstBadge tone="pink">02</BurstBadge>
+        <BurstBadge tone="cyan" size="lg">NEW</BurstBadge>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Sticky notes</h2>
+      <div class="flex flex-wrap gap-6">
+        <StickyNote tone="yellow" tilt={-3}>
+          <p class="font-bold">Remember to ship.</p>
+        </StickyNote>
+        <StickyNote tone="pink" tilt={2}>
+          <p class="font-bold">Sleep is for the weak (j/k, sleep).</p>
+        </StickyNote>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Tag pills</h2>
+      <div class="flex flex-wrap gap-2">
+        <TagPill tone="yellow">Laravel</TagPill>
+        <TagPill tone="pink">AI</TagPill>
+        <TagPill tone="cyan">Shopify</TagPill>
+        <TagPill tone="green">Open source</TagPill>
+        <TagPill tone="red">DevOps</TagPill>
+        <TagPill tone="blue">Architecture</TagPill>
+        <TagPill tone="ink">Hot take</TagPill>
+        <TagPill tone="yellow" href="#">Clickable</TagPill>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Checklist box</h2>
+      <ChecklistBox
+        title="Phase 1 progress"
+        items={checklist}
+        tone="yellow"
+        class="max-w-md"
+      />
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Comparison table</h2>
+      <ComparisonTable columns={cols} rows={rows} />
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Code block</h2>
+      <CodeBlock code={sample} lang="ts" filename="anthropic.ts" />
+    </div>
+
+    <div>
+      <h2 class="display text-3xl mb-5">Robot mascot</h2>
+      <div class="flex flex-wrap gap-6 items-end">
+        <RobotMascot tone="yellow" />
+        <RobotMascot tone="pink" />
+        <RobotMascot tone="cyan" />
+        <RobotMascot tone="green" />
+      </div>
+    </div>
+  </section>
+
+  <HalftoneSection tone="blue" bordered class="py-12 text-paper">
+    <div class="mx-auto max-w-5xl px-5 text-center">
+      <p class="display text-3xl md:text-4xl">Halftone section</p>
+      <p class="opacity-90 mt-2">Wraps any section with a halftone overlay.</p>
+    </div>
+  </HalftoneSection>
+</BaseLayout>

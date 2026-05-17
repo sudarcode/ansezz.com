@@ -1,0 +1,71 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { webPage } from "@/lib/seo";
+import { SITE } from "@/consts";
+
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  heading: string;
+  intro?: string;
+  image?: string;
+  structuredData?: object | object[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  eyebrow,
+  heading,
+  intro,
+  image,
+  structuredData,
+  noindex,
+} = Astro.props;
+
+const pageUrl = new URL(Astro.url.pathname, SITE.URL).href;
+const pageDesc = description ?? SITE.DESCRIPTION;
+const autoWebPage = noindex
+  ? null
+  : webPage({ url: pageUrl, title, description: pageDesc, image });
+
+const extra = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : [];
+const finalStructured = autoWebPage ? [autoWebPage, ...extra] : extra;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  structuredData={finalStructured}
+  noindex={noindex}
+>
+  <section
+    class="relative mx-auto max-w-5xl px-5 pt-12 pb-10 md:pt-20 md:pb-14"
+  >
+    {
+      eyebrow && (
+        <p class="mono text-sm font-bold uppercase tracking-widest text-pink-deep mb-4">
+          ▸ {eyebrow}
+        </p>
+      )
+    }
+    <h1 class="display text-[clamp(2rem,5.5vw,4rem)] max-w-5xl">
+      {heading}
+    </h1>
+    {
+      intro && (
+        <p class="mt-5 max-w-2xl text-base sm:text-lg md:text-xl text-ink/80 leading-snug">
+          {intro}
+        </p>
+      )
+    }
+  </section>
+  <slot />
+</BaseLayout>

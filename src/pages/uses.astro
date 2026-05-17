@@ -1,0 +1,113 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import { USES } from "@/consts";
+
+type Tone = "paper" | "yellow" | "pink" | "cyan" | "green" | "red" | "blue";
+
+const groups: {
+  title: string;
+  tone: Tone;
+  items: { name: string; note?: string }[];
+}[] = [
+  {
+    title: "Backend",
+    tone: "red",
+    items: [
+      { name: "Laravel 12", note: "Workhorse" },
+      { name: "PHP 8.3" },
+      { name: "Octane (Swoole)", note: "When latency matters" },
+      { name: "Horizon", note: "Queues" },
+      { name: "Filament v4", note: "Admin panels in hours, not weeks" },
+      { name: "PostgreSQL", note: "Default datastore" },
+      { name: "pgvector", note: "Embeddings" },
+      { name: "Redis" },
+      { name: "Meilisearch" },
+    ],
+  },
+  {
+    title: "Frontend",
+    tone: "cyan",
+    items: [
+      { name: "Vue 3 + Inertia.js" },
+      { name: "React 19" },
+      { name: "Tailwind CSS v4" },
+      { name: "TypeScript (strict)" },
+      { name: "Astro", note: "This site" },
+      { name: "Vite" },
+    ],
+  },
+  {
+    title: "AI / ML",
+    tone: "green",
+    items: [
+      { name: "Anthropic Claude", note: "Daily driver" },
+      { name: "MCP (Model Context Protocol)" },
+      { name: "Prism PHP", note: "Multi-provider abstraction" },
+      { name: "OpenAI", note: "Embeddings + fallback" },
+      { name: "pgvector + hybrid search" },
+      { name: "Claude Code", note: "Pair programming" },
+    ],
+  },
+  {
+    title: "DevOps",
+    tone: "yellow",
+    items: [
+      { name: "Docker" },
+      { name: "Coolify", note: "Self-host all the things" },
+      { name: "Laravel Forge" },
+      { name: "GitHub Actions" },
+      { name: "Cloudflare" },
+      { name: "Cloudflare Pages / Vercel", note: "Static sites" },
+    ],
+  },
+  {
+    title: "Tools",
+    tone: "pink",
+    items: [
+      { name: "Neovim + LazyVim" },
+      { name: "PhpStorm" },
+      { name: "Ghostty" },
+      { name: "1Password" },
+      { name: "Linear" },
+      { name: "Raycast" },
+    ],
+  },
+];
+---
+
+<Page
+  title={USES.TITLE}
+  description={USES.DESCRIPTION}
+  eyebrow="The stack"
+  heading="What I reach for, by default."
+  intro="An honest list. Tools earn their spot by shipping production work, not hype."
+>
+  <div class="mx-auto max-w-5xl px-5 pb-16 grid gap-6 md:grid-cols-2">
+    {
+      groups.map((group) => (
+        <NeoCard tone={group.tone} class="h-full">
+          <h2 class="heading text-2xl uppercase mb-4">{group.title}</h2>
+          <ul class="space-y-2.5">
+            {group.items.map((it) => (
+              <li class="flex items-baseline gap-2 flex-wrap">
+                <span class="font-bold">{it.name}</span>
+                {it.note && (
+                  <span class="text-xs opacity-70 mono">— {it.note}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            {group.items.slice(0, 6).map((it) => (
+              <TagPill tone="paper" size="sm">
+                {it.name}
+              </TagPill>
+            ))}
+          </div>
+        </NeoCard>
+      ))
+    }
+  </div>
+</Page>

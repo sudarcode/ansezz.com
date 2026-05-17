@@ -1,0 +1,89 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import { SITE } from "@/consts";
+
+const updated = "2026-05-16";
+---
+
+<Page
+  title="Privacy"
+  description={`Privacy notice for ${SITE.TITLE} — what data is collected, why, and your rights.`}
+  eyebrow="Legal"
+  heading="Privacy notice."
+  intro="Short version: this site does not collect personal data. No accounts, no forms, no cookies set by me. Long version below."
+>
+  <div class="mx-auto max-w-3xl px-5 pb-16 space-y-6">
+    <p class="mono text-xs opacity-60 uppercase tracking-widest">
+      Last updated: {updated}
+    </p>
+
+    <NeoCard tone="paper">
+      <h2 class="heading text-2xl uppercase mb-3">What I collect</h2>
+      <p class="text-sm leading-relaxed">
+        This site is a static blog and portfolio. It does <strong>not</strong>{" "}
+        store any personal information on its own. No login, no comments, no
+        contact form. The only way to reach me is via email, phone, LinkedIn, or
+        my Google Calendar booking link — and any data you share that way is
+        handled by those services under their own privacy terms.
+      </p>
+    </NeoCard>
+
+    <NeoCard tone="paper">
+      <h2 class="heading text-2xl uppercase mb-3">Analytics</h2>
+      <p class="text-sm leading-relaxed">
+        I use <a
+          href="https://plausible.io/privacy-focused-web-analytics"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline decoration-[3px] underline-offset-4 hover:bg-yellow">
+          Plausible Analytics
+        </a>, a privacy-respecting service hosted in the EU. Plausible does not use
+        cookies, does not collect personal data, and does not track you across sites.
+        I see aggregated traffic only (which pages were visited, where visitors came
+        from, what device class they used). No GDPR consent banner is required.
+      </p>
+    </NeoCard>
+
+    <NeoCard tone="paper">
+      <h2 class="heading text-2xl uppercase mb-3">Hosting & CDN</h2>
+      <p class="text-sm leading-relaxed">
+        The site is hosted on Cloudflare Pages / Vercel. The host stores access
+        logs (IP, user agent, requested URL, timestamp) for security and
+        performance, retained under their own retention policies.
+      </p>
+    </NeoCard>
+
+    <NeoCard tone="paper">
+      <h2 class="heading text-2xl uppercase mb-3">Third-party content</h2>
+      <p class="text-sm leading-relaxed">
+        Fonts are loaded via the Astro font provider (self-hosted at build
+        time). Images are served from this domain. External links in blog posts
+        point to other companies' sites — once you leave this domain, their
+        privacy policies apply.
+      </p>
+    </NeoCard>
+
+    <NeoCard tone="paper">
+      <h2 class="heading text-2xl uppercase mb-3">Your rights</h2>
+      <p class="text-sm leading-relaxed">
+        Under GDPR and similar regulations, you may request access to, or
+        deletion of, any personal data I hold about you. Since I do not collect
+        any, this typically means: nothing to access, nothing to delete. If you
+        have specific questions, email <a
+          href={`mailto:${SITE.EMAIL}`}
+          class="underline decoration-[3px] underline-offset-4 hover:bg-yellow">
+          {SITE.EMAIL}
+        </a>.
+      </p>
+    </NeoCard>
+
+    <NeoCard tone="yellow">
+      <h2 class="heading text-2xl uppercase mb-3">Changes</h2>
+      <p class="text-sm leading-relaxed">
+        If the site starts collecting data (e.g. a newsletter signup), this
+        notice will be updated and the "last updated" date above will change.
+      </p>
+    </NeoCard>
+  </div>
+</Page>

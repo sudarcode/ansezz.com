@@ -1,0 +1,179 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
+import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import { Icon } from "astro-icon/components";
+import { CONTACT, SITE, AVAILABLE_FOR, SOCIALS } from "@/consts";
+import { externalLinkAttrs } from "@/lib/links";
+
+const tones = ["yellow", "pink", "cyan", "green", "red", "blue"] as const;
+---
+
+<Page
+  title={CONTACT.TITLE}
+  description={CONTACT.DESCRIPTION}
+  eyebrow="Hire me"
+  heading="Building AI features, a Laravel SaaS, or scaling a Shopify Plus app?"
+  intro="If your shortlist needs a senior backend engineer who also ships AI features end-to-end, let's talk."
+>
+  <div class="mx-auto max-w-5xl px-5 pb-16">
+    <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
+      <div class="space-y-8">
+        <div>
+          <p
+            class="mono text-xs font-bold uppercase tracking-widest text-pink-deep mb-3"
+          >
+            ▸ Available for
+          </p>
+          <ul class="flex flex-wrap gap-2">
+            {
+              AVAILABLE_FOR.map((label, i) => (
+                <li>
+                  <TagPill tone={tones[i % tones.length]}>{label}</TagPill>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2">
+          <NeoCard
+            href={`mailto:${SITE.EMAIL}`}
+            tone="yellow"
+            hover
+            ariaLabel="Send email"
+          >
+            <div class="flex items-start gap-4">
+              <Icon name="lucide:mail" class="h-8 w-8 mt-1" />
+              <div>
+                <p
+                  class="mono text-xs font-bold uppercase tracking-widest opacity-70 mb-1"
+                >
+                  Email
+                </p>
+                <p class="heading text-lg break-all">{SITE.EMAIL}</p>
+                <p class="text-xs mt-2 opacity-70">
+                  Reply within 24h on weekdays.
+                </p>
+              </div>
+            </div>
+          </NeoCard>
+          <NeoCard
+            href="https://linkedin.com/in/ansezz"
+            tone="cyan"
+            hover
+            ariaLabel="Open LinkedIn"
+          >
+            <div class="flex items-start gap-4">
+              <Icon name="lucide:linkedin" class="h-8 w-8 mt-1" />
+              <div>
+                <p
+                  class="mono text-xs font-bold uppercase tracking-widest opacity-70 mb-1"
+                >
+                  LinkedIn
+                </p>
+                <p class="heading text-xl">/in/ansezz</p>
+                <p class="text-xs mt-2 opacity-70">
+                  Open to DMs, but email is faster.
+                </p>
+              </div>
+            </div>
+          </NeoCard>
+          <NeoCard
+            href="https://github.com/ansezz"
+            tone="paper"
+            hover
+            ariaLabel="Open GitHub"
+          >
+            <div class="flex items-start gap-4">
+              <Icon name="lucide:github" class="h-8 w-8 mt-1" />
+              <div>
+                <p
+                  class="mono text-xs font-bold uppercase tracking-widest opacity-70 mb-1"
+                >
+                  GitHub
+                </p>
+                <p class="heading text-xl">@ansezz</p>
+                <p class="text-xs mt-2 opacity-70">
+                  Code, demos, drive-by experiments.
+                </p>
+              </div>
+            </div>
+          </NeoCard>
+          <NeoCard
+            href={SITE.BOOKING_URL}
+            tone="ink"
+            hover
+            class="text-bg"
+            ariaLabel="Book a meeting"
+          >
+            <div class="flex items-start gap-4">
+              <Icon name="lucide:calendar" class="h-8 w-8 mt-1" />
+              <div>
+                <p
+                  class="mono text-xs font-bold uppercase tracking-widest opacity-60 mb-1"
+                >
+                  Book a call
+                </p>
+                <p class="heading text-xl">15-min intro</p>
+                <p class="text-xs mt-2 opacity-70">
+                  Google Calendar — pick a slot, no email tag.
+                </p>
+              </div>
+            </div>
+          </NeoCard>
+          <NeoCard
+            href={`tel:${SITE.PHONE}`}
+            tone="green"
+            hover
+            ariaLabel="Call phone"
+          >
+            <div class="flex items-start gap-4">
+              <Icon name="lucide:phone" class="h-8 w-8 mt-1" />
+              <div>
+                <p
+                  class="mono text-xs font-bold uppercase tracking-widest opacity-70 mb-1"
+                >
+                  Phone / WhatsApp
+                </p>
+                <p class="heading text-xl">{SITE.PHONE_DISPLAY}</p>
+                <p class="text-xs mt-2 opacity-70">
+                  GMT+1 · Mon–Fri, 9:00–18:00.
+                </p>
+              </div>
+            </div>
+          </NeoCard>
+        </div>
+      </div>
+
+      <aside class="md:sticky md:top-24 flex flex-col items-center gap-4 max-w-[260px] mx-auto md:mx-0">
+        <RobotMascot tone="pink" size={160} class="md:!w-[180px] md:!h-[180px]" />
+        <SpeechBubble tone="yellow" tail="tl" class="max-w-[240px]">
+          <p class="text-sm">
+            I read every email. Even from recruiters. Even the bad ones.
+          </p>
+        </SpeechBubble>
+      </aside>
+    </div>
+  </div>
+
+  <HalftoneSection tone="ink" bordered class="py-12">
+    <div class="mx-auto max-w-5xl px-5 grid gap-6 md:grid-cols-3 text-bg">
+      {
+        SOCIALS.map((s) => (
+          <a
+            href={s.HREF}
+            {...externalLinkAttrs(s.HREF)}
+            class="flex items-center gap-3 border-[2px] border-bg p-4 font-bold uppercase text-sm hover:bg-yellow hover:text-ink hover:border-yellow transition-colors"
+          >
+            <Icon name={s.ICON} class="h-5 w-5" />
+            {s.NAME}
+          </a>
+        ))
+      }
+    </div>
+  </HalftoneSection>
+</Page>

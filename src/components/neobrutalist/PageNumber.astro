@@ -1,0 +1,29 @@
+---
+type Position = "tl" | "tr" | "bl" | "br";
+
+interface Props {
+  n: string | number;
+  position?: Position;
+  class?: string;
+}
+
+const { n, position = "tr", class: className = "" } = Astro.props;
+
+const posClass: Record<Position, string> = {
+  tl: "top-4 left-4",
+  tr: "top-4 right-4",
+  bl: "bottom-4 left-4",
+  br: "bottom-4 right-4",
+};
+---
+
+<span
+  class:list={[
+    "display absolute text-7xl md:text-8xl text-ink/10 select-none pointer-events-none",
+    posClass[position],
+    className,
+  ]}
+  aria-hidden="true"
+>
+  {typeof n === "number" ? String(n).padStart(2, "0") : n}
+</span>

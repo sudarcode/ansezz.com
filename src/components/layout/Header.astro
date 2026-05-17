@@ -1,0 +1,58 @@
+---
+import Nav from "./Nav.astro";
+import { Icon } from "astro-icon/components";
+import { SITE } from "@/consts";
+---
+
+<header
+  class="sticky top-0 z-40 border-b-[3px] border-ink bg-bg/95 backdrop-blur supports-[backdrop-filter]:bg-bg/80"
+>
+  <div
+    class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3 gap-4"
+  >
+    <a
+      href="/"
+      class="display text-2xl tracking-tight hover:bg-yellow px-1.5 -mx-1.5 transition-colors"
+    >
+      {SITE.SHORT_TITLE}<span class="text-pink">.</span>
+    </a>
+    <div class="hidden md:block">
+      <Nav />
+    </div>
+
+    <button
+      id="mobile-menu-toggle"
+      type="button"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      aria-label="Toggle menu"
+      class="md:hidden inline-flex items-center justify-center h-10 w-10 border-[2px] border-ink bg-paper shadow-neo-sm transition-all hover:bg-yellow"
+    >
+      <Icon name="lucide:menu" class="h-5 w-5 menu-icon-open" />
+      <Icon name="lucide:x" class="h-5 w-5 menu-icon-close hidden" />
+    </button>
+  </div>
+
+  <div
+    id="mobile-menu"
+    hidden
+    class="md:hidden border-t-[3px] border-ink bg-bg"
+  >
+    <div class="mx-auto max-w-5xl px-5 py-4">
+      <Nav vertical />
+    </div>
+  </div>
+
+  <noscript>
+    <style>#mobile-menu-toggle { display: none !important; }</style>
+    <div class="md:hidden border-t-[3px] border-ink bg-bg">
+      <div class="mx-auto max-w-5xl px-5 py-4">
+        <Nav vertical />
+      </div>
+    </div>
+  </noscript>
+</header>
+
+<script>
+  import "@/scripts/mobile-menu";
+</script>

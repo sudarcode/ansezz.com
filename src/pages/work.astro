@@ -1,0 +1,131 @@
+---
+import { getCollection } from "astro:content";
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import { WORK } from "@/consts";
+
+const entries = await getCollection("work");
+const sorted = entries.sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    a.data.order - b.data.order,
+);
+
+const groups = {
+  ai: {
+    label: "AI Engineering",
+    tone: "cyan" as const,
+    items: [] as typeof sorted,
+  },
+  shopify: {
+    label: "Shopify Apps",
+    tone: "green" as const,
+    items: [] as typeof sorted,
+  },
+  saas: {
+    label: "SaaS Platforms",
+    tone: "yellow" as const,
+    items: [] as typeof sorted,
+  },
+  "open-source": {
+    label: "Open Source",
+    tone: "pink" as const,
+    items: [] as typeof sorted,
+  },
+};
+
+for (const entry of sorted) {
+  groups[entry.data.category].items.push(entry);
+}
+
+const cardTones = ["paper", "yellow", "cyan", "green", "pink"] as const;
+---
+
+<Page
+  title={WORK.TITLE}
+  description={WORK.DESCRIPTION}
+  eyebrow="Selected work"
+  heading="Things I built. Most of them survived."
+  intro="A slice of recent projects across AI engineering, Shopify Plus, SaaS platforms, and open source."
+>
+  <div class="mx-auto max-w-5xl px-5 pb-16 space-y-16">
+    {
+      Object.entries(groups).map(
+        ([, group], gi) =>
+          group.items.length > 0 && (
+            <section>
+              <div class="flex items-center gap-4 mb-6">
+                <BurstBadge tone={group.tone} size="sm">
+                  {String(gi + 1).padStart(2, "0")}
+                </BurstBadge>
+                <h2 class="display text-3xl md:text-4xl">{group.label}</h2>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                {group.items.map((entry, i) => (
+                  <NeoCard
+                    tone={cardTones[i % cardTones.length]}
+                    hover
+                    class="flex flex-col gap-4 h-full"
+                  >
+                    <h3 class="heading text-2xl">{entry.data.title}</h3>
+                    <p class="text-sm leading-snug text-ink/80">
+                      {entry.data.description}
+                    </p>
+                    {entry.data.outcome && (
+                      <p class="mono text-xs font-bold uppercase tracking-wider bg-ink text-bg inline-block px-2 py-1 w-fit">
+                        ↑ {entry.data.outcome}
+                      </p>
+                    )}
+                    {entry.data.stack.length > 0 && (
+                      <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                        {entry.data.stack.map((s) => (
+                          <TagPill tone="paper" size="sm">
+                            {s}
+                          </TagPill>
+                        ))}
+                      </div>
+                    )}
+                    <div class="flex gap-3 mt-2 text-sm font-bold">
+                      {entry.data.liveUrl && (
+                        <a
+                          href={entry.data.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="underline underline-offset-4 decoration-[3px] hover:bg-ink hover:text-bg px-1"
+                        >
+                          Live ↗
+                        </a>
+                      )}
+                      {entry.data.githubUrl && (
+                        <a
+                          href={entry.data.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="underline underline-offset-4 decoration-[3px] hover:bg-ink hover:text-bg px-1"
+                        >
+                          GitHub ↗
+                        </a>
+                      )}
+                    </div>
+                  </NeoCard>
+                ))}
+              </div>
+            </section>
+          ),
+      )
+    }
+    {
+      sorted.length === 0 && (
+        <div class="border-[3px] border-dashed border-ink p-12 text-center">
+          <p class="display text-3xl mb-3">Coming soon</p>
+          <p class="opacity-70">
+            Case studies in progress. Drop me a line if you'd like an early
+            look.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</Page>
