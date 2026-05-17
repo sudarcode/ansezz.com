@@ -16,7 +16,7 @@ const hero = post.data.heroImage;
 <a
   href={`/blog/${post.id}/`}
   aria-label={`Read ${post.data.title}`}
-  class="group block bg-paper border-[3px] border-ink rounded-[3px] shadow-neo-md transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg overflow-hidden"
+  class="group flex h-full flex-col bg-paper border-[3px] border-ink rounded-[3px] shadow-neo-md transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg overflow-hidden"
 >
   {
     hero ? (
@@ -36,7 +36,7 @@ const hero = post.data.heroImage;
       <div class="relative aspect-[5/4] border-b-[3px] border-ink bg-ink halftone-dense opacity-90" />
     )
   }
-  <div class="p-5 space-y-3">
+  <div class="flex flex-1 flex-col p-5 gap-3">
     <PostMeta
       date={post.data.publishDate}
       updatedDate={post.data.updatedDate}
@@ -50,7 +50,7 @@ const hero = post.data.heroImage;
     <p class="text-sm leading-snug text-ink/80 line-clamp-3">
       {post.data.description}
     </p>
-    <p class="pt-1 font-bold text-sm group-hover:underline underline-offset-4 decoration-[3px]">
+    <p class="mt-auto pt-2 font-bold text-sm group-hover:underline underline-offset-4 decoration-[3px]">
       Read post →
     </p>
   </div>

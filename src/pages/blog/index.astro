@@ -53,38 +53,36 @@ const featuredHero = featured?.data.heroImage;
           aria-label={`Read ${featured.data.title}`}
           class="group block border-[3px] border-ink shadow-neo-lg bg-yellow overflow-hidden transition-all hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl"
         >
-          <div class="grid md:grid-cols-[1.1fr_1fr] gap-0">
-            {featuredHero && (
-              <div class="relative aspect-[16/10] md:aspect-auto overflow-hidden border-b-[3px] md:border-b-0 md:border-l-[3px] border-ink bg-ink order-1 md:order-2">
-                <img
-                  src={featuredHero.url}
-                  alt={featuredHero.alt}
-                  width="1200"
-                  height="750"
-                  loading="eager"
-                  decoding="async"
-                  fetchpriority="high"
-                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-            )}
-            <div class="p-6 md:p-10 order-2 md:order-1 flex flex-col justify-center">
-              <p class="mono text-xs font-bold uppercase tracking-widest mb-3">
-                ▸ Latest
-              </p>
-              <h2 class="display text-3xl md:text-5xl mb-4 leading-tight">
-                {featured.data.title}
-              </h2>
-              <p class="text-base md:text-lg mb-4">
-                {featured.data.description}
-              </p>
-              <PostMeta
-                date={featured.data.publishDate}
-                updatedDate={featured.data.updatedDate}
-                category={featured.data.category}
-                readingTime={featuredRt}
+          {featuredHero && (
+            <div class="relative aspect-[2/1] overflow-hidden border-b-[3px] border-ink bg-ink">
+              <img
+                src={featuredHero.url}
+                alt={featuredHero.alt}
+                width="1200"
+                height="600"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
+          )}
+          <div class="p-6 md:p-10">
+            <p class="mono text-xs font-bold uppercase tracking-widest mb-3">
+              ▸ Latest
+            </p>
+            <h2 class="display text-3xl md:text-5xl mb-4 leading-tight">
+              {featured.data.title}
+            </h2>
+            <p class="text-base md:text-lg mb-4">
+              {featured.data.description}
+            </p>
+            <PostMeta
+              date={featured.data.publishDate}
+              updatedDate={featured.data.updatedDate}
+              category={featured.data.category}
+              readingTime={featuredRt}
+            />
           </div>
         </a>
       ) : (
