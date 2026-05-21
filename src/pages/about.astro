@@ -12,6 +12,12 @@ import NeoButton from "@/components/neobrutalist/NeoButton.astro";
 import AvailabilityBadge from "@/components/neobrutalist/AvailabilityBadge.astro";
 import { Icon } from "astro-icon/components";
 import { ABOUT, LANGUAGES, SITE, OWNER } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const aboutBreadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "About", url: "/about/" },
+]);
 
 const facts: { v: string; l: string; icon: string; tone: "yellow" | "pink" | "cyan" | "green" | "red" | "purple" }[] = [
   { v: "12+", l: "Years shipping", icon: "lucide:rocket", tone: "yellow" },
@@ -123,6 +129,7 @@ const obsessions = [
   eyebrow="About"
   heading="Backend brain. AI heart. 12 years of shipping."
   intro="I'm Anass — senior lead backend engineer, software architect, and AI engineer. Remote-only since 2014. I help founders, agencies, and product teams ship Laravel SaaS, Shopify Plus apps, and AI features that survive real users."
+  structuredData={aboutBreadcrumbLd}
 >
   <section
     class="mx-auto max-w-5xl px-5 grid gap-10 md:grid-cols-[1fr_320px] md:gap-12 pb-12"

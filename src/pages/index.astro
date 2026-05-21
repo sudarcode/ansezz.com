@@ -81,9 +81,18 @@ const websiteLd = {
   "@id": `${SITE.URL}#website`,
   url: SITE.URL,
   name: SITE.TITLE,
+  alternateName: SITE.SHORT_TITLE,
   description: SITE.DESCRIPTION,
   inLanguage: "en",
   publisher: { "@id": `${SITE.URL}#person` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE.URL}/blog/?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 const professionalServiceLd = {

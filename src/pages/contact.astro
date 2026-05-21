@@ -13,6 +13,7 @@ import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
 import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
 import { Icon } from "astro-icon/components";
 import { CONTACT, SITE, AVAILABLE_FOR, OWNER, SERVICES } from "@/consts";
+import { faqPage, breadcrumbList } from "@/lib/seo";
 
 const tones = ["yellow", "pink", "cyan", "green", "red", "blue", "purple"] as const;
 
@@ -90,6 +91,13 @@ const faq = [
   eyebrow="Hire me"
   heading="Let's build something."
   intro="Senior backend, software architect, AI engineer. Booked weekly, but I keep slots for serious projects. Two ways to start — email me, or book a 15-min intro."
+  structuredData={[
+    faqPage(faq.map((item) => ({ question: item.q, answer: item.a }))),
+    breadcrumbList([
+      { name: "Home", url: SITE.URL },
+      { name: "Contact", url: "/contact/" },
+    ]),
+  ]}
 >
   <section class="mx-auto max-w-5xl px-5 pb-12 space-y-6">
     <div class="flex flex-wrap items-center gap-4">

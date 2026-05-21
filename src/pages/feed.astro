@@ -4,6 +4,12 @@ import NeoCard from "@/components/neobrutalist/NeoCard.astro";
 import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
 import { Icon } from "astro-icon/components";
 import { SITE, X_HANDLE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const feedBreadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Feed", url: "/feed/" },
+]);
 
 const xProfile = `https://x.com/${X_HANDLE}`;
 ---
@@ -14,6 +20,7 @@ const xProfile = `https://x.com/${X_HANDLE}`;
   eyebrow="Social"
   heading="Live feed."
   intro="Real-time X timeline — production logs, shipping notes, contrarian takes on Laravel + Shopify + AI."
+  structuredData={feedBreadcrumbLd}
 >
   <div class="mx-auto max-w-3xl px-5 pb-20">
     <div class="flex flex-wrap items-center gap-3 mb-10">
