@@ -6,7 +6,7 @@ category: ai
 tags: [rag, ai, llm, pgvector, reranker, hybrid-search, evals, production]
 featured: true
 heroImage:
-  url: "https://cdn.marblism.com/3rVZwAAEjp-.webp"
+  url: "/blog/7-rag-mistakes-production/hero.webp"
   alt: "Stylized illustration of a production RAG stack under stress"
 ---
 
@@ -32,7 +32,7 @@ This "naive chunking" treats your data like raw soup. It might cut a sentence in
 
 I always recommend chunking based on the actual structure of the document first. Use headers (H1, H2, H3), paragraphs, or even markdown delimiters to ensure related ideas stay together. If you're working with complex data, consider recursive character splitting that respects newlines and punctuation before falling back to raw token counts.
 
-![Structural vs naive chunking illustration](https://cdn.marblism.com/on3xgCmaGCz.webp)
+![Structural vs naive chunking illustration](/blog/7-rag-mistakes-production/chunking.webp)
 
 ## 2. Skipping the reranker step
 
@@ -46,7 +46,7 @@ I look at retrieval as a two-stage process. Stage one is the "fast and broad" se
 
 The reranker acts like a bouncer at a club. It doesn't care if a document looks "okay." It only lets in the ones that are actually relevant to the question.
 
-![Two-stage retrieval with reranker](https://cdn.marblism.com/4p7rDMF4Alq.webp)
+![Two-stage retrieval with reranker](/blog/7-rag-mistakes-production/reranker.webp)
 
 ## 3. Ignoring embedding drift and versioning
 
@@ -70,7 +70,7 @@ I start with a "latency budget." If the user expects a response in under 2 secon
 
 If you need more data, consider using a multi-step approach: use a cheaper model to summarize the retrieved chunks before passing the refined info to your main model.
 
-![Latency budget illustration](https://cdn.marblism.com/GIkH9gaCAEu.webp)
+![Latency budget illustration](/blog/7-rag-mistakes-production/latency.webp)
 
 ## 5. Forgetting about hybrid search
 
@@ -104,7 +104,7 @@ I use the Ragas framework or simple LLM-as-a-judge patterns to run automated eva
 2. **Answer relevance** — does it answer the user's question?
 3. **Context precision** — are the retrieved chunks actually useful?
 
-![Evaluation harness illustration](https://cdn.marblism.com/1vTHAMhrMRt.webp)
+![Evaluation harness illustration](/blog/7-rag-mistakes-production/evals.webp)
 
 ### Practical takeaways for your stack
 
