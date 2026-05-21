@@ -4,7 +4,7 @@ export const SITE = {
   SHORT_TITLE: "ansezz",
   DESCRIPTION:
     "Senior Lead Backend Engineer, Software Architect, and AI Engineer. 12+ years building production Laravel SaaS, Shopify Plus apps, and AI features (Claude, MCP, RAG, agentic systems). Remote-first since 2014.",
-  EMAIL: "ans-ezzouaine@hotmail.com",
+  EMAIL: "me@ansezz.com",
   PHONE: "+212679405863",
   PHONE_DISPLAY: "+212 679 40 58 63",
   BOOKING_URL: "https://calendar.app.google/x1eeuSb9UuMGF4pD9",
@@ -72,7 +72,7 @@ export const SOCIALS = [
     HREF: "https://facebook.com/ansezz",
     ICON: "lucide:facebook",
   },
-  { NAME: "Email", HREF: "mailto:ans-ezzouaine@hotmail.com", ICON: "lucide:mail" },
+  { NAME: "Email", HREF: "mailto:me@ansezz.com", ICON: "lucide:mail" },
   { NAME: "Phone", HREF: "tel:+212679405863", ICON: "lucide:phone" },
   {
     NAME: "Book a call",
