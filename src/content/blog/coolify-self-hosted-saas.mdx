@@ -1,0 +1,103 @@
+---
+title: "The Coolify revolution: why I'm ditching expensive cloud providers for self-hosted SaaS"
+description: "The 'cloud tax' kills SaaS margins before product-market fit. How Coolify — an open-source, self-hostable Heroku — plus ARM instances on Hetzner or Oracle's free tier cuts a $500/month AWS bill down to single digits, with zero vendor lock-in and a git-push deploy experience."
+publishDate: 2026-05-30
+category: devops
+tags: [coolify, self-hosting, devops, docker, arm, hetzner, saas, cost-optimization]
+featured: false
+heroImage:
+  url: "/blog/coolify-self-hosted-saas/hero.webp"
+  alt: "Self-hosted SaaS stack running on Coolify instead of expensive cloud providers"
+---
+
+Most SaaS founders are quietly getting robbed by their own cloud provider.
+
+I have spent over a decade building and scaling web applications, and if there is one thing I have learned, it is that the "cloud tax" is the most effective way to kill your margins before you even find product-market fit. We have been conditioned to believe that unless our small CRUD app is running on a multi-region, auto-scaling AWS EKS cluster, we are doing it wrong.
+
+That is a lie designed to keep you paying for complexity you do not need.
+
+## The architecture of a trap
+
+It starts innocently enough. You sign up for AWS or GCP because they give you $1,000 in credits. You spin up an RDS instance for your database, a few S3 buckets for storage, and maybe a managed Kubernetes service because it feels "professional."
+
+Then the credits run out.
+
+Suddenly, you are paying $200 a month for a database that is 99% idle. You are paying for NAT gateways, provisioned IOPS, and "management fees" for services that could easily run on a $5 VPS. You are stuck in a web of proprietary APIs and IAM roles that require a full-time DevOps engineer just to update an environment variable.
+
+This is the agitation: managed services feel like a superpower at the start, but they become a golden cage as you scale. The complexity overhead alone is enough to slow your development velocity to a crawl. When I look at how [AI is changing traditional development](/blog/ai-vs-traditional-development/), it becomes clear that we need to move faster, not get bogged down in infrastructure molasses.
+
+## Enter Coolify: Heroku's open-source soulmate
+
+![Coolify dashboard showing its core self-hosting features](/blog/coolify-self-hosted-saas/features.webp)
+
+The solution I have moved my entire stack to is Coolify.
+
+Coolify is an open-source, self-hostable alternative to Vercel, Heroku, and Railway. It gives you that same "git push to deploy" experience we all love, but it runs on your own hardware. Whether you have a $4 VPS on Hetzner or a massive ARM-based instance on Oracle Cloud, Coolify turns it into a private PaaS.
+
+I recently wrote about how [Coolify and Docker are changing SaaS hosting](/blog/coolify-docker-saas-hosting/), but the shift is deeper than just a tool change. It is a mindset shift toward technical sovereignty.
+
+Here is what makes Coolify a game-changer for a senior engineer:
+
+- **Zero vendor lock-in** — your configurations are stored on your server. If Coolify disappeared tomorrow, your Docker containers would keep running.
+- **Automatic SSL** — it handles Let's Encrypt out of the box. No more messing with Nginx configs or certbot.
+- **Database management** — you can spin up Postgres, MySQL, Redis, or MongoDB in one click. They run as containers on your server, meaning you pay $0 in additional managed service fees.
+- **Pull request deployments** — it creates temporary environments for every PR, just like Vercel, but without the "team seat" tax.
+
+## The magic of ARM (Graviton and OCI)
+
+If you want to see a 90% reduction in your infrastructure bill, you need to stop using x86 and start using ARM.
+
+AWS Graviton instances are roughly 20-40% cheaper and more performant than their Intel-based counterparts. But the real "cheat code" right now is Oracle Cloud Infrastructure (OCI). Their "Always Free" tier gives you 4 ARM Ampere A1 cores and 24 GB of RAM for free.
+
+I can run an entire production SaaS — frontend, backend, database, and Redis — on that single free instance using Coolify.
+
+When you pair ARM efficiency with a self-hosted orchestrator, the math changes. A startup that was paying $500/month on AWS can often move that entire workload to a $40/month ARM instance on Hetzner or OCI. That extra $460 goes back into your pocket or your marketing budget.
+
+![Architecture of a self-hosted SaaS running on a single ARM instance](/blog/coolify-self-hosted-saas/architecture.webp)
+
+## Docker and Nix: the engine room
+
+Coolify relies heavily on Docker, which is the industry standard for a reason. It ensures that what works on my machine works on the server. But as I move deeper into the "vibe coding" era, I'm also looking at how technologies like Nix can further stabilize our environments.
+
+By using Nix flakes to define our development environment and Docker to package the runtime, we create a bulletproof deployment pipeline. When I use tools like the [Model Context Protocol (MCP)](/blog/mcp-context-aware-agents/), I want my AI agents to have a clear, reproducible environment to work within. Self-hosting doesn't mean "unprofessional" — it means having total control over the stack.
+
+## Comparison: the hidden cost of "easy"
+
+Let's look at the numbers for a standard Laravel or Node.js app with a database and a background worker.
+
+**The managed path (Vercel + Supabase + AWS S3):**
+
+- Vercel Pro: $20/month per user
+- Supabase Pro: $25/month
+- AWS S3 + bandwidth: $15/month
+- **Total: $60+/month (and rising with every user/teammate)**
+
+**The Coolify path (Hetzner VPS):**
+
+- 4 vCPU ARM / 8GB RAM: $6/month
+- Backups to S3-compatible storage: $1/month
+- Coolify: $0 (open source)
+- **Total: $7/month**
+
+The "managed" path is nearly 10x more expensive before you even have your first 100 users. For a senior engineer, the 30 minutes it takes to install Coolify on a fresh Linux box is worth the thousands of dollars saved over the life of the project.
+
+## Practical steps to join the revolution
+
+![A developer workspace set up for self-hosted deployment](/blog/coolify-self-hosted-saas/workspace.webp)
+
+If you are tired of the cloud tax, here is my recommended path to freedom:
+
+1. **Grab a VPS** — I recommend Hetzner for raw performance/price or OCI for their insane free tier. Pick an ARM-based instance (Ubuntu 24.04).
+2. **Install Coolify** — run the one-line install command from their documentation. It takes about 5 minutes.
+3. **Connect your Git** — link your GitHub or GitLab account.
+4. **Dockerize your app** — if you are using Laravel, it is as simple as adding a `Dockerfile`. For Vite or Next.js, Coolify has built-in builders that don't even require a `Dockerfile`.
+5. **Move your DB** — export your managed DB and import it into a Coolify-managed container. Set up S3 backups immediately.
+
+## The bottom line
+
+We are entering a cycle where efficiency is the only thing that matters. The days of "VC-subsidized" infrastructure are over. Whether you are building a small tool or a massive enterprise SaaS, you owe it to your bottom line to look at self-hosting.
+
+Coolify has matured to the point where the developer experience is indistinguishable from the big players. The only difference is who owns the keys to the castle.
+
+I am curious: what is the most "expensive" mistake you have ever made on a cloud bill — a forgotten NAT gateway or a runaway Lambda function? Drop a note via [contact](/contact/). 🤘
+</content>
