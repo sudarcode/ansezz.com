@@ -4,7 +4,10 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import rehypeExternalLinks from "rehype-external-links";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { unified } from "@astrojs/markdown-remark";
+import rehypeImageDims from "./src/lib/rehype-image-dims.mjs";
 
 import { SITE } from "./src/consts";
 
@@ -49,6 +52,18 @@ export default defineConfig({
     // deprecated markdown.rehypePlugins option.
     processor: unified({
       rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: {
+              className: ["heading-anchor"],
+              ariaLabel: "Link to this section",
+            },
+          },
+        ],
+        rehypeImageDims,
         [
           rehypeExternalLinks,
           {

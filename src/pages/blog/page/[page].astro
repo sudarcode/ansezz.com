@@ -36,6 +36,8 @@ const prevUrl = page.currentPage === 2 ? "/blog/" : page.url.prev;
   eyebrow={`Blog · Page ${page.currentPage}`}
   heading="More from the trenches."
   intro="Older posts. Same hot takes."
+  prev={prevUrl}
+  next={page.url.next}
 >
   <HalftoneSection tone="bg" class="pb-2">
     <div class="mx-auto max-w-6xl px-5">

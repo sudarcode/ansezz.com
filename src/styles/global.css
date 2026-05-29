@@ -200,6 +200,28 @@ article.prose a {
 article.prose a:hover {
   background: var(--color-yellow);
 }
+/* heading anchor links (rehype-autolink-headings, append mode) */
+article.prose :is(h2, h3, h4) {
+  position: relative;
+}
+article.prose .heading-anchor {
+  text-decoration: none;
+  font-weight: 700;
+  opacity: 0;
+  margin-left: 0.4em;
+  color: var(--color-pink);
+  transition: opacity 0.12s ease;
+}
+article.prose .heading-anchor::after {
+  content: "#";
+}
+article.prose :is(h2, h3, h4):hover .heading-anchor,
+article.prose .heading-anchor:focus-visible {
+  opacity: 1;
+}
+article.prose .heading-anchor:hover {
+  background: transparent;
+}
 article.prose blockquote {
   border-left-width: 4px;
   background: var(--color-yellow);

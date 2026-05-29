@@ -501,6 +501,24 @@ export const TOOL_LIST: ToolEntry[] = [
     tone: "pink",
     status: "live",
   },
+  {
+    title: "JWT Decoder",
+    blurb:
+      "Paste a JWT and read its header and payload — claims, algorithm, and expiry decoded in your browser. Decode-only; nothing is sent anywhere.",
+    href: "/tools/jwt-decoder/",
+    icon: "lucide:key-round",
+    tone: "purple",
+    status: "live",
+  },
+  {
+    title: "UUID Generator",
+    blurb:
+      "Generate v4 UUIDs in bulk, copy with one click. Crypto-random, instant, offline. Handy for seeds, fixtures, and quick IDs.",
+    href: "/tools/uuid-generator/",
+    icon: "lucide:fingerprint",
+    tone: "green",
+    status: "live",
+  },
 ];
 
 // ── Library / reading list ────────────────────────────────

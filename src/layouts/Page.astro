@@ -13,6 +13,8 @@ interface Props {
   image?: string;
   structuredData?: object | object[];
   noindex?: boolean;
+  prev?: string;
+  next?: string;
 }
 
 const {
@@ -24,6 +26,8 @@ const {
   image,
   structuredData,
   noindex,
+  prev,
+  next,
 } = Astro.props;
 
 const pageUrl = new URL(Astro.url.pathname, SITE.URL).href;
@@ -48,6 +52,8 @@ const finalStructured = autoWebPage ? [autoWebPage, ...extra] : extra;
   image={resolvedImage}
   structuredData={finalStructured}
   noindex={noindex}
+  prev={prev}
+  next={next}
 >
   <section
     class="relative mx-auto max-w-5xl px-5 pt-12 pb-10 md:pt-20 md:pb-14"

@@ -23,6 +23,9 @@ interface Props {
   noindex?: boolean;
   ogType?: "website" | "article" | "profile";
   article?: ArticleMeta;
+  /** Pagination — emit <link rel="prev/next"> for paginated sequences. */
+  prev?: string;
+  next?: string;
 }
 
 const {
@@ -34,7 +37,12 @@ const {
   noindex = false,
   ogType = "website",
   article,
+  prev,
+  next,
 } = Astro.props;
+
+const prevHref = prev ? new URL(prev, Astro.site).href : undefined;
+const nextHref = next ? new URL(next, Astro.site).href : undefined;
 
 const fullTitle = title === SITE.TITLE ? title : `${title} — ${SITE.TITLE}`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
@@ -68,12 +76,15 @@ const ldList = structuredData
     <meta name="description" content={description} />
     <meta name="author" content={OWNER.NAME} />
     <link rel="canonical" href={canonicalUrl} />
+    {prevHref && <link rel="prev" href={prevHref} />}
+    {nextHref && <link rel="next" href={nextHref} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.TITLE} href="/rss.xml" />
+    <link rel="alternate" type="application/feed+json" title={SITE.TITLE} href="/feed.json" />
     {
       SOCIALS.filter((s) => s.HREF.startsWith("http")).map((s) => (
         <link rel="me" href={s.HREF} />

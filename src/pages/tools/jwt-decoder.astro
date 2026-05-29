@@ -1,0 +1,79 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import { SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Tools", url: "/tools/" },
+  { name: "JWT Decoder", url: "/tools/jwt-decoder/" },
+]);
+---
+
+<Page
+  title="JWT Decoder"
+  description="Free JWT decoder. Paste a JSON Web Token and read its header and payload — claims, algorithm, and expiry — decoded entirely in your browser. Nothing is sent anywhere."
+  eyebrow="Free tool"
+  heading="JWT Decoder."
+  intro="Paste a JWT to read its header and payload. Decoding happens in your browser — the token never leaves the page."
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-4xl px-5 pb-6">
+    <StickyNote tone="pink" tilt={-1.5} class="max-w-md">
+      <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+        ▸ Decode only
+      </p>
+      <p class="text-sm font-bold leading-snug">
+        This does not verify the signature — it only decodes. Never trust a JWT
+        you haven't verified server-side. Don't paste production secrets.
+      </p>
+    </StickyNote>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-5 pb-16 space-y-5" id="jwt-root">
+    <NeoCard tone="paper" shadow="md" class="space-y-3">
+      <label
+        for="jwt-input"
+        class="mono text-[11px] font-bold uppercase tracking-widest block"
+      >
+        JWT
+      </label>
+      <textarea
+        id="jwt-input"
+        rows="5"
+        spellcheck="false"
+        placeholder="eyJhbGciOiJIUzI1Ni', '...'"
+        class="w-full border-[3px] border-ink rounded-[4px] bg-paper p-3 font-mono text-sm shadow-neo-sm focus:outline-none resize-y break-all"
+      ></textarea>
+      <p id="jwt-error" class="text-sm font-bold text-pink-deep" hidden></p>
+    </NeoCard>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      <NeoCard tone="cyan" shadow="sm" class="space-y-2">
+        <p class="mono text-[11px] font-bold uppercase tracking-widest">
+          ▸ Header
+        </p>
+        <pre class="overflow-x-auto text-sm"><code id="jwt-header">—</code></pre>
+      </NeoCard>
+      <NeoCard tone="yellow" shadow="sm" class="space-y-2">
+        <p class="mono text-[11px] font-bold uppercase tracking-widest">
+          ▸ Payload
+        </p>
+        <pre class="overflow-x-auto text-sm"><code id="jwt-payload">—</code></pre>
+      </NeoCard>
+    </div>
+
+    <NeoCard tone="paper" shadow="sm" class="space-y-2">
+      <p class="mono text-[11px] font-bold uppercase tracking-widest">
+        ▸ Claims
+      </p>
+      <ul id="jwt-claims" class="space-y-1 text-sm"></ul>
+    </NeoCard>
+  </section>
+</Page>
+
+<script>
+  import "@/scripts/jwt-decoder";
+</script>

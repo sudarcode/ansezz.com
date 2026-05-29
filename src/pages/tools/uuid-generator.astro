@@ -1,0 +1,68 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import { Icon } from "astro-icon/components";
+import { SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Tools", url: "/tools/" },
+  { name: "UUID Generator", url: "/tools/uuid-generator/" },
+]);
+---
+
+<Page
+  title="UUID Generator"
+  description="Free v4 UUID generator. Generate crypto-random UUIDs in bulk and copy them with one click — instant, offline, nothing leaves your browser."
+  eyebrow="Free tool"
+  heading="UUID Generator."
+  intro="Crypto-random v4 UUIDs, generated in your browser. Set how many, generate, copy."
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-3xl px-5 pb-16" id="uuid-root">
+    <NeoCard tone="paper" shadow="md" class="space-y-5">
+      <div class="flex flex-wrap items-end gap-4">
+        <label class="block">
+          <span class="mono text-[11px] font-bold uppercase tracking-widest block mb-2">
+            How many
+          </span>
+          <input
+            id="uuid-count"
+            type="number"
+            min="1"
+            max="500"
+            value="5"
+            class="w-28 border-[3px] border-ink rounded-[4px] bg-paper px-3 py-2.5 font-mono font-bold shadow-neo-sm focus:outline-none"
+          />
+        </label>
+        <NeoButton type="button" variant="primary" size="md" class="cursor-pointer">
+          <span id="uuid-generate" class="inline-flex items-center gap-2">
+            <Icon name="lucide:refresh-cw" class="h-4 w-4" />
+            Generate
+          </span>
+        </NeoButton>
+        <button
+          type="button"
+          id="uuid-copy"
+          class="inline-flex items-center gap-2 border-[3px] border-ink bg-paper px-4 py-2.5 text-sm font-bold uppercase tracking-wide shadow-neo-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow hover:shadow-neo-md"
+        >
+          <Icon name="lucide:copy" class="h-4 w-4" />
+          <span id="uuid-copy-label">Copy all</span>
+        </button>
+      </div>
+
+      <textarea
+        id="uuid-output"
+        rows="10"
+        readonly
+        class="w-full border-[3px] border-ink rounded-[4px] bg-bg-alt p-3 font-mono text-sm shadow-neo-sm focus:outline-none resize-y"
+      ></textarea>
+    </NeoCard>
+  </section>
+</Page>
+
+<script>
+  import "@/scripts/uuid-generator";
+</script>

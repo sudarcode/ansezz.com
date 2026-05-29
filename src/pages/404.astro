@@ -98,9 +98,15 @@ const reportUrl = `mailto:${SITE.EMAIL}?subject=${encodeURIComponent("Broken lin
           <Icon name="lucide:home" class="h-4 w-4" />
           Take me home
         </NeoButton>
-        <NeoButton href="/blog/" variant="secondary" size="lg">
-          Read the blog →
-        </NeoButton>
+        <button
+          type="button"
+          data-cmdk-open
+          class="inline-flex items-center gap-2 border-[3px] border-ink bg-paper px-5 py-2.5 text-sm font-bold uppercase tracking-wide shadow-neo-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow hover:shadow-neo-md"
+        >
+          <Icon name="lucide:search" class="h-4 w-4" />
+          Search the site
+          <kbd class="mono text-[10px] font-bold border-[2px] border-ink rounded px-1.5 py-0.5">⌘K</kbd>
+        </button>
         <NeoButton href="/contact/" variant="ink" size="lg">
           Email me →
         </NeoButton>

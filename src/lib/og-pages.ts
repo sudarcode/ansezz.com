@@ -76,6 +76,12 @@ export const PAGE_OG: PageOg[] = [
     label: "Library",
     title: "Books, tools & repos I recommend.",
   },
+  {
+    slug: "series",
+    path: "/blog/series/",
+    label: "Blog series",
+    title: "Read it as a series.",
+  },
 ];
 
 const BY_PATH = new Map(PAGE_OG.map((p) => [p.path, p]));
