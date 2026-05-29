@@ -97,7 +97,28 @@ document.addEventListener("keydown", (e) => {
   }
   if (!isOpen()) return;
 
-  if (e.key === "Escape") {
+  if (e.key === "Tab") {
+    // Keep focus inside the modal.
+    const modal = document.getElementById("cmdk");
+    if (!modal) return;
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+    );
+    const list = [...focusable].filter(
+      (el) => !el.closest("li")?.hasAttribute("hidden") && !el.hidden,
+    );
+    if (list.length === 0) return;
+    const first = list[0];
+    const last = list[list.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+    if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  } else if (e.key === "Escape") {
     e.preventDefault();
     close();
   } else if (e.key === "ArrowDown") {

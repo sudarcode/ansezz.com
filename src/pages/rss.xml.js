@@ -4,6 +4,9 @@ import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { SITE } from "@/consts";
 
+// NOTE: posts are rendered with markdown-it, not the MDX compiler. Current
+// posts are plain Markdown, so this is faithful. If a post ever uses MDX
+// components/imports, they won't render here — switch to the container API.
 const parser = new MarkdownIt({ html: true, linkify: true });
 
 // Rewrite root-relative URLs to absolute so feed readers resolve them.

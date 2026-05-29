@@ -129,6 +129,11 @@ export const BLOG = {
     "Notes on Laravel internals, AI engineering with Anthropic Claude and MCP, RAG pipelines, Shopify Plus, DevOps, and software architecture.",
 };
 
+// Minimum posts a tag needs before it gets its own generated OG card.
+// Below this, the tag page reuses the generic blog card — avoids
+// generating a PNG per long-tail tag.
+export const TAG_OG_MIN_POSTS = 3;
+
 // Curated entry points for new readers (post IDs = filename w/o extension).
 export const START_HERE = [
   "why-your-rag-is-failing",

@@ -13,6 +13,16 @@ import { SITE } from "./src/consts";
 
 const siteHost = new URL(SITE.URL).hostname;
 
+// Concatenate the text content of a hast heading node (for anchor aria-labels).
+function headingText(node) {
+  if (!node) return "";
+  if (node.type === "text") return node.value;
+  if (Array.isArray(node.children)) {
+    return node.children.map(headingText).join("");
+  }
+  return "";
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.URL,
@@ -57,9 +67,15 @@ export default defineConfig({
           rehypeAutolinkHeadings,
           {
             behavior: "append",
-            properties: {
-              className: ["heading-anchor"],
-              ariaLabel: "Link to this section",
+            // Build a per-heading aria-label from the heading's text.
+            properties: (node) => {
+              const text = headingText(node);
+              return {
+                className: ["heading-anchor"],
+                ariaLabel: text
+                  ? `Link to section: ${text}`
+                  : "Link to section",
+              };
             },
           },
         ],

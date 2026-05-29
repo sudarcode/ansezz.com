@@ -4,6 +4,8 @@ import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { SITE, OWNER } from "@/consts";
 
+// NOTE: rendered with markdown-it, not the MDX compiler — faithful for the
+// current plain-Markdown posts; MDX components would not render here.
 const parser = new MarkdownIt({ html: true, linkify: true });
 
 function absolutize(html: string, base: string): string {

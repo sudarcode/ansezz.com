@@ -26,6 +26,8 @@ interface Props {
   /** Pagination — emit <link rel="prev/next"> for paginated sequences. */
   prev?: string;
   next?: string;
+  /** Extra RSS feeds to advertise (e.g. a per-category feed). */
+  feeds?: { title: string; href: string }[];
 }
 
 const {
@@ -39,6 +41,7 @@ const {
   article,
   prev,
   next,
+  feeds = [],
 } = Astro.props;
 
 const prevHref = prev ? new URL(prev, Astro.site).href : undefined;
@@ -85,6 +88,11 @@ const ldList = structuredData
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.TITLE} href="/rss.xml" />
     <link rel="alternate" type="application/feed+json" title={SITE.TITLE} href="/feed.json" />
+    {
+      feeds.map((f) => (
+        <link rel="alternate" type="application/rss+xml" title={f.title} href={f.href} />
+      ))
+    }
     {
       SOCIALS.filter((s) => s.HREF.startsWith("http")).map((s) => (
         <link rel="me" href={s.HREF} />
