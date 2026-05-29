@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-import { SITE, SOCIALS, OWNER, NAV } from "@/consts";
+import { SITE, SOCIALS, OWNER, NAV, FOOTER_MORE } from "@/consts";
 import { externalLinkAttrs } from "@/lib/links";
 
 const year = new Date().getFullYear();
@@ -91,6 +91,18 @@ const bottomLinks = [
             Feed
           </a>
         </li>
+        {
+          FOOTER_MORE.map((n) => (
+            <li>
+              <a
+                href={n.HREF}
+                class="text-sm font-bold opacity-90 hover:opacity-100 hover:text-yellow transition-colors inline-block"
+              >
+                {n.LABEL}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
 

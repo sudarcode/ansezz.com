@@ -3,13 +3,22 @@ title: "Scaling with RabbitMQ: why message brokers matter"
 description: "Synchronous controllers are how monoliths die. RabbitMQ basics, exchanges and queues, the strangler pattern for going async, idempotent workers, and the Laravel queue setup I use to absorb 100k-row spikes without breaking the login page."
 publishDate: 2026-05-16
 category: architecture
-tags: [rabbitmq, message-broker, queues, decoupling, scaling, laravel, async, architecture]
+tags:
+  [
+    rabbitmq,
+    message-broker,
+    queues,
+    decoupling,
+    scaling,
+    laravel,
+    async,
+    architecture,
+  ]
 featured: true
 heroImage:
   url: "/blog/scaling-with-rabbitmq/hero.webp"
   alt: "Pop-art illustration of RabbitMQ routing messages between web servers and workers"
 ---
-
 
 The monolith is screaming. Every time a user hits the "checkout" button, your server has to generate a PDF, send a welcome email, update the inventory, and ping three different third-party APIs. Your request/response cycle is hanging by a thread. If any of those external services take more than two seconds to respond, your user sees a 504 gateway timeout.
 

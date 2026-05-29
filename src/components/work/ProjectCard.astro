@@ -13,6 +13,9 @@ interface Props {
 
 const { entry, tone = "paper" } = Astro.props;
 
+// Featured entries have a full case-study detail page.
+const caseStudyHref = entry.data.featured ? `/work/${entry.id}/` : undefined;
+
 const toneClass: Record<Tone, string> = {
   paper: "bg-paper text-ink",
   yellow: "bg-yellow text-ink",
@@ -39,7 +42,18 @@ const tagTone = tone === "paper" ? "yellow" : "paper";
         ▸ {entry.data.category}
       </p>
       <h3 class="heading text-2xl md:text-3xl leading-tight">
-        {entry.data.title}
+        {
+          caseStudyHref ? (
+            <a
+              href={caseStudyHref}
+              class="hover:underline underline-offset-4 decoration-[3px] after:absolute after:inset-0"
+            >
+              {entry.data.title}
+            </a>
+          ) : (
+            entry.data.title
+          )
+        }
       </h3>
     </div>
     {
@@ -79,10 +93,20 @@ const tagTone = tone === "paper" ? "yellow" : "paper";
   }
 
   {
-    (entry.data.liveUrl || entry.data.githubUrl) && (
-      <div class="mt-auto flex flex-wrap gap-2.5 pt-2">
+    (caseStudyHref || entry.data.liveUrl || entry.data.githubUrl) && (
+      <div class="relative z-10 mt-auto flex flex-wrap gap-2.5 pt-2">
+        {caseStudyHref && (
+          <NeoButton href={caseStudyHref} variant="ink" size="sm">
+            Case study
+            <Icon name="lucide:arrow-right" class="h-3.5 w-3.5" />
+          </NeoButton>
+        )}
         {entry.data.liveUrl && (
-          <NeoButton href={entry.data.liveUrl} variant="ink" size="sm">
+          <NeoButton
+            href={entry.data.liveUrl}
+            variant={caseStudyHref ? "secondary" : "ink"}
+            size="sm"
+          >
             <Icon name="lucide:external-link" class="h-3.5 w-3.5" />
             Live
           </NeoButton>

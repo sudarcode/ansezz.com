@@ -1,5 +1,6 @@
 ---
 import Nav from "./Nav.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 import { Icon } from "astro-icon/components";
 import { SITE } from "@/consts";
 import { externalLinkAttrs } from "@/lib/links";
@@ -19,6 +20,7 @@ import { externalLinkAttrs } from "@/lib/links";
     </a>
     <div class="hidden md:flex items-center gap-3">
       <Nav />
+      <ThemeToggle />
       <a
         href="/contact/"
         class="inline-flex items-center gap-1.5 border-[2.5px] border-ink bg-pink text-paper px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm"
@@ -29,18 +31,20 @@ import { externalLinkAttrs } from "@/lib/links";
       </a>
     </div>
 
-    <button
-      id="mobile-menu-toggle"
-      type="button"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
-      aria-label="Toggle menu"
-      class="md:hidden inline-flex items-center justify-center h-10 w-10 border-[2px] border-ink bg-paper shadow-neo-sm transition-all hover:bg-yellow"
-    >
-      <Icon name="lucide:menu" class="h-5 w-5 menu-icon-open" />
-      <Icon name="lucide:x" class="h-5 w-5 menu-icon-close hidden" />
-    </button>
-  </div>
+    <div class="flex items-center gap-2 md:hidden">
+      <ThemeToggle />
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+        class="inline-flex items-center justify-center h-10 w-10 border-[2px] border-ink bg-paper shadow-neo-sm transition-all hover:bg-yellow"
+      >
+        <Icon name="lucide:menu" class="h-5 w-5 menu-icon-open" />
+        <Icon name="lucide:x" class="h-5 w-5 menu-icon-close hidden" />
+      </button>
+    </div>
 
   <div
     id="mobile-menu"

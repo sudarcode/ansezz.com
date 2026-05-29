@@ -66,6 +66,26 @@
   border-color: var(--color-ink);
 }
 
+/* ── dark theme ───────────────────────────────────────────
+   Neobrutalist inversion: ink (borders/shadows/text) flips to
+   cream, surfaces flip to near-black. Accent hues keep popping.
+   Utilities reference the CSS vars, so retinting them cascades. */
+html[data-theme="dark"] {
+  --color-bg: #15140e;
+  --color-bg-alt: #1f1e16;
+  --color-ink: #f4f3ea;
+  --color-ink-soft: #d6d5cb;
+  --color-paper: #221f17;
+  --color-muted: #b3b2a8;
+  color-scheme: dark;
+}
+/* slightly tame the brightest accents on dark so they don't vibrate */
+html[data-theme="dark"] {
+  --color-yellow: #f2cf3c;
+  --color-cyan: #34c4b6;
+  --color-green: #6cce75;
+}
+
 @utility display-xl {
   font-size: var(--type-display-xl);
 }
@@ -113,17 +133,11 @@ body {
 
 /* halftone pattern */
 .halftone {
-  background-image: radial-gradient(
-    var(--color-ink) 1.2px,
-    transparent 1.2px
-  );
+  background-image: radial-gradient(var(--color-ink) 1.2px, transparent 1.2px);
   background-size: 14px 14px;
 }
 .halftone-dense {
-  background-image: radial-gradient(
-    var(--color-ink) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(var(--color-ink) 1px, transparent 1px);
   background-size: 8px 8px;
 }
 

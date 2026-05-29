@@ -75,7 +75,9 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: (page) =>
-        !page.includes("/styleguide") && !page.includes("/404"),
+        !page.includes("/styleguide") &&
+        !page.includes("/404") &&
+        !page.includes("/og/"),
       changefreq: "weekly",
       priority: 0.7,
       serialize(item) {

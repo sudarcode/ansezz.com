@@ -5,8 +5,6 @@ import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import "@/styles/global.css";
 
-const plausibleDomain = new URL(SITE.URL).hostname;
-
 interface ArticleMeta {
   publishedTime: string;
   modifiedTime?: string;
@@ -41,6 +39,9 @@ const fullTitle = title === SITE.TITLE ? title : `${title} — ${SITE.TITLE}`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(image, Astro.site).href;
 const isDefaultOg = image === "/og.webp";
+// Generated per-post OG cards are 1200×630 too — advertise dimensions so
+// social validators don't have to guess.
+const isFixed1200 = isDefaultOg || image.startsWith("/og/");
 const ogImageType = image.endsWith(".webp")
   ? "image/webp"
   : image.endsWith(".png")
@@ -96,7 +97,7 @@ const ldList = structuredData
     <meta property="og:image" content={ogImage} />
     {ogImageType && <meta property="og:image:type" content={ogImageType} />}
     {
-      isDefaultOg && (
+      isFixed1200 && (
         <>
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
@@ -134,21 +135,29 @@ const ldList = structuredData
     <meta name="twitter:site" content="@ansezz" />
 
     <meta name="theme-color" content="#fafaf5" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#15140e" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    {/* Set theme before first paint — no flash of wrong theme. */}
+    <script is:inline>
+      (() => {
+        const apply = () => {
+          try {
+            const stored = localStorage.getItem("theme");
+            const dark =
+              stored === "dark" ||
+              (!stored &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches);
+            document.documentElement.dataset.theme = dark ? "dark" : "light";
+          } catch {}
+        };
+        apply();
+        // Re-apply after Astro view-transition swaps.
+        document.addEventListener("astro:after-swap", apply);
+      })();
+    </script>
 
     <ClientRouter />
-
-    {
-      import.meta.env.PROD && (
-        <script
-          is:inline
-          defer
-          data-domain={plausibleDomain}
-          src="https://plausible.io/js/script.js"
-        />
-      )
-    }
 
     {
       ldList.map((data) => (

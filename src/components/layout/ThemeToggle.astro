@@ -1,0 +1,27 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  aria-label="Toggle dark mode"
+  title="Toggle dark mode"
+  class:list={[
+    "inline-flex h-10 w-10 items-center justify-center border-[2px] border-ink bg-paper text-ink shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow hover:shadow-neo-sm",
+    className,
+  ]}
+>
+  <Icon name="lucide:sun" class="h-5 w-5 theme-icon-sun hidden" />
+  <Icon name="lucide:moon" class="h-5 w-5 theme-icon-moon hidden" />
+</button>
+
+<script>
+  import "@/scripts/theme-toggle";
+</script>

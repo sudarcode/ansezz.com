@@ -1,6 +1,7 @@
 export const SITE = {
   URL: "https://ansezz.com",
-  TITLE: "Anass Ez-zouaine — Senior Backend Engineer · Software Architect · AI Engineer",
+  TITLE:
+    "Anass Ez-zouaine — Senior Backend Engineer · Software Architect · AI Engineer",
   SHORT_TITLE: "ansezz",
   DESCRIPTION:
     "Senior Lead Backend Engineer, Software Architect, and AI Engineer. 12+ years building production Laravel SaaS, Shopify Plus apps, and AI features (Claude, MCP, RAG, agentic systems). Remote-first since 2014.",
@@ -15,11 +16,7 @@ export const SITE = {
 
 export const OWNER = {
   NAME: "Anass Ez-zouaine",
-  ROLES: [
-    "Senior Lead Backend Engineer",
-    "Software Architect",
-    "AI Engineer",
-  ],
+  ROLES: ["Senior Lead Backend Engineer", "Software Architect", "AI Engineer"],
   HIGHLIGHT: "AI Engineer",
   TAGLINE:
     "I ship production backends, Shopify Plus apps, and AI features that survive real users — Laravel + Anthropic Claude + pgvector, every day.",
@@ -93,9 +90,17 @@ export const NAV = [
   { LABEL: "Home", HREF: "/" },
   { LABEL: "About", HREF: "/about/" },
   { LABEL: "Work", HREF: "/work/" },
+  { LABEL: "Services", HREF: "/services/" },
   { LABEL: "Blog", HREF: "/blog/" },
   { LABEL: "Uses", HREF: "/uses/" },
   { LABEL: "Contact", HREF: "/contact/" },
+];
+
+/** Secondary links surfaced in the footer (not the primary nav). */
+export const FOOTER_MORE = [
+  { LABEL: "Now", HREF: "/now/" },
+  { LABEL: "Newsletter", HREF: "/newsletter/" },
+  { LABEL: "Tools", HREF: "/tools/" },
 ];
 
 export const HOME = {
@@ -265,11 +270,184 @@ export const LANGUAGES = [
   { label: "French", level: "Basic" },
 ];
 
+// ── Services page ─────────────────────────────────────────
+export const SERVICES_PAGE = {
+  TITLE: "Services",
+  DESCRIPTION:
+    "Senior engineering you can hire by the engagement — Laravel SaaS MVPs, AI integration sprints, Shopify Plus apps, and architecture audits. Fixed-scope, senior-only, remote-first.",
+  HOW: [
+    {
+      step: "01",
+      title: "Discovery call",
+      body: "Free 30-minute call. We scope the problem, I tell you honestly if I'm the right fit and what it'll take.",
+      icon: "lucide:phone-call",
+      tone: "yellow" as const,
+    },
+    {
+      step: "02",
+      title: "Fixed proposal",
+      body: "You get a written scope, milestones, and a flat price or weekly rate. No open-ended hourly surprises.",
+      icon: "lucide:file-text",
+      tone: "cyan" as const,
+    },
+    {
+      step: "03",
+      title: "Build in the open",
+      body: "Short async updates, a shared board, demos every few days. You see progress, not a black box.",
+      icon: "lucide:git-commit-horizontal",
+      tone: "green" as const,
+    },
+    {
+      step: "04",
+      title: "Ship + handoff",
+      body: "Deployed, documented, tested. I hand off clean code your team can own — or stay on retainer.",
+      icon: "lucide:rocket",
+      tone: "pink" as const,
+    },
+  ],
+};
+
+export const SERVICES_FAQ = [
+  {
+    question: "What's your rate?",
+    answer:
+      "Most work is fixed-scope per engagement (MVP build, AI sprint, audit). For ongoing or advisory work I bill a weekly retainer. Book a discovery call and I'll quote against your actual scope — no hourly meter.",
+  },
+  {
+    question: "Do you work solo or with a team?",
+    answer:
+      "Solo for most builds — you get a senior engineer, not a layer of juniors. For larger scopes I bring in vetted specialists I've shipped with, and stay accountable for the whole delivery.",
+  },
+  {
+    question: "What time zones do you cover?",
+    answer:
+      "Based in Morocco (GMT+1). I overlap EU mornings and US-East afternoons daily, and work async-first with replies within 24 hours.",
+  },
+  {
+    question: "Can you take over an existing / messy codebase?",
+    answer:
+      "Yes. Start with an Architecture Audit — one week, a written risk report, and a remediation plan. From there we either fix forward together or I lead the cleanup.",
+  },
+  {
+    question: "Do you sign NDAs and work under contract?",
+    answer:
+      "Always. NDA up front if you need it, then a simple statement of work covering scope, milestones, IP assignment, and payment terms before any code is written.",
+  },
+];
+
+// ── Testimonials ──────────────────────────────────────────
+// TODO(owner): Replace these with REAL, attributable testimonials
+// before publishing. Each should be something a named client/colleague
+// actually said and is happy to be quoted on. Empty array => section
+// auto-hides. Do NOT ship fabricated social proof.
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  tone: "yellow" | "pink" | "cyan" | "green";
+}
+
+export const TESTIMONIALS: Testimonial[] = [];
+
+// ── /now page ─────────────────────────────────────────────
+export const NOW = {
+  TITLE: "Now",
+  DESCRIPTION:
+    "What Anass Ez-zouaine is focused on right now — current projects, what I'm learning, and what I'm available for.",
+  // Keep this honest and current. Update the date when you edit it.
+  UPDATED: "2026-05-29",
+  FOCUS: [
+    {
+      icon: "lucide:brain-circuit",
+      tone: "purple" as const,
+      title: "Building",
+      body: "Productionizing agentic commerce, MCP servers, and RAG pipelines on Laravel + Shopify Plus — evals and cost guardrails included.",
+    },
+    {
+      icon: "lucide:book-open",
+      tone: "cyan" as const,
+      title: "Learning",
+      body: "Deeper on agent evaluation harnesses, context engineering, and squeezing latency out of pgvector hybrid search at scale.",
+    },
+    {
+      icon: "lucide:pen-line",
+      tone: "yellow" as const,
+      title: "Writing",
+      body: "Shipping posts on RAG failure modes, Laravel Octane under load, and self-hosting SaaS on Coolify. New one roughly every week.",
+    },
+    {
+      icon: "lucide:handshake",
+      tone: "green" as const,
+      title: "Available for",
+      body: "Senior / lead / fractional CTO and advisory work. Selective on fit — a free discovery call tells us both fast.",
+    },
+  ],
+};
+
+// ── Newsletter ────────────────────────────────────────────
+export const NEWSLETTER = {
+  TITLE: "Newsletter",
+  DESCRIPTION:
+    "No-fluff engineering notes — Laravel internals, AI engineering with Claude & MCP, RAG, and Shopify Plus. One short email per new post.",
+  SUBSCRIBE_ACTION:
+    "https://buttondown.email/api/emails/embed-subscribe/ansezz",
+  ARCHIVE_URL: "https://buttondown.email/ansezz/archive/",
+};
+
+// ── Free tools ────────────────────────────────────────────
+export const TOOLS = {
+  TITLE: "Tools",
+  DESCRIPTION:
+    "Free, no-signup tools for engineers building with LLMs and Laravel. Built because I needed them.",
+};
+
+export interface ToolEntry {
+  title: string;
+  blurb: string;
+  href: string;
+  icon: string;
+  tone: "yellow" | "pink" | "cyan" | "green" | "purple";
+  status: "live" | "soon";
+}
+
+export const TOOL_LIST: ToolEntry[] = [
+  {
+    title: "LLM Cost Calculator",
+    blurb:
+      "Estimate API spend across Claude, GPT, and friends. Tokens in/out × requests × model price — see the monthly bill before you ship.",
+    href: "/tools/llm-cost-calculator/",
+    icon: "lucide:calculator",
+    tone: "yellow",
+    status: "live",
+  },
+];
+
+// ── Comments (giscus) ─────────────────────────────────────
+// Fill these from https://giscus.app after enabling GitHub
+// Discussions on the repo, then set ENABLED = true.
+export const COMMENTS = {
+  ENABLED: true,
+  REPO: "ansezz/ansezz.com",
+  REPO_ID: "MDEwOlJlcG9zaXRvcnk0MDM4ODA0NDE=",
+  CATEGORY: "General",
+  CATEGORY_ID: "DIC_kwDOGBK5-c4C-GwR",
+  MAPPING: "pathname",
+  REACTIONS: true,
+};
+
 export interface OtherProjectLink {
   name: string;
   url: string;
   note: string;
-  tone: "yellow" | "pink" | "cyan" | "green" | "red" | "blue" | "purple" | "ink";
+  tone:
+    | "yellow"
+    | "pink"
+    | "cyan"
+    | "green"
+    | "red"
+    | "blue"
+    | "purple"
+    | "ink";
 }
 
 export const OTHER_SHOPIFY_STOREFRONTS: OtherProjectLink[] = [

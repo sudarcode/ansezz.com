@@ -46,7 +46,11 @@ in tutorials. So I'm writing them down.
     { label: "AI-slop blog", tone: "red" },
   ]}
   rows={[
-    { icon: "lucide:check", label: "Real production code", cells: [true, false] },
+    {
+      icon: "lucide:check",
+      label: "Real production code",
+      cells: [true, false],
+    },
     { icon: "lucide:zap", label: "Opinions", cells: [true, false] },
     { icon: "lucide:bot", label: "GPT-written filler", cells: [false, true] },
     { icon: "lucide:smile", label: "Personality", cells: [true, false] },
@@ -63,6 +67,8 @@ Every post that needs code gets the syntax treatment:
   filename="app/Actions/AskClaude.php"
 />
 
-<BurstBadge tone="pink" size="sm">01</BurstBadge>
+<BurstBadge tone="pink" size="sm">
+  01
+</BurstBadge>
 
 That's it. First post live. More incoming.

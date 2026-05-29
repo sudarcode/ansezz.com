@@ -3,13 +3,22 @@ title: "Mastering event-driven architecture with Google Pub/Sub"
 description: "Decouple your services or drown in latency. Topics, fan-out, push vs pull, dead-letter queues, idempotent consumers, and the Laravel integration I run on Google Cloud — a practical EDA blueprint from a senior engineer."
 publishDate: 2026-05-02
 category: architecture
-tags: [pub-sub, event-driven, gcp, google-cloud, laravel, messaging, scalability, architecture]
+tags:
+  [
+    pub-sub,
+    event-driven,
+    gcp,
+    google-cloud,
+    laravel,
+    messaging,
+    scalability,
+    architecture,
+  ]
 featured: false
 heroImage:
   url: "/blog/event-driven-pubsub/hero.webp"
   alt: "Pop-art illustration of a Pub/Sub topic broadcasting events to many consumers"
 ---
-
 
 Building a modern web application usually starts simple. You have a request and you send a response. But as your business grows, that simple flow starts to feel heavy. Maybe you need to send a welcome email, update a CRM, and trigger a data warehouse sync all at once. If you do this synchronously, your users are stuck staring at a loading spinner. If one service fails, the whole request dies. Your system becomes a house of cards.
 

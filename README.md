@@ -23,15 +23,15 @@
 
 A static site for [**ansezz.com**](https://ansezz.com). Showcases shipped work, writing on Laravel + AI + Shopify, and how to hire me. Built on Astro 6 with content collections, full SEO/JSON-LD, sitemap, RSS, OG image, and a hand-rolled neobrutalist component library.
 
-| Page | Purpose |
-|------|---------|
-| `/` | Trading-card hero, what I build, services, featured posts |
-| `/about/` | 3-step process, stack, principles, languages |
-| `/work/` | 60+ shipped projects — Laravel SaaS, Shopify apps, AI, open source |
-| `/blog/` | Notes on backend, AI engineering, Shopify, DevOps |
-| `/uses/` | Daily drivers, 8 stack lanes, what I dropped |
-| `/contact/` | Engagement modes, FAQ, channels |
-| `/styleguide/` | Internal — every component & token |
+| Page           | Purpose                                                            |
+| -------------- | ------------------------------------------------------------------ |
+| `/`            | Trading-card hero, what I build, services, featured posts          |
+| `/about/`      | 3-step process, stack, principles, languages                       |
+| `/work/`       | 60+ shipped projects — Laravel SaaS, Shopify apps, AI, open source |
+| `/blog/`       | Notes on backend, AI engineering, Shopify, DevOps                  |
+| `/uses/`       | Daily drivers, 8 stack lanes, what I dropped                       |
+| `/contact/`    | Engagement modes, FAQ, channels                                    |
+| `/styleguide/` | Internal — every component & token                                 |
 
 ---
 
@@ -74,6 +74,7 @@ AvailabilityBadge, SocialButton, TagPillRow, NewsletterCallout, ...
 ```
 
 Tokens (in `src/styles/global.css` `@theme`):
+
 - **Colors** — `bg`, `paper`, `ink`, `yellow`, `pink`, `pink-deep`, `cyan`, `green`, `red`, `blue`, `purple`
 - **Shadows** — `shadow-neo-xs` (2px) → `shadow-neo-xl` (12px), all hard offset
 - **Type** — `display-xl/l/m` clamp scale, Archivo Black + Inter + JetBrains Mono
@@ -132,7 +133,7 @@ pnpm generate:icons     # PWA + apple-touch icons
 title: "Shopify Liquid vs Headless — when to pick which"
 description: "Decision tree for storefronts you actually have to ship."
 publishDate: 2026-05-10
-category: shopify          # laravel | ai | shopify | devops | architecture | career
+category: shopify # laravel | ai | shopify | devops | architecture | career
 tags: [Shopify, Hydrogen, Liquid]
 featured: false
 draft: false
@@ -165,6 +166,7 @@ NODE_VERSION = 22
 ```
 
 Repo-level pins (already committed):
+
 - `.nvmrc` → `22`
 - `.node-version` → `22.12.0`
 - `package.json` `packageManager` → `pnpm@10.8.1` (Cloudflare v3 detects this)
@@ -172,6 +174,7 @@ Repo-level pins (already committed):
 `public/_headers` and `public/_redirects` are honored automatically by Cloudflare Pages — CSP, security headers, immutable cache rules, and SPA-style 404 fallback all ship as-is.
 
 Domain wiring (already live):
+
 - Production: `ansezz.com` + `ansezz-com.pages.dev`
 - DNS: `ansezz.com` proxied through Cloudflare (orange cloud)
 

@@ -10,7 +10,6 @@ heroImage:
   alt: "Pop-art illustration of a RAG pipeline breaking under production load"
 ---
 
-
 You built a RAG (Retrieval-Augmented Generation) demo. On a local machine, with a handful of PDF files, it looked convincing. The answers felt coherent. The system appeared capable.
 
 Then you pushed it to production.
@@ -31,7 +30,7 @@ Embeddings are useful. They let us map text into vectors and retrieve by meaning
 
 **The problem.** Vector search is strong at finding related concepts, but weak at handling specificity.
 
-If a user searches for *"Project-X-99 deployment logs,"* a vector search might return documents about "Project-A deployment" or "logging best practices" because they are semantically close. It can miss the exact identifier "X-99" because that string carries little semantic weight in a high-dimensional space.
+If a user searches for _"Project-X-99 deployment logs,"_ a vector search might return documents about "Project-A deployment" or "logging best practices" because they are semantically close. It can miss the exact identifier "X-99" because that string carries little semantic weight in a high-dimensional space.
 
 **The agitation.** Once retrieval drifts, the LLM inherits the drift. The model cannot reason its way out of missing or irrelevant context. You end up paying for tokens that produce confident but unhelpful answers, and users lose trust for a reason that often sits one layer below the model itself.
 
@@ -88,7 +87,7 @@ function reciprocalRankFusion(array $resultSets, int $k = 60): array
 }
 ```
 
-This gives you a cleaner retrieval layer. If a document is semantically relevant *and* lexically precise, it moves toward the top for a reason.
+This gives you a cleaner retrieval layer. If a document is semantically relevant _and_ lexically precise, it moves toward the top for a reason.
 
 ## The "second pass": using re-rankers
 
@@ -96,7 +95,7 @@ Hybrid search is a strong retrieval foundation, but production RAG usually needs
 
 If you want more precise results, add a **re-ranker**.
 
-A re-ranker such as Cohere Rerank or BGE-Reranker is a cross-encoder model that evaluates the query and the document together. That matters because relevance is relational. It is not just about what a document contains. It is about whether that document answers *this* question.
+A re-ranker such as Cohere Rerank or BGE-Reranker is a cross-encoder model that evaluates the query and the document together. That matters because relevance is relational. It is not just about what a document contains. It is about whether that document answers _this_ question.
 
 - **Step 1.** Retrieve the top 50 results using hybrid search.
 - **Step 2.** Pass those 50 results through a re-ranker.
@@ -124,7 +123,7 @@ To move from demo RAG to production RAG, I focus on a few non-negotiables:
 - **Add a re-ranker.** Refine the final candidate set before anything reaches the LLM.
 - **Evaluate with RAGAS.** Measure faithfulness and relevance instead of trusting intuition.
 
-Building AI is easy. Building *reliable* AI is hard. It requires a deeper understanding of retrieval, ranking, and context design, not just the ability to connect an API.
+Building AI is easy. Building _reliable_ AI is hard. It requires a deeper understanding of retrieval, ranking, and context design, not just the ability to connect an API.
 
 If you are looking to build a high-performance SaaS or need help modernizing your digital presence with AI that actually works, check out what I do at [Ansezz](/work/). I specialize in solving these exact types of technical problems.
 

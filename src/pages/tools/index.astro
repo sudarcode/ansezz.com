@@ -1,0 +1,72 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import { Icon } from "astro-icon/components";
+import { TOOLS, TOOL_LIST, SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Tools", url: "/tools/" },
+]);
+---
+
+<Page
+  title={TOOLS.TITLE}
+  description={TOOLS.DESCRIPTION}
+  eyebrow="Free tools"
+  heading="Tools I built because I needed them."
+  intro={TOOLS.DESCRIPTION}
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-5xl px-5 pb-16">
+    <ul class="grid gap-6 sm:grid-cols-2">
+      {
+        TOOL_LIST.map((t, i) => {
+          const live = t.status === "live";
+          const Wrapper = live ? "a" : "div";
+          return (
+            <li>
+              <Wrapper
+                href={live ? t.href : undefined}
+                data-neo-hover={live ? "" : undefined}
+                class:list={[
+                  "block h-full",
+                  live ? "" : "opacity-60 cursor-default",
+                ]}
+              >
+                <NeoCard
+                  tone={t.tone}
+                  shadow="md"
+                  tilt={i % 2 === 0 ? -0.4 : 0.4}
+                  class="flex h-full flex-col gap-3"
+                >
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="inline-flex h-11 w-11 items-center justify-center border-[2.5px] border-ink rounded-[6px] bg-paper text-ink shadow-neo-xs"
+                      aria-hidden="true"
+                    >
+                      <Icon name={t.icon} class="h-5 w-5" />
+                    </span>
+                    <span class="mono text-[10px] font-bold uppercase tracking-widest border-[2px] border-ink rounded-full px-2 py-0.5 bg-paper">
+                      {live ? "Live" : "Soon"}
+                    </span>
+                  </div>
+                  <h2 class="heading text-xl uppercase leading-tight">
+                    {t.title}
+                  </h2>
+                  <p class="text-sm leading-snug opacity-90">{t.blurb}</p>
+                  {live && (
+                    <p class="mono text-xs font-bold uppercase tracking-widest mt-auto pt-2 inline-flex items-center gap-1">
+                      Open <Icon name="lucide:arrow-right" class="h-3.5 w-3.5" />
+                    </p>
+                  )}
+                </NeoCard>
+              </Wrapper>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+</Page>

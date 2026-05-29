@@ -26,9 +26,9 @@ const updatedLabel = updatedAt.toLocaleDateString("en-US", {
 
 const tldr = [
   { label: "No accounts", tone: "green" as const },
-  { label: "No forms", tone: "green" as const },
+  { label: "No analytics or tracking", tone: "green" as const },
   { label: "No cookies set by me", tone: "green" as const },
-  { label: "No tracking pixels", tone: "green" as const },
+  { label: "Comments & newsletter opt-in", tone: "yellow" as const },
   { label: "No selling data — ever", tone: "yellow" as const },
 ];
 
@@ -49,7 +49,7 @@ const sections = [
   description={`Privacy notice for ${SITE.TITLE} — what data is collected, why, and your rights.`}
   eyebrow="Legal"
   heading="Privacy notice."
-  intro="Short version: this site collects nothing about you personally. No accounts, no forms, no cookies set by me. Long version below — written in plain English."
+  intro="Short version: this site collects nothing about you personally. No accounts, no analytics, no cookies set by me. Comments and the newsletter are strictly opt-in. Long version below — written in plain English."
   structuredData={privacyBreadcrumbLd}
 >
   <div class="mx-auto max-w-4xl px-5 pb-20">
@@ -98,10 +98,13 @@ const sections = [
         </div>
         <p class="text-sm leading-relaxed">
           This site is a static blog and portfolio. It does <strong>not</strong>
-          store any personal information on its own. No login, no comments, no
-          contact form. The only way to reach me is via email, phone, LinkedIn,
-          or my Google Calendar booking link — and any data you share that way
-          is handled by those services under their own privacy terms.
+          store any personal information on its own — no login, no server, no
+          database. Two features are <strong>opt-in</strong>: blog comments
+          (powered by GitHub Discussions via giscus) and the email newsletter
+          (Buttondown). You only share data if you choose to use them. Otherwise,
+          reach me via email, phone, LinkedIn, or my Google Calendar booking
+          link — data shared that way is handled by those services under their
+          own privacy terms.
         </p>
       </NeoCard>
 
@@ -113,18 +116,11 @@ const sections = [
           <h2 class="heading text-xl uppercase">Analytics</h2>
         </div>
         <p class="text-sm leading-relaxed">
-          I use <a
-            href="https://plausible.io/privacy-focused-web-analytics"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="underline decoration-[3px] underline-offset-4 hover:bg-yellow"
-          >
-            Plausible Analytics
-          </a>, a privacy-respecting service hosted in the EU. Plausible does
-          not use cookies, does not collect personal data, and does not track
-          you across sites. I see aggregated traffic only (which pages were
-          visited, where visitors came from, what device class they used). No
-          GDPR consent banner is required.
+          None. I run <strong>no</strong> analytics, no tracking scripts, and no
+          tracking pixels — no Google Analytics, no Plausible, nothing. I have no
+          visibility into who you are or which pages you read. The only traffic
+          data that exists is the host's standard access logs (see Hosting &amp;
+          CDN below).
         </p>
       </NeoCard>
 
@@ -133,12 +129,15 @@ const sections = [
           <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper">
             <Icon name="lucide:cookie" class="h-4 w-4" />
           </span>
-          <h2 class="heading text-xl uppercase">Cookies</h2>
+          <h2 class="heading text-xl uppercase">Cookies & local storage</h2>
         </div>
         <p class="text-sm leading-relaxed">
-          None. This site sets zero cookies, zero localStorage, zero session
-          identifiers. If your browser stores anything for this domain, it came
-          from a browser extension — not from me.
+          I set <strong>no cookies</strong> and no session identifiers. The only
+          thing stored in your browser is a single <code>localStorage</code> key
+          (<code>theme</code>) remembering your light/dark mode choice — it never
+          leaves your device. If you open the comments and sign in to GitHub,
+          giscus may set its own storage inside its embedded frame, under
+          GitHub's terms.
         </p>
       </NeoCard>
 
@@ -165,10 +164,14 @@ const sections = [
           <h2 class="heading text-xl uppercase">Third-party content</h2>
         </div>
         <p class="text-sm leading-relaxed">
-          Fonts are loaded via the Astro font provider (self-hosted at build
-          time). Images are served from this domain. External links in blog
-          posts point to other companies' sites — once you leave this domain,
-          their privacy policies apply.
+          Fonts and images are self-hosted from this domain. A few features load
+          third-party content only when you engage with them:
+          <strong>giscus / GitHub</strong> (blog comments),
+          <strong>Buttondown</strong> (newsletter signup), and an embedded
+          <strong>X / Twitter</strong> timeline on the feed page. Each loads
+          under its own privacy policy. External links in blog posts point
+          elsewhere — once you leave this domain, the destination's policy
+          applies.
         </p>
       </NeoCard>
 
@@ -177,16 +180,18 @@ const sections = [
           <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper text-ink">
             <Icon name="lucide:mail" class="h-4 w-4" />
           </span>
-          <h2 class="heading text-xl uppercase">Email & booking</h2>
+          <h2 class="heading text-xl uppercase">Email, newsletter & booking</h2>
         </div>
         <p class="text-sm leading-relaxed">
           If you <a
             href={`mailto:${SITE.EMAIL}`}
             class="underline decoration-[3px] underline-offset-4 hover:bg-yellow hover:text-ink"
           >email me</a> or book a call via Google Calendar, I keep that thread /
-          event only as long as needed to reply or run the engagement. I do not
-          add you to any list, do not share your address, and will delete on
-          request.
+          event only as long as needed to reply or run the engagement. If you
+          subscribe to the newsletter, your email is stored by
+          <strong>Buttondown</strong> solely to send new-post emails — one-click
+          unsubscribe, no sharing, no selling. I do not add anyone to a list
+          without an explicit signup, and will delete on request.
         </p>
       </NeoCard>
 
@@ -216,9 +221,10 @@ const sections = [
           <h2 class="heading text-xl uppercase">Changes</h2>
         </div>
         <p class="text-sm leading-relaxed">
-          If the site starts collecting data (e.g. a newsletter signup), this
-          notice will be updated and the "Last updated" date above will change.
-          No retroactive changes — anything new applies forward only.
+          If the site changes how it handles data (a new integration, a new
+          opt-in feature), this notice is updated and the "Last updated" date
+          above changes. No retroactive changes — anything new applies forward
+          only.
         </p>
       </NeoCard>
     </div>

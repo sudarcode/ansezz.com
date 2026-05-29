@@ -1,0 +1,205 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import { SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Tools", url: "/tools/" },
+  { name: "LLM Cost Calculator", url: "/tools/llm-cost-calculator/" },
+]);
+
+// Prices in USD per 1M tokens. Approximate list prices — VERIFY against the
+// provider's current pricing page before you bet a budget on it.
+const MODELS = [
+  { id: "claude-opus", label: "Claude Opus 4.x", in: 15, out: 75 },
+  { id: "claude-sonnet", label: "Claude Sonnet 4.x", in: 3, out: 15 },
+  { id: "claude-haiku", label: "Claude Haiku 4.5", in: 1, out: 5 },
+  { id: "gpt-4o", label: "GPT-4o", in: 2.5, out: 10 },
+  { id: "gpt-4o-mini", label: "GPT-4o mini", in: 0.15, out: 0.6 },
+  { id: "gpt-4-1", label: "GPT-4.1", in: 2, out: 8 },
+  { id: "custom", label: "Custom (enter prices)", in: 0, out: 0 },
+];
+const modelsJson = JSON.stringify(MODELS);
+---
+
+<Page
+  title="LLM Cost Calculator"
+  description="Free, no-signup calculator for LLM API spend. Estimate monthly cost across Claude, GPT, and custom models from tokens, requests, and price per million tokens."
+  eyebrow="Free tool"
+  heading="LLM Cost Calculator."
+  intro="Plug in tokens, requests, and a model. See the daily and monthly API bill before you ship it to production."
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-5xl px-5 pb-6">
+    <StickyNote tone="yellow" tilt={-1.5} class="max-w-md">
+      <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+        ▸ Heads up
+      </p>
+      <p class="text-sm font-bold leading-snug">
+        Prices are approximate list rates. Always confirm against the
+        provider's current pricing page.
+      </p>
+    </StickyNote>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-5 pb-16">
+    <form
+      id="cost-form"
+      class="grid gap-6 md:grid-cols-[1fr_360px] items-start"
+      data-models={modelsJson}
+    >
+      <!-- Inputs -->
+      <NeoCard tone="paper" shadow="md" class="space-y-5">
+        <div>
+          <label
+            for="model"
+            class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+          >
+            Model
+          </label>
+          <select
+            id="model"
+            class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-bold shadow-neo-sm focus:outline-none"
+          >
+            {
+              MODELS.map((m) => (
+                <option value={m.id}>{m.label}</option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              for="priceIn"
+              class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+            >
+              Input $ / 1M
+            </label>
+            <input
+              id="priceIn"
+              type="number"
+              min="0"
+              step="0.01"
+              value="3"
+              class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-mono font-bold shadow-neo-sm focus:outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="priceOut"
+              class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+            >
+              Output $ / 1M
+            </label>
+            <input
+              id="priceOut"
+              type="number"
+              min="0"
+              step="0.01"
+              value="15"
+              class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-mono font-bold shadow-neo-sm focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              for="tokIn"
+              class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+            >
+              Input tokens / request
+            </label>
+            <input
+              id="tokIn"
+              type="number"
+              min="0"
+              step="1"
+              value="2000"
+              class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-mono font-bold shadow-neo-sm focus:outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="tokOut"
+              class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+            >
+              Output tokens / request
+            </label>
+            <input
+              id="tokOut"
+              type="number"
+              min="0"
+              step="1"
+              value="600"
+              class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-mono font-bold shadow-neo-sm focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            for="reqs"
+            class="mono text-[11px] font-bold uppercase tracking-widest block mb-2"
+          >
+            Requests / day
+          </label>
+          <input
+            id="reqs"
+            type="number"
+            min="0"
+            step="1"
+            value="1000"
+            class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-3 font-mono font-bold shadow-neo-sm focus:outline-none"
+          />
+        </div>
+
+        <label class="flex items-center gap-2 text-sm font-bold cursor-pointer">
+          <input
+            id="cacheHits"
+            type="checkbox"
+            class="h-5 w-5 border-[2.5px] border-ink accent-pink"
+          />
+          Assume 50% input-token cache hit (×0.1 price on cached input)
+        </label>
+      </NeoCard>
+
+      <!-- Output -->
+      <NeoCard tone="cyan" shadow="lg" class="space-y-4 md:sticky md:top-24">
+        <p class="mono text-[11px] font-bold uppercase tracking-widest">
+          ▸ Estimated spend
+        </p>
+        <dl class="space-y-3">
+          <div class="flex items-end justify-between gap-2 border-b-[2.5px] border-ink pb-2">
+            <dt class="text-sm font-bold uppercase">Per request</dt>
+            <dd id="out-req" class="display text-2xl leading-none">$0</dd>
+          </div>
+          <div class="flex items-end justify-between gap-2 border-b-[2.5px] border-ink pb-2">
+            <dt class="text-sm font-bold uppercase">Per day</dt>
+            <dd id="out-day" class="display text-3xl leading-none">$0</dd>
+          </div>
+          <div class="flex items-end justify-between gap-2">
+            <dt class="text-sm font-bold uppercase">Per month</dt>
+            <dd id="out-month" class="display text-4xl leading-none text-pink-deep">$0</dd>
+          </div>
+        </dl>
+        <p class="mono text-[10px] uppercase tracking-widest opacity-70 pt-1">
+          30-day month · live as you type
+        </p>
+        <NeoButton href="/contact/" variant="ink" size="sm" fullWidth>
+          Need this productionized? →
+        </NeoButton>
+      </NeoCard>
+    </form>
+  </section>
+</Page>
+
+<script>
+  import "@/scripts/llm-cost-calculator";
+</script>

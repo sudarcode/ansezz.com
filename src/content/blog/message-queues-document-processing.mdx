@@ -3,7 +3,19 @@ title: "Message queues: handling the heavy lifting of document processing"
 description: "Stop running embeddings inside the request-response cycle. A production-grade document ingestion pipeline — staged workers, exponential backoff, dead-letter quarantines, batched embeddings, and queue-depth autoscaling that keeps your AI app from melting under a 500-page PDF."
 publishDate: 2026-05-22
 category: architecture
-tags: [message-queues, ai, rag, document-processing, redis, bullmq, laravel-queues, dlq, batching, infrastructure]
+tags:
+  [
+    message-queues,
+    ai,
+    rag,
+    document-processing,
+    redis,
+    bullmq,
+    laravel-queues,
+    dlq,
+    batching,
+    infrastructure,
+  ]
 featured: false
 heroImage:
   url: "/blog/message-queues-document-processing/hero.webp"
@@ -47,7 +59,7 @@ When you use a message queue like Redis (with BullMQ or Laravel Queues) or SQS, 
 
 ![Retry strategy and dead-letter quarantine flow](/blog/message-queues-document-processing/dlq-retries.webp)
 
-But what happens when a document simply *cannot* be processed? Maybe it's a password-protected PDF or a corrupted file. You don't want it retrying forever and clogging up your workers.
+But what happens when a document simply _cannot_ be processed? Maybe it's a password-protected PDF or a corrupted file. You don't want it retrying forever and clogging up your workers.
 
 This is where a **Dead Letter Queue (DLQ)** comes in. After a certain number of failed attempts, the message is moved to the DLQ. This acts as a "quarantine" zone. I can then inspect these failed jobs, fix the underlying issue, and manually re-queue them. It's a safety net that keeps your main production line moving.
 

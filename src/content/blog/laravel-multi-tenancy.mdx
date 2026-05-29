@@ -3,13 +3,13 @@ title: "Laravel multi-tenancy: how I built a scalable SaaS architecture"
 description: "Single DB vs multi-DB, global scopes that stop data leaks, stancl/tenancy in production, isolated storage, automated migrations, and the Docker + Google Cloud setup I run for high-trust SaaS clients."
 publishDate: 2026-02-08
 category: laravel
-tags: [laravel, multi-tenancy, saas, architecture, stancl-tenancy, docker, postgres]
+tags:
+  [laravel, multi-tenancy, saas, architecture, stancl-tenancy, docker, postgres]
 featured: false
 heroImage:
   url: "/blog/laravel-multi-tenancy/hero.webp"
   alt: "Pop-art illustration of a Laravel SaaS serving many isolated tenants"
 ---
-
 
 I still remember the panic of my first SaaS launch. I was watching the logs as the third customer signed up. Suddenly I realized I had no idea if customer A could see customer B's data. That realization is a rite of passage for every developer.
 

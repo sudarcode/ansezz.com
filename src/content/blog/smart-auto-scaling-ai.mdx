@@ -3,7 +3,19 @@ title: "Scaling on demand: smart auto-scaling for modern AI apps"
 description: "CPU autoscaling is a lie for GPU workloads. Why queue depth, KV-cache pressure, and TTFT beat CPU as scaling triggers — KEDA-driven patterns, ARIMA forecasting, and composite metrics that scale your AI SaaS before users hit the spinner."
 publishDate: 2026-05-25
 category: architecture
-tags: [auto-scaling, ai, llm, kubernetes, keda, gpu, kv-cache, queue-depth, ttft, infrastructure]
+tags:
+  [
+    auto-scaling,
+    ai,
+    llm,
+    kubernetes,
+    keda,
+    gpu,
+    kv-cache,
+    queue-depth,
+    ttft,
+    infrastructure,
+  ]
 featured: false
 heroImage:
   url: "/blog/smart-auto-scaling-ai/hero.webp"
@@ -24,7 +36,7 @@ Most horizontal pod autoscalers (HPA) are configured to watch CPU utilization by
 
 AI models are different. The CPU handles the "boring" stuff like tokenization, request routing, and managing HTTP headers. The heavy lifting happens on the GPU.
 
-I have seen production clusters where the GPU is pinned at 100 percent while the CPU sits idle. Kubernetes sees the low CPU usage and thinks the pod is healthy. It might even try to pack *more* pods onto that node, leading to a catastrophic failure.
+I have seen production clusters where the GPU is pinned at 100 percent while the CPU sits idle. Kubernetes sees the low CPU usage and thinks the pod is healthy. It might even try to pack _more_ pods onto that node, leading to a catastrophic failure.
 
 ![CPU usage tells you nothing about GPU saturation](/blog/smart-auto-scaling-ai/cpu-lie.webp)
 

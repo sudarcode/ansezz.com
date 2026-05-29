@@ -1,0 +1,155 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import NeoButton from "@/components/neobrutalist/NeoButton.astro";
+import TagPill from "@/components/neobrutalist/TagPill.astro";
+import PanelDivider from "@/components/neobrutalist/PanelDivider.astro";
+import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
+import { Icon } from "astro-icon/components";
+import { OWNER, SITE } from "@/consts";
+import { webPage, breadcrumbList } from "@/lib/seo";
+
+export async function getStaticPaths() {
+  // Detail pages only for featured projects — the rest stay as cards/links.
+  const entries = await getCollection("work", ({ data }) => data.featured);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const categoryLabel: Record<string, string> = {
+  ai: "AI engineering",
+  shopify: "Shopify Plus",
+  saas: "SaaS platform",
+};
+
+const canonicalUrl = new URL(`/work/${entry.id}/`, SITE.URL).href;
+
+const webPageLd = webPage({
+  url: canonicalUrl,
+  title: entry.data.title,
+  description: entry.data.description,
+});
+const creativeWorkLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "@id": `${canonicalUrl}#work`,
+  name: entry.data.title,
+  description: entry.data.description,
+  url: entry.data.liveUrl ?? canonicalUrl,
+  author: { "@id": `${SITE.URL}#person` },
+  keywords: entry.data.stack.join(", "),
+  ...(entry.data.liveUrl ? { sameAs: entry.data.liveUrl } : {}),
+};
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Work", url: "/work/" },
+  { name: entry.data.title, url: `/work/${entry.id}/` },
+]);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  structuredData={[webPageLd, creativeWorkLd, breadcrumbLd]}
+>
+  <section class="mx-auto max-w-4xl px-5 pt-8 pb-6 md:pt-12">
+    <NeoButton href="/work/" variant="secondary" size="sm" class="mb-6">
+      ← All work
+    </NeoButton>
+
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+      <TagPill tone="cyan" size="md">
+        {categoryLabel[entry.data.category] ?? entry.data.category}
+      </TagPill>
+      <span class="inline-flex items-center gap-1 border-[2px] border-ink rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase shadow-neo-xs bg-yellow">
+        ★ Featured case study
+      </span>
+    </div>
+
+    <h1 class="display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] tracking-tight">
+      {entry.data.title}
+    </h1>
+    <p class="mt-5 max-w-3xl text-base sm:text-lg md:text-xl text-ink-soft leading-snug">
+      {entry.data.description}
+    </p>
+
+    {
+      entry.data.outcome && (
+        <p class="mono mt-6 inline-flex items-start gap-2 text-xs font-bold uppercase tracking-wider bg-ink text-bg px-3 py-2 w-fit max-w-full">
+          <Icon name="lucide:trending-up" class="h-4 w-4 mt-0.5 shrink-0" />
+          <span>{entry.data.outcome}</span>
+        </p>
+      )
+    }
+
+    {
+      entry.data.stack.length > 0 && (
+        <ul class="flex flex-wrap gap-2 mt-6">
+          {entry.data.stack.map((s) => (
+            <li>
+              <TagPill tone="paper" size="sm">
+                {s}
+              </TagPill>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      (entry.data.liveUrl || entry.data.githubUrl) && (
+        <div class="mt-7 flex flex-wrap gap-3">
+          {entry.data.liveUrl && (
+            <NeoButton href={entry.data.liveUrl} variant="ink" size="md">
+              <Icon name="lucide:external-link" class="h-4 w-4" />
+              View live
+            </NeoButton>
+          )}
+          {entry.data.githubUrl && (
+            <NeoButton
+              href={entry.data.githubUrl}
+              variant="secondary"
+              size="md"
+            >
+              <Icon name="lucide:github" class="h-4 w-4" />
+              Source
+            </NeoButton>
+          )}
+        </div>
+      )
+    }
+  </section>
+
+  <section class="mx-auto max-w-4xl px-5 pb-12">
+    <PanelDivider shape="zigzag" tone="yellow" />
+    <article class="prose max-w-none mt-8">
+      <Content />
+    </article>
+  </section>
+
+  <HalftoneSection tone="blue" bordered class="py-14 text-paper">
+    <div class="mx-auto max-w-4xl px-5 grid gap-6 md:grid-cols-[1fr_auto] items-center">
+      <div>
+        <p class="display text-3xl md:text-4xl leading-tight">
+          Want something like this built?
+        </p>
+        <p class="mt-3 text-base text-paper/80">
+          {OWNER.NAME} — senior engineering, by the engagement.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <NeoButton href="/services/" variant="primary" size="lg">
+          See services
+        </NeoButton>
+        <NeoButton href="/contact/" variant="ink" size="lg">
+          Start a project →
+        </NeoButton>
+      </div>
+    </div>
+  </HalftoneSection>
+</BaseLayout>

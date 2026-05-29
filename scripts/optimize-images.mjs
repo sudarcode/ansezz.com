@@ -17,7 +17,12 @@ async function walk(dir) {
       out.push(...(await walk(full)));
     } else if (entry.isFile()) {
       const ext = extname(entry.name).toLowerCase();
-      if (ext === ".webp" || ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
+      if (
+        ext === ".webp" ||
+        ext === ".jpg" ||
+        ext === ".jpeg" ||
+        ext === ".png"
+      ) {
         out.push(full);
       }
     }
@@ -42,9 +47,10 @@ async function optimize(file) {
     return { file, before, after: before, skipped: true };
   }
 
-  const finalPath = extname(file).toLowerCase() === ".webp"
-    ? file
-    : file.replace(/\.(jpe?g|png)$/i, ".webp");
+  const finalPath =
+    extname(file).toLowerCase() === ".webp"
+      ? file
+      : file.replace(/\.(jpe?g|png)$/i, ".webp");
   if (finalPath !== file) await unlink(file);
   await rename(tmp, finalPath);
 

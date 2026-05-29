@@ -10,16 +10,16 @@ Deploy target: **Cloudflare Pages** (project `ansezz-com`, custom domain `ansezz
 
 ## Commands
 
-| Command | Action |
-|---------|--------|
-| `pnpm install` | Install deps |
-| `pnpm dev` | Dev server at `localhost:4321` |
-| `pnpm build` | Build to `./dist/` |
-| `pnpm preview` | Preview built site |
-| `pnpm check` | Type-check `.astro` + TS (run before declaring work done) |
-| `pnpm format` | Prettier across repo |
-| `pnpm optimize:images` | Sharp pass over images in `public/blog` |
-| `pnpm generate:icons` | Regenerate PWA + apple-touch icons |
+| Command                | Action                                                    |
+| ---------------------- | --------------------------------------------------------- |
+| `pnpm install`         | Install deps                                              |
+| `pnpm dev`             | Dev server at `localhost:4321`                            |
+| `pnpm build`           | Build to `./dist/`                                        |
+| `pnpm preview`         | Preview built site                                        |
+| `pnpm check`           | Type-check `.astro` + TS (run before declaring work done) |
+| `pnpm format`          | Prettier across repo                                      |
+| `pnpm optimize:images` | Sharp pass over images in `public/blog`                   |
+| `pnpm generate:icons`  | Regenerate PWA + apple-touch icons                        |
 
 No test runner. No lint command — Prettier formats (`prettier-plugin-astro`, `prettier-plugin-tailwindcss`).
 
@@ -39,7 +39,7 @@ Content-driven static site. Three pillars:
   - `--font-display` (Archivo Black)
   - `--font-sans` (Inter)
   - `--font-mono` (JetBrains Mono)
-  Sitemap + MDX + astro-icon + rehype-external-links wired. Tailwind v4 loaded as Vite plugin (no `tailwind.config.js`).
+    Sitemap + MDX + astro-icon + rehype-external-links wired. Tailwind v4 loaded as Vite plugin (no `tailwind.config.js`).
 - `tsconfig.json` — extends `astro/tsconfigs/strict`, path alias `@/*` → `src/*`.
 - `src/layouts/BaseLayout.astro` — outer shell (`Head` + `Header` + `Footer` + JSON-LD).
 - `src/layouts/Page.astro` — wraps BaseLayout, adds eyebrow + heading + intro shell, auto-emits `WebPage` JSON-LD.
@@ -76,6 +76,7 @@ Composites: `src/components/home/*`, `src/components/blog/*`, `src/components/wo
 **Cloudflare Pages** auto-deploys on push to `main`. No GitHub Actions configured — Cloudflare runs `pnpm install --frozen-lockfile && pnpm build` against `dist/` directly.
 
 Required Cloudflare settings:
+
 - **Build image: v3** (Settings → Build & deployments → Build image). v1 ships Node 18, Astro 6 needs ≥22.12.
 - **Env var**: `NODE_VERSION=22`
 - Framework preset: Astro

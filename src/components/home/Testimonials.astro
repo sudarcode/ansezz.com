@@ -1,0 +1,49 @@
+---
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
+import { TESTIMONIALS } from "@/consts";
+
+// Renders nothing until real testimonials exist in consts.ts.
+const items = TESTIMONIALS;
+---
+
+{
+  items.length > 0 && (
+    <section class="mx-auto max-w-6xl px-5 py-16 md:py-20">
+      <div class="mb-8">
+        <BurstBadge tone="cyan" size="sm" class="mb-4">
+          ★
+        </BurstBadge>
+        <h2 class="display text-[clamp(1.75rem,4vw,3rem)] leading-[0.95]">
+          What people say.
+        </h2>
+        <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-3">
+          ▸ Words from clients & teammates
+        </p>
+      </div>
+      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {items.map((t, i) => (
+          <li>
+            <NeoCard
+              tone={t.tone}
+              shadow="md"
+              tilt={i % 2 === 0 ? -0.4 : 0.4}
+              class="flex h-full flex-col gap-4"
+            >
+              <p class="text-base md:text-lg font-medium leading-snug">
+                <span class="display text-2xl align-top mr-1">“</span>
+                {t.quote}
+              </p>
+              <div class="mt-auto pt-2 border-t-[2.5px] border-ink">
+                <p class="font-bold text-sm">{t.name}</p>
+                <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-70">
+                  {t.role}
+                </p>
+              </div>
+            </NeoCard>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
