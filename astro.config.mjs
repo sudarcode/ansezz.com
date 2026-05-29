@@ -4,6 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import rehypeExternalLinks from "rehype-external-links";
+import { unified } from "@astrojs/markdown-remark";
 
 import { SITE } from "./src/consts";
 
@@ -44,32 +45,36 @@ export default defineConfig({
       theme: "github-dark",
       wrap: true,
     },
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          target: "_blank",
-          rel: ["noopener", "noreferrer"],
-          test: (node) => {
-            const href = node.properties?.href;
-            if (typeof href !== "string") return false;
-            if (href.startsWith("#") || href.startsWith("/")) return false;
-            if (
-              href.startsWith("mailto:") ||
-              href.startsWith("tel:") ||
-              href.startsWith("sms:")
-            ) {
-              return false;
-            }
-            try {
-              return new URL(href).hostname !== siteHost;
-            } catch {
-              return false;
-            }
+    // Astro 6.4+: plugins go through the unified() processor, not the
+    // deprecated markdown.rehypePlugins option.
+    processor: unified({
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          {
+            target: "_blank",
+            rel: ["noopener", "noreferrer"],
+            test: (node) => {
+              const href = node.properties?.href;
+              if (typeof href !== "string") return false;
+              if (href.startsWith("#") || href.startsWith("/")) return false;
+              if (
+                href.startsWith("mailto:") ||
+                href.startsWith("tel:") ||
+                href.startsWith("sms:")
+              ) {
+                return false;
+              }
+              try {
+                return new URL(href).hostname !== siteHost;
+              } catch {
+                return false;
+              }
+            },
           },
-        },
+        ],
       ],
-    ],
+    }),
   },
   integrations: [
     mdx(),
