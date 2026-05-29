@@ -219,6 +219,42 @@ article.prose pre {
   box-shadow: 6px 6px 0 var(--color-ink);
   border-radius: 4px;
 }
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border: 2px solid var(--color-ink);
+  border-radius: 3px;
+  background: var(--color-yellow);
+  color: var(--color-ink);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+}
+article.prose pre:hover .code-copy-btn,
+.code-copy-btn:focus-visible {
+  opacity: 1;
+}
+.code-copy-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 var(--color-ink);
+}
+.code-copy-btn.is-copied {
+  background: var(--color-green);
+}
+@media (hover: none) {
+  .code-copy-btn {
+    opacity: 1;
+  }
+}
 article.prose pre code {
   background: transparent;
   color: inherit;

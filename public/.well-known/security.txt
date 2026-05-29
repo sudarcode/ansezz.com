@@ -1,0 +1,5 @@
+# Security contact for ansezz.com
+Contact: mailto:me@ansezz.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en, fr, ar
+Canonical: https://ansezz.com/.well-known/security.txt

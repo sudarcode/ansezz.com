@@ -29,10 +29,12 @@ const categoryLabel: Record<string, string> = {
 
 const canonicalUrl = new URL(`/work/${entry.id}/`, SITE.URL).href;
 
+const ogImage = `/og/work/${entry.id}.png`;
 const webPageLd = webPage({
   url: canonicalUrl,
   title: entry.data.title,
   description: entry.data.description,
+  image: ogImage,
 });
 const creativeWorkLd = {
   "@context": "https://schema.org",
@@ -55,6 +57,7 @@ const breadcrumbLd = breadcrumbList([
 <BaseLayout
   title={entry.data.title}
   description={entry.data.description}
+  image={ogImage}
   structuredData={[webPageLd, creativeWorkLd, breadcrumbLd]}
 >
   <section class="mx-auto max-w-4xl px-5 pt-8 pb-6 md:pt-12">

@@ -101,6 +101,8 @@ export const FOOTER_MORE = [
   { LABEL: "Now", HREF: "/now/" },
   { LABEL: "Newsletter", HREF: "/newsletter/" },
   { LABEL: "Tools", HREF: "/tools/" },
+  { LABEL: "Library", HREF: "/library/" },
+  { LABEL: "Series", HREF: "/blog/series/" },
 ];
 
 export const HOME = {
@@ -127,6 +129,14 @@ export const BLOG = {
     "Notes on Laravel internals, AI engineering with Anthropic Claude and MCP, RAG pipelines, Shopify Plus, DevOps, and software architecture.",
 };
 
+// Curated entry points for new readers (post IDs = filename w/o extension).
+export const START_HERE = [
+  "why-your-rag-is-failing",
+  "laravel-octane-high-traffic",
+  "claude-mcp-dev-tools",
+  "coolify-self-hosted-saas",
+];
+
 export const USES = {
   TITLE: "Uses",
   DESCRIPTION:
@@ -138,6 +148,59 @@ export const CONTACT = {
   DESCRIPTION:
     "Hire me for senior / lead / fractional CTO / advisory work — Laravel SaaS, Shopify Plus apps, AI feature integration, architecture audits, MVP builds.",
 };
+
+// ── Blog series ───────────────────────────────────────────
+// Ordered reading paths across related posts. Post IDs = filename
+// without extension. A post may belong to at most one series.
+export interface BlogSeries {
+  slug: string;
+  title: string;
+  description: string;
+  tone: "cyan" | "green" | "yellow" | "pink" | "purple" | "blue";
+  posts: string[];
+}
+
+export const BLOG_SERIES: BlogSeries[] = [
+  {
+    slug: "rag-in-production",
+    title: "RAG in Production",
+    description:
+      "Everything that breaks when retrieval-augmented generation meets real users — and how to fix it.",
+    tone: "cyan",
+    posts: [
+      "why-your-rag-is-failing",
+      "7-rag-mistakes-production",
+      "picking-the-right-rag-stack",
+      "redis-semantic-caching-rag",
+      "circuit-breakers-vector-db",
+    ],
+  },
+  {
+    slug: "self-hosting-saas",
+    title: "Self-Hosting SaaS with Coolify",
+    description:
+      "Ship and scale a SaaS on your own infrastructure with Coolify and Docker — without a platform bill.",
+    tone: "green",
+    posts: [
+      "coolify-self-hosted-saas",
+      "coolify-docker-saas-hosting",
+      "scaling-with-coolify",
+    ],
+  },
+  {
+    slug: "shopify-plus",
+    title: "Shopify Plus, Deep",
+    description:
+      "Themes, headless, web components, and agentic commerce — building serious storefronts and apps on Shopify Plus.",
+    tone: "pink",
+    posts: [
+      "shopify-liquid-vs-headless",
+      "shopify-storefront-web-components",
+      "shopify-ucp-quick-start",
+      "agentic-commerce-shopify",
+    ],
+  },
+];
 
 export const BLOG_CATEGORIES = [
   "laravel",
@@ -419,6 +482,116 @@ export const TOOL_LIST: ToolEntry[] = [
     icon: "lucide:calculator",
     tone: "yellow",
     status: "live",
+  },
+  {
+    title: "Token Counter",
+    blurb:
+      "Paste any text and estimate token count for Claude and GPT models — plus characters, words, and a rough per-call cost. All in your browser.",
+    href: "/tools/token-counter/",
+    icon: "lucide:hash",
+    tone: "cyan",
+    status: "live",
+  },
+  {
+    title: "Cron Explainer",
+    blurb:
+      "Decode a cron expression into plain English, field by field. Built it for my own schedulers — paste a 5-field cron and read what it actually does.",
+    href: "/tools/cron-explainer/",
+    icon: "lucide:clock",
+    tone: "pink",
+    status: "live",
+  },
+];
+
+// ── Library / reading list ────────────────────────────────
+// Things I recommend. Edit freely — these are starting picks
+// aligned to the stack; swap in your own favorites and notes.
+export const LIBRARY = {
+  TITLE: "Library",
+  DESCRIPTION:
+    "Books, tools, and resources I recommend for backend engineering, AI, and shipping production software — curated, not exhaustive.",
+};
+
+export interface LibraryItem {
+  name: string;
+  by?: string;
+  note: string;
+  url?: string;
+}
+export interface LibraryGroup {
+  heading: string;
+  icon: string;
+  tone: "yellow" | "pink" | "cyan" | "green" | "purple" | "blue";
+  items: LibraryItem[];
+}
+
+export const LIBRARY_GROUPS: LibraryGroup[] = [
+  {
+    heading: "Books",
+    icon: "lucide:book",
+    tone: "yellow",
+    items: [
+      {
+        name: "Designing Data-Intensive Applications",
+        by: "Martin Kleppmann",
+        note: "The reference for how real systems store, move, and break data. Re-read it.",
+        url: "https://dataintensive.net/",
+      },
+      {
+        name: "A Philosophy of Software Design",
+        by: "John Ousterhout",
+        note: "Deep modules, shallow interfaces. Changed how I scope abstractions.",
+      },
+      {
+        name: "Clean Architecture",
+        by: "Robert C. Martin",
+        note: "Take the boundaries, leave the dogma. Still the clearest layering primer.",
+      },
+    ],
+  },
+  {
+    heading: "Docs worth reading cover-to-cover",
+    icon: "lucide:file-text",
+    tone: "cyan",
+    items: [
+      {
+        name: "Anthropic Claude docs",
+        note: "Tool use, prompt caching, agents, MCP — the source of truth for building on Claude.",
+        url: "https://docs.anthropic.com/",
+      },
+      {
+        name: "Laravel docs",
+        note: "Queues, Octane, Horizon — the parts most people skip are the ones that scale.",
+        url: "https://laravel.com/docs",
+      },
+      {
+        name: "Model Context Protocol",
+        note: "The standard for wiring tools into LLMs. Short spec, big implications.",
+        url: "https://modelcontextprotocol.io/",
+      },
+    ],
+  },
+  {
+    heading: "Tools I reach for",
+    icon: "lucide:wrench",
+    tone: "green",
+    items: [
+      {
+        name: "Coolify",
+        note: "Self-hosted PaaS. Ship SaaS on your own boxes without the platform bill.",
+        url: "https://coolify.io/",
+      },
+      {
+        name: "pgvector",
+        note: "Vector search inside Postgres — one database instead of two for most RAG.",
+        url: "https://github.com/pgvector/pgvector",
+      },
+      {
+        name: "Filament",
+        note: "Laravel admin panels that don't feel like 2012. Ships internal tooling fast.",
+        url: "https://filamentphp.com/",
+      },
+    ],
   },
 ];
 

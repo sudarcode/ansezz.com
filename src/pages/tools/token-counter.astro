@@ -1,0 +1,88 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import StickyNote from "@/components/neobrutalist/StickyNote.astro";
+import { SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Tools", url: "/tools/" },
+  { name: "Token Counter", url: "/tools/token-counter/" },
+]);
+---
+
+<Page
+  title="Token Counter"
+  description="Free, no-signup token counter. Paste text and estimate tokens for Claude and GPT models, plus characters, words, and a rough per-call cost — all client-side."
+  eyebrow="Free tool"
+  heading="Token Counter."
+  intro="Paste text, get an instant estimate of how many tokens it costs across Claude and GPT models. Nothing leaves your browser."
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-5xl px-5 pb-6">
+    <StickyNote tone="yellow" tilt={-1.5} class="max-w-md">
+      <p class="mono text-[10px] font-bold uppercase tracking-widest mb-1">
+        ▸ Estimate, not exact
+      </p>
+      <p class="text-sm font-bold leading-snug">
+        Uses the ~4 chars/token heuristic. Real tokenizers vary ±10-20%. For
+        billing precision, count with the provider's tokenizer.
+      </p>
+    </StickyNote>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-5 pb-16">
+    <div class="grid gap-6 md:grid-cols-[1fr_320px] items-start" id="tok-root">
+      <NeoCard tone="paper" shadow="md" class="space-y-3">
+        <label
+          for="tok-input"
+          class="mono text-[11px] font-bold uppercase tracking-widest block"
+        >
+          Your text
+        </label>
+        <textarea
+          id="tok-input"
+          rows="14"
+          placeholder="Paste your prompt, document, or context here…"
+          class="w-full border-[3px] border-ink rounded-[4px] bg-paper p-3 font-mono text-sm shadow-neo-sm focus:outline-none resize-y"
+        ></textarea>
+      </NeoCard>
+
+      <NeoCard tone="cyan" shadow="lg" class="space-y-4 md:sticky md:top-24">
+        <p class="mono text-[11px] font-bold uppercase tracking-widest">
+          ▸ Estimate
+        </p>
+        <dl class="space-y-2.5">
+          <div class="flex items-end justify-between border-b-[2.5px] border-ink pb-2">
+            <dt class="text-sm font-bold uppercase">~ Tokens</dt>
+            <dd id="tok-tokens" class="display text-4xl leading-none text-pink-deep">0</dd>
+          </div>
+          <div class="flex items-end justify-between">
+            <dt class="text-sm font-bold uppercase">Characters</dt>
+            <dd id="tok-chars" class="display text-2xl leading-none">0</dd>
+          </div>
+          <div class="flex items-end justify-between">
+            <dt class="text-sm font-bold uppercase">Words</dt>
+            <dd id="tok-words" class="display text-2xl leading-none">0</dd>
+          </div>
+        </dl>
+        <div class="border-t-[2.5px] border-ink pt-3">
+          <p class="mono text-[10px] font-bold uppercase tracking-widest mb-2 opacity-80">
+            As input, once
+          </p>
+          <ul class="space-y-1 text-sm font-bold" id="tok-costs">
+            <li class="flex justify-between"><span>Claude Opus</span><span data-cost="15">$0</span></li>
+            <li class="flex justify-between"><span>Claude Sonnet</span><span data-cost="3">$0</span></li>
+            <li class="flex justify-between"><span>GPT-4o</span><span data-cost="2.5">$0</span></li>
+            <li class="flex justify-between"><span>GPT-4o mini</span><span data-cost="0.15">$0</span></li>
+          </ul>
+        </div>
+      </NeoCard>
+    </div>
+  </section>
+</Page>
+
+<script>
+  import "@/scripts/token-counter";
+</script>

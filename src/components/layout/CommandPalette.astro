@@ -1,0 +1,90 @@
+---
+import { NAV, FOOTER_MORE, TOOL_LIST } from "@/consts";
+
+// Flattened, filterable command list. Search query (when not matching a
+// link) hands off to the blog's Pagefind search via /blog/?q=.
+const links = [
+  ...NAV.map((n) => ({ label: n.LABEL, href: n.HREF, group: "Pages" })),
+  ...FOOTER_MORE.map((n) => ({ label: n.LABEL, href: n.HREF, group: "More" })),
+  ...TOOL_LIST.filter((t) => t.status === "live").map((t) => ({
+    label: t.title,
+    href: t.href,
+    group: "Tools",
+  })),
+];
+---
+
+<div
+  id="cmdk"
+  hidden
+  class="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-[12vh]"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Command menu"
+>
+  <div id="cmdk-backdrop" class="absolute inset-0 bg-ink/40 backdrop-blur-sm">
+  </div>
+  <div
+    class="relative w-full max-w-xl border-[3px] border-ink bg-paper shadow-neo-xl rounded-[6px] overflow-hidden"
+  >
+    <div class="flex items-center gap-2 border-b-[3px] border-ink px-4 py-3">
+      <span class="mono text-xs font-bold opacity-60">▸</span>
+      <input
+        id="cmdk-input"
+        type="text"
+        placeholder="Jump to a page or search the blog…"
+        autocomplete="off"
+        spellcheck="false"
+        class="flex-1 bg-transparent font-bold text-base focus:outline-none placeholder:text-ink/40"
+      />
+      <kbd
+        class="mono text-[10px] font-bold border-[2px] border-ink rounded px-1.5 py-0.5 bg-bg-alt"
+        >esc</kbd
+      >
+    </div>
+    <ul id="cmdk-list" class="max-h-[50vh] overflow-y-auto py-2">
+      {
+        links.map((l, i) => (
+          <li>
+            <a
+              href={l.href}
+              data-cmdk-item
+              data-label={l.label.toLowerCase()}
+              data-index={i}
+              class="flex items-center justify-between gap-3 px-4 py-2.5 text-sm font-bold transition-colors aria-[selected=true]:bg-yellow hover:bg-yellow"
+            >
+              <span>{l.label}</span>
+              <span class="mono text-[10px] font-bold uppercase tracking-widest opacity-50">
+                {l.group}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+      <li id="cmdk-search-row" hidden>
+        <a
+          href="/blog/"
+          id="cmdk-search-link"
+          data-cmdk-item
+          class="flex items-center justify-between gap-3 px-4 py-2.5 text-sm font-bold transition-colors aria-[selected=true]:bg-yellow hover:bg-yellow"
+        >
+          <span id="cmdk-search-label">Search the blog…</span>
+          <span class="mono text-[10px] font-bold uppercase tracking-widest opacity-50"
+            >Search ↵</span
+          >
+        </a>
+      </li>
+      <li
+        id="cmdk-empty"
+        hidden
+        class="px-4 py-6 text-center text-sm opacity-60"
+      >
+        No matches.
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  import "@/scripts/command-palette";
+</script>

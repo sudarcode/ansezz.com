@@ -1,0 +1,87 @@
+---
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import { Icon } from "astro-icon/components";
+import { LIBRARY, LIBRARY_GROUPS, SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+import { externalLinkAttrs } from "@/lib/links";
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Library", url: "/library/" },
+]);
+
+// Static class maps — dynamic `bg-${tone}` is not picked up by Tailwind.
+const iconBg: Record<string, string> = {
+  yellow: "bg-yellow text-ink",
+  pink: "bg-pink text-ink",
+  cyan: "bg-cyan text-ink",
+  green: "bg-green text-ink",
+  purple: "bg-purple text-paper",
+  blue: "bg-blue text-paper",
+};
+---
+
+<Page
+  title={LIBRARY.TITLE}
+  description={LIBRARY.DESCRIPTION}
+  eyebrow="Library"
+  heading="What I read & recommend."
+  intro={LIBRARY.DESCRIPTION}
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-5xl px-5 pb-16 space-y-12">
+    {
+      LIBRARY_GROUPS.map((group, gi) => (
+        <div>
+          <div class="flex items-center gap-3 mb-5">
+            <span
+              class={`inline-flex h-10 w-10 items-center justify-center border-[2.5px] border-ink rounded-[6px] shadow-neo-xs ${iconBg[group.tone]}`}
+              aria-hidden="true"
+            >
+              <Icon name={group.icon} class="h-5 w-5" />
+            </span>
+            <h2 class="display text-2xl md:text-3xl leading-tight">
+              {group.heading}
+            </h2>
+          </div>
+          <ul class="grid gap-4 md:grid-cols-3">
+            {group.items.map((item, i) => {
+              const Tag = item.url ? "a" : "div";
+              return (
+                <li>
+                  <Tag
+                    href={item.url}
+                    {...(item.url ? externalLinkAttrs(item.url) : {})}
+                    data-neo-hover={item.url ? "" : undefined}
+                    class="block h-full"
+                  >
+                    <NeoCard
+                      tone={i % 2 === 0 ? "paper" : group.tone}
+                      shadow="sm"
+                      tilt={(gi + i) % 2 === 0 ? -0.3 : 0.3}
+                      class="flex h-full flex-col gap-2 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-md"
+                    >
+                      <h3 class="heading text-base uppercase leading-tight">
+                        {item.name}
+                        {item.url && (
+                          <span class="opacity-50 ml-1">↗</span>
+                        )}
+                      </h3>
+                      {item.by && (
+                        <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-70">
+                          {item.by}
+                        </p>
+                      )}
+                      <p class="text-sm leading-snug opacity-90">{item.note}</p>
+                    </NeoCard>
+                  </Tag>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))
+    }
+  </section>
+</Page>

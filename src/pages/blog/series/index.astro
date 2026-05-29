@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Page from "@/layouts/Page.astro";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import { Icon } from "astro-icon/components";
+import { BLOG_SERIES, SITE } from "@/consts";
+import { breadcrumbList } from "@/lib/seo";
+
+const all = await getCollection("blog", ({ data }) => !data.draft);
+const titleOf = new Map(all.map((p) => [p.id, p.data.title]));
+
+const breadcrumbLd = breadcrumbList([
+  { name: "Home", url: SITE.URL },
+  { name: "Blog", url: "/blog/" },
+  { name: "Series", url: "/blog/series/" },
+]);
+---
+
+<Page
+  title="Series"
+  description="Multi-part reading paths through the blog — RAG in production, self-hosting SaaS with Coolify, and Shopify Plus, in order."
+  eyebrow="Blog"
+  heading="Read it as a series."
+  intro="Related posts, ordered into a path. Start at part one and work through — or jump to whatever you need."
+  structuredData={breadcrumbLd}
+>
+  <section class="mx-auto max-w-5xl px-5 pb-16">
+    <ul class="grid gap-6 md:grid-cols-2">
+      {
+        BLOG_SERIES.map((s, i) => (
+          <li>
+            <a href={`/blog/series/${s.slug}/`} class="block h-full" data-neo-hover>
+              <NeoCard
+                tone={s.tone}
+                shadow="md"
+                tilt={i % 2 === 0 ? -0.3 : 0.3}
+                class="flex h-full flex-col gap-3"
+              >
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex h-11 w-11 items-center justify-center border-[2.5px] border-ink rounded-[6px] bg-paper text-ink shadow-neo-xs"
+                    aria-hidden="true"
+                  >
+                    <Icon name="lucide:layers" class="h-5 w-5" />
+                  </span>
+                  <span class="mono text-[10px] font-bold uppercase tracking-widest border-[2px] border-ink rounded-full px-2 py-0.5 bg-paper">
+                    {s.posts.length} parts
+                  </span>
+                </div>
+                <h2 class="heading text-xl md:text-2xl uppercase leading-tight">
+                  {s.title}
+                </h2>
+                <p class="text-sm leading-snug opacity-90">{s.description}</p>
+                <ol class="mt-auto pt-2 space-y-1 text-sm font-medium">
+                  {s.posts.slice(0, 3).map((id, n) => (
+                    <li class="flex gap-2">
+                      <span class="mono text-[11px] opacity-60">
+                        {String(n + 1).padStart(2, "0")}
+                      </span>
+                      <span class="truncate">{titleOf.get(id) ?? id}</span>
+                    </li>
+                  ))}
+                  {s.posts.length > 3 && (
+                    <li class="mono text-[11px] opacity-60">
+                      + {s.posts.length - 3} more →
+                    </li>
+                  )}
+                </ol>
+              </NeoCard>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Page>

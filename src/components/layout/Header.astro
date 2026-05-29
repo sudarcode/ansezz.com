@@ -20,6 +20,16 @@ import { externalLinkAttrs } from "@/lib/links";
     </a>
     <div class="hidden md:flex items-center gap-3">
       <Nav />
+      <button
+        type="button"
+        data-cmdk-open
+        aria-label="Open command menu (Cmd+K)"
+        title="Search & jump — ⌘K"
+        class="inline-flex items-center gap-2 h-10 border-[2px] border-ink bg-paper px-3 text-ink shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow hover:shadow-neo-sm"
+      >
+        <Icon name="lucide:search" class="h-4 w-4" />
+        <kbd class="mono text-[10px] font-bold">⌘K</kbd>
+      </button>
       <ThemeToggle />
       <a
         href="/contact/"

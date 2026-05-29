@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import { getSeriesForPost } from "@/lib/series";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  currentId: string;
+  class?: string;
+}
+
+const { currentId, class: className = "" } = Astro.props;
+const ctx = getSeriesForPost(currentId);
+
+const titles = new Map<string, string>();
+if (ctx) {
+  const all = await getCollection("blog");
+  for (const p of all) titles.set(p.id, p.data.title);
+}
+---
+
+{
+  ctx && (
+    <aside
+      class:list={[
+        "border-[3px] border-ink rounded-[4px] bg-bg-alt shadow-neo-sm p-5",
+        className,
+      ]}
+      aria-label={`Part of the ${ctx.series.title} series`}
+    >
+      <div class="flex items-center gap-2 mb-3">
+        <Icon name="lucide:layers" class="h-4 w-4" />
+        <p class="mono text-[10px] font-bold uppercase tracking-widest">
+          Part {ctx.index + 1} of {ctx.total} ·{" "}
+          <a
+            href={`/blog/series/${ctx.series.slug}/`}
+            class="underline decoration-2 underline-offset-2 hover:bg-yellow"
+          >
+            {ctx.series.title}
+          </a>
+        </p>
+      </div>
+      <ol class="space-y-1.5">
+        {ctx.series.posts.map((id, i) => {
+          const isCurrent = id === currentId;
+          return (
+            <li>
+              <a
+                href={`/blog/${id}/`}
+                aria-current={isCurrent ? "true" : undefined}
+                class:list={[
+                  "flex items-start gap-2 text-sm leading-snug rounded-[3px] px-2 py-1.5 transition-colors",
+                  isCurrent
+                    ? "bg-ink text-bg font-bold"
+                    : "hover:bg-yellow font-medium",
+                ]}
+              >
+                <span class="mono text-[11px] font-bold opacity-70 shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span>{titles.get(id) ?? id}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </aside>
+  )
+}

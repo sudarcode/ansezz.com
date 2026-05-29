@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import { webPage } from "@/lib/seo";
+import { pageOgPath } from "@/lib/og-pages";
 import { SITE } from "@/consts";
 
 interface Props {
@@ -27,9 +28,11 @@ const {
 
 const pageUrl = new URL(Astro.url.pathname, SITE.URL).href;
 const pageDesc = description ?? SITE.DESCRIPTION;
+// Per-page branded OG card when the page hasn't supplied its own image.
+const resolvedImage = image ?? pageOgPath(Astro.url.pathname) ?? undefined;
 const autoWebPage = noindex
   ? null
-  : webPage({ url: pageUrl, title, description: pageDesc, image });
+  : webPage({ url: pageUrl, title, description: pageDesc, image: resolvedImage });
 
 const extra = structuredData
   ? Array.isArray(structuredData)
@@ -42,7 +45,7 @@ const finalStructured = autoWebPage ? [autoWebPage, ...extra] : extra;
 <BaseLayout
   title={title}
   description={description}
-  image={image}
+  image={resolvedImage}
   structuredData={finalStructured}
   noindex={noindex}
 >

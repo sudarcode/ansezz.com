@@ -1,0 +1,37 @@
+# Anass Ez-zouaine — Senior Backend Engineer · Software Architect · AI Engineer
+
+> Personal site, portfolio, and engineering blog of Anass Ez-zouaine. 12+ years
+> shipping production Laravel SaaS, Shopify Plus apps, and AI features (Anthropic
+> Claude, MCP, RAG, agentic systems). Remote-first since 2014, based in Meknes,
+> Morocco. Available for senior / lead / fractional CTO and advisory engagements.
+
+## About
+
+- [About](https://ansezz.com/about/): Background, experience, and how I work.
+- [Work](https://ansezz.com/work/): Selected projects — AI engineering, Shopify Plus apps, multi-tenant SaaS, open source.
+- [Services](https://ansezz.com/services/): Engagements — MVP build, AI integration sprint, Shopify Plus app, architecture audit.
+- [Now](https://ansezz.com/now/): What I'm focused on right now.
+- [Uses](https://ansezz.com/uses/): Tools, stack, and hardware I use daily.
+- [Contact](https://ansezz.com/contact/): Email, phone, booking, and socials.
+
+## Blog
+
+Topics: Laravel internals & Octane, AI engineering with Claude + MCP, RAG
+pipelines on pgvector, Shopify Plus, DevOps & self-hosting (Coolify), and
+software architecture.
+
+- [Blog index](https://ansezz.com/blog/): All posts.
+- [AI posts](https://ansezz.com/blog/category/ai/)
+- [Laravel posts](https://ansezz.com/blog/category/laravel/)
+- [Shopify posts](https://ansezz.com/blog/category/shopify/)
+- [Architecture posts](https://ansezz.com/blog/category/architecture/)
+- [RSS feed](https://ansezz.com/rss.xml)
+
+## Tools
+
+- [Free engineering tools](https://ansezz.com/tools/): No-signup utilities for LLM and Laravel work.
+
+## Contact
+
+- Email: me@ansezz.com
+- Site: https://ansezz.com

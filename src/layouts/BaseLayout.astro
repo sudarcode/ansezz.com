@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { SITE, OWNER, SOCIALS } from "@/consts";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import CommandPalette from "@/components/layout/CommandPalette.astro";
 import "@/styles/global.css";
 
 interface ArticleMeta {
@@ -138,18 +139,18 @@ const ldList = structuredData
     <meta name="theme-color" content="#15140e" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
-    {/* Set theme before first paint — no flash of wrong theme. */}
+    {/* Set theme before first paint — no flash. Default is LIGHT;
+        dark only when the visitor has explicitly chosen it. System
+        preference is intentionally ignored. */}
     <script is:inline>
       (() => {
         const apply = () => {
           try {
-            const stored = localStorage.getItem("theme");
-            const dark =
-              stored === "dark" ||
-              (!stored &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches);
+            const dark = localStorage.getItem("theme") === "dark";
             document.documentElement.dataset.theme = dark ? "dark" : "light";
-          } catch {}
+          } catch {
+            document.documentElement.dataset.theme = "light";
+          }
         };
         apply();
         // Re-apply after Astro view-transition swaps.
@@ -181,5 +182,10 @@ const ldList = structuredData
       <slot />
     </main>
     <Footer />
+    <CommandPalette />
+
+    <script>
+      import "@/scripts/code-copy";
+    </script>
   </body>
 </html>

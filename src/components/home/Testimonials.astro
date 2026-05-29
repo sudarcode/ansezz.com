@@ -1,28 +1,53 @@
 ---
-import NeoCard from "@/components/neobrutalist/NeoCard.astro";
 import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
-import { TESTIMONIALS } from "@/consts";
+import { Icon } from "astro-icon/components";
+import {
+  TESTIMONIALS,
+  OTHER_SHOPIFY_STOREFRONTS,
+  OTHER_SHOPIFY_APPS,
+  OTHER_PLATFORMS,
+} from "@/consts";
+import NeoCard from "@/components/neobrutalist/NeoCard.astro";
+import { externalLinkAttrs } from "@/lib/links";
 
-// Renders nothing until real testimonials exist in consts.ts.
-const items = TESTIMONIALS;
+// Real social proof from shipped, live projects — no fabricated quotes.
+// (If real testimonials are added to TESTIMONIALS later, they render above.)
+const toneBg: Record<string, string> = {
+  yellow: "bg-yellow text-ink",
+  pink: "bg-pink text-ink",
+  cyan: "bg-cyan text-ink",
+  green: "bg-green text-ink",
+  red: "bg-red text-ink",
+  blue: "bg-blue text-paper",
+  purple: "bg-purple text-paper",
+  ink: "bg-ink text-bg",
+};
+
+// A curated, recognizable slice across storefronts, apps, and platforms.
+const brands = [
+  ...OTHER_SHOPIFY_STOREFRONTS.slice(0, 6),
+  ...OTHER_SHOPIFY_APPS.slice(0, 1),
+  ...OTHER_PLATFORMS.slice(0, 3),
+];
 ---
 
-{
-  items.length > 0 && (
-    <section class="mx-auto max-w-6xl px-5 py-16 md:py-20">
-      <div class="mb-8">
-        <BurstBadge tone="cyan" size="sm" class="mb-4">
-          ★
-        </BurstBadge>
-        <h2 class="display text-[clamp(1.75rem,4vw,3rem)] leading-[0.95]">
-          What people say.
-        </h2>
-        <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-3">
-          ▸ Words from clients & teammates
-        </p>
-      </div>
-      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((t, i) => (
+<section class="mx-auto max-w-6xl px-5 py-16 md:py-20">
+  <div class="mb-8">
+    <BurstBadge tone="cyan" size="sm" class="mb-4">★</BurstBadge>
+    <h2 class="display text-[clamp(1.75rem,4vw,3rem)] leading-[0.95]">
+      Shipped for.
+    </h2>
+    <p
+      class="mono text-[11px] font-bold uppercase tracking-widest opacity-60 mt-3"
+    >
+      ▸ A slice of live brands & platforms I've built and shipped
+    </p>
+  </div>
+
+  {
+    TESTIMONIALS.length > 0 && (
+      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        {TESTIMONIALS.map((t, i) => (
           <li>
             <NeoCard
               tone={t.tone}
@@ -44,6 +69,51 @@ const items = TESTIMONIALS;
           </li>
         ))}
       </ul>
-    </section>
-  )
-}
+    )
+  }
+
+  <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      brands.map((b) => (
+        <li>
+          <a
+            href={b.url}
+            {...externalLinkAttrs(b.url)}
+            class="group flex items-center gap-3 border-[2.5px] border-ink rounded-[4px] bg-paper p-3 shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm hover:bg-yellow"
+          >
+            <span
+              class:list={[
+                "inline-flex h-10 w-10 shrink-0 items-center justify-center border-[2px] border-ink rounded-full font-black text-sm",
+                toneBg[b.tone],
+              ]}
+            >
+              {b.name.slice(0, 1)}
+            </span>
+            <span class="flex-1 min-w-0">
+              <span class="block font-bold text-sm truncate">
+                {b.name}
+                <span class="inline-block align-middle ml-1 opacity-60">↗</span>
+              </span>
+              <span class="block mono text-[10px] uppercase tracking-widest opacity-70 truncate">
+                {b.note}
+              </span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-6 flex flex-wrap items-center gap-3">
+    <a
+      href="/work/"
+      class="inline-flex items-center gap-2 border-[2.5px] border-ink bg-ink text-bg px-4 py-2 text-sm font-bold uppercase tracking-wide shadow-neo-xs transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-sm"
+    >
+      <Icon name="lucide:arrow-right" class="h-4 w-4" />
+      See all work
+    </a>
+    <p class="mono text-[11px] font-bold uppercase tracking-widest opacity-60">
+      ▸ 60+ production builds total
+    </p>
+  </div>
+</section>
