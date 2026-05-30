@@ -47,7 +47,6 @@ const cardTagTones: Record<string, "yellow" | "paper" | "ink"> = {
               tone={item.tone}
               hover
               href={item.href}
-              ariaLabel={`${item.title} — ${item.cta}`}
               class="flex h-full flex-col gap-4 group"
               tilt={i % 2 === 0 ? -0.4 : 0.4}
             >
@@ -59,7 +58,7 @@ const cardTagTones: Record<string, "yellow" | "paper" | "ink"> = {
                   <Icon name={item.icon} class="h-5 w-5" />
                 </span>
                 <div class="flex-1 min-w-0">
-                  <p class="mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+                  <p class="mono text-[10px] font-bold uppercase tracking-widest">
                     ▸ Lane {String(i + 1).padStart(2, "0")}
                   </p>
                   <h3 class="heading text-xl md:text-2xl uppercase leading-tight mt-0.5">

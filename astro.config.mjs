@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
+import AstroPWA from "@vite-pwa/astro";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -12,6 +13,28 @@ import rehypeImageDims from "./src/lib/rehype-image-dims.mjs";
 import { SITE } from "./src/consts";
 
 const siteHost = new URL(SITE.URL).hostname;
+
+// Build a { "<post-url>": ISO-date } map from blog frontmatter so the sitemap
+// can emit <lastmod>. astro:content isn't available in the config, so read the
+// files directly and pull updatedDate ?? publishDate.
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+function blogLastmod() {
+  const dir = join(process.cwd(), "src/content/blog");
+  const map = {};
+  for (const file of readdirSync(dir)) {
+    if (!/\.(md|mdx)$/.test(file)) continue;
+    const id = file.replace(/\.(md|mdx)$/, "");
+    const src = readFileSync(join(dir, file), "utf8");
+    const updated = src.match(/^updatedDate:\s*"?([0-9-]+)"?/m)?.[1];
+    const published = src.match(/^publishDate:\s*"?([0-9-]+)"?/m)?.[1];
+    const date = updated ?? published;
+    if (date) map[`${SITE.URL}/blog/${id}/`] = new Date(date).toISOString();
+  }
+  return map;
+}
+const LASTMOD = blogLastmod();
 
 // Concatenate the text content of a hast heading node (for anchor aria-labels).
 function headingText(node) {
@@ -117,11 +140,17 @@ export default defineConfig({
       changefreq: "weekly",
       priority: 0.7,
       serialize(item) {
+        const lastmod = LASTMOD[item.url];
         if (item.url === SITE.URL || item.url === `${SITE.URL}/`) {
           return { ...item, priority: 1.0, changefreq: "weekly" };
         }
         if (item.url.includes("/blog/") && item.url !== `${SITE.URL}/blog/`) {
-          return { ...item, priority: 0.8, changefreq: "monthly" };
+          return {
+            ...item,
+            priority: 0.8,
+            changefreq: "monthly",
+            ...(lastmod ? { lastmod } : {}),
+          };
         }
         if (item.url.endsWith("/blog/")) {
           return { ...item, priority: 0.9, changefreq: "daily" };
@@ -130,5 +159,38 @@ export default defineConfig({
       },
     }),
     icon(),
+    AstroPWA({
+      registerType: "autoUpdate",
+      // Keep the hand-authored public/manifest.webmanifest; don't generate one.
+      manifest: false,
+      // We register /sw.js ourselves in BaseLayout (Astro head control).
+      injectRegister: false,
+      workbox: {
+        // Precache the app shell assets; pages are cached at runtime.
+        globPatterns: ["**/*.{js,css,svg,woff2}"],
+        navigateFallback: null,
+        cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            urlPattern: ({ request }) =>
+              request.destination === "image" || request.destination === "font",
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "assets",
+              expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 60 },
+            },
+          },
+        ],
+      },
+    }),
   ],
 });

@@ -16,7 +16,6 @@ import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
 import SocialButton from "@/components/neobrutalist/SocialButton.astro";
 import AvailabilityBadge from "@/components/neobrutalist/AvailabilityBadge.astro";
 import PanelDivider from "@/components/neobrutalist/PanelDivider.astro";
-import NewsletterCallout from "@/components/home/NewsletterCallout.astro";
 import { Icon } from "astro-icon/components";
 
 const sample = `import { Anthropic } from "@anthropic-ai/sdk";
@@ -97,7 +96,6 @@ const sections = [
   { id: "availability", label: "AvailabilityBadge" },
   { id: "socialbutton", label: "SocialButton" },
   { id: "mascot", label: "RobotMascot" },
-  { id: "newsletter", label: "NewsletterCallout" },
 ];
 ---
 
@@ -385,8 +383,4 @@ const sections = [
       </div>
     </div>
   </section>
-
-  <div id="newsletter">
-    <NewsletterCallout />
-  </div>
 </BaseLayout>

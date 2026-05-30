@@ -28,7 +28,7 @@ const tldr = [
   { label: "No accounts", tone: "green" as const },
   { label: "No analytics or tracking", tone: "green" as const },
   { label: "No cookies set by me", tone: "green" as const },
-  { label: "Comments & newsletter opt-in", tone: "yellow" as const },
+  { label: "Comments & contact form opt-in", tone: "yellow" as const },
   { label: "No selling data — ever", tone: "yellow" as const },
 ];
 
@@ -49,7 +49,7 @@ const sections = [
   description={`Privacy notice for ${SITE.TITLE} — what data is collected, why, and your rights.`}
   eyebrow="Legal"
   heading="Privacy notice."
-  intro="Short version: this site collects nothing about you personally. No accounts, no analytics, no cookies set by me. Comments and the newsletter are strictly opt-in. Long version below — written in plain English."
+  intro="Short version: this site collects nothing about you personally. No accounts, no analytics, no cookies set by me. Comments and the contact form are strictly opt-in. Long version below — written in plain English."
   structuredData={privacyBreadcrumbLd}
 >
   <div class="mx-auto max-w-4xl px-5 pb-20">
@@ -100,8 +100,9 @@ const sections = [
           This site is a static blog and portfolio. It does <strong>not</strong>
           store any personal information on its own — no login, no server, no
           database. Two features are <strong>opt-in</strong>: blog comments
-          (powered by GitHub Discussions via giscus) and the email newsletter
-          (Buttondown). You only share data if you choose to use them. Otherwise,
+          (powered by GitHub Discussions via giscus) and the contact form
+          (delivered by Web3Forms). You only share data if you choose to use
+          them. Otherwise,
           reach me via email, phone, LinkedIn, or my Google Calendar booking
           link — data shared that way is handled by those services under their
           own privacy terms.
@@ -167,7 +168,7 @@ const sections = [
           Fonts and images are self-hosted from this domain. A few features load
           third-party content only when you engage with them:
           <strong>giscus / GitHub</strong> (blog comments),
-          <strong>Buttondown</strong> (newsletter signup), and an embedded
+          <strong>Web3Forms</strong> (contact form delivery), and an embedded
           <strong>X / Twitter</strong> timeline on the feed page. Each loads
           under its own privacy policy. External links in blog posts point
           elsewhere — once you leave this domain, the destination's policy
@@ -180,18 +181,17 @@ const sections = [
           <span class="inline-flex items-center justify-center h-9 w-9 rounded-[4px] border-[2.5px] border-ink bg-paper text-ink">
             <Icon name="lucide:mail" class="h-4 w-4" />
           </span>
-          <h2 class="heading text-xl uppercase">Email, newsletter & booking</h2>
+          <h2 class="heading text-xl uppercase">Email, contact form & booking</h2>
         </div>
         <p class="text-sm leading-relaxed">
           If you <a
             href={`mailto:${SITE.EMAIL}`}
             class="underline decoration-[3px] underline-offset-4 hover:bg-yellow hover:text-ink"
-          >email me</a> or book a call via Google Calendar, I keep that thread /
-          event only as long as needed to reply or run the engagement. If you
-          subscribe to the newsletter, your email is stored by
-          <strong>Buttondown</strong> solely to send new-post emails — one-click
-          unsubscribe, no sharing, no selling. I do not add anyone to a list
-          without an explicit signup, and will delete on request.
+          >email me</a>, submit the contact form, or book a call via Google
+          Calendar, I keep that message / thread / event only as long as needed
+          to reply or run the engagement. The contact form is delivered by
+          <strong>Web3Forms</strong>, which forwards your message to my inbox —
+          no marketing list, no sharing, no selling. I'll delete on request.
         </p>
       </NeoCard>
 

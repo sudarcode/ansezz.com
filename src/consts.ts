@@ -99,7 +99,6 @@ export const NAV = [
 /** Secondary links surfaced in the footer (not the primary nav). */
 export const FOOTER_MORE = [
   { LABEL: "Now", HREF: "/now/" },
-  { LABEL: "Newsletter", HREF: "/newsletter/" },
   { LABEL: "Tools", HREF: "/tools/" },
   { LABEL: "Library", HREF: "/library/" },
   { LABEL: "Series", HREF: "/blog/series/" },
@@ -152,6 +151,14 @@ export const CONTACT = {
   TITLE: "Contact",
   DESCRIPTION:
     "Hire me for senior / lead / fractional CTO / advisory work — Laravel SaaS, Shopify Plus apps, AI feature integration, architecture audits, MVP builds.",
+};
+
+// Web3Forms-backed contact form (no backend). Get a free access key at
+// https://web3forms.com, paste it here, and the form replaces the mailto CTA.
+// Empty key => form is hidden, mailto stays. CSP already allows the endpoint.
+export const CONTACT_FORM = {
+  ACCESS_KEY: "06e57a3e-7478-4447-b601-9cd3bd46e211",
+  ENDPOINT: "https://api.web3forms.com/submit",
 };
 
 // ── Blog series ───────────────────────────────────────────
@@ -450,16 +457,6 @@ export const NOW = {
       body: "Senior / lead / fractional CTO and advisory work. Selective on fit — a free discovery call tells us both fast.",
     },
   ],
-};
-
-// ── Newsletter ────────────────────────────────────────────
-export const NEWSLETTER = {
-  TITLE: "Newsletter",
-  DESCRIPTION:
-    "No-fluff engineering notes — Laravel internals, AI engineering with Claude & MCP, RAG, and Shopify Plus. One short email per new post.",
-  SUBSCRIBE_ACTION:
-    "https://buttondown.email/api/emails/embed-subscribe/ansezz",
-  ARCHIVE_URL: "https://buttondown.email/ansezz/archive/",
 };
 
 // ── Free tools ────────────────────────────────────────────

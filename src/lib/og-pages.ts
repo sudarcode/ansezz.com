@@ -59,12 +59,6 @@ export const PAGE_OG: PageOg[] = [
     title: "What I'm doing right now.",
   },
   {
-    slug: "newsletter",
-    path: "/newsletter/",
-    label: "Newsletter",
-    title: "The no-fluff engineering list.",
-  },
-  {
     slug: "tools",
     path: "/tools/",
     label: "Free tools",

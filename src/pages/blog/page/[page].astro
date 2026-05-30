@@ -8,7 +8,6 @@ import TagPill from "@/components/neobrutalist/TagPill.astro";
 import TagPillRow from "@/components/neobrutalist/TagPillRow.astro";
 import NeoButton from "@/components/neobrutalist/NeoButton.astro";
 import HalftoneSection from "@/components/neobrutalist/HalftoneSection.astro";
-import NewsletterCallout from "@/components/home/NewsletterCallout.astro";
 import { BLOG, BLOG_CATEGORIES, CATEGORY_LABEL, CATEGORY_TONE } from "@/consts";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -96,6 +95,4 @@ const prevUrl = page.currentPage === 2 ? "/blog/" : page.url.prev;
       }
     </nav>
   </div>
-
-  <NewsletterCallout />
 </PageLayout>

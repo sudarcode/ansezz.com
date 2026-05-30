@@ -99,6 +99,10 @@ const articleLd = {
   articleSection: CATEGORY_LABEL[post.data.category],
   keywords: post.data.tags.join(", "),
   inLanguage: "en",
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1", "article.prose h2", "article.prose h3"],
+  },
 };
 
 const breadcrumbLd = {
@@ -288,15 +292,11 @@ const structured = relatedLd
               ▸ Liked this?
             </p>
             <p class="text-sm font-bold leading-snug">
-              Email when I ship the next one.
+              Grab the feed — new posts land in your reader.
             </p>
-            <NeoButton
-              href="/newsletter/"
-              variant="primary"
-              size="sm"
-              fullWidth
-            >
-              Subscribe →
+            <NeoButton href="/rss.xml" variant="primary" size="sm" fullWidth>
+              <Icon name="lucide:rss" class="h-3.5 w-3.5" />
+              RSS feed
             </NeoButton>
           </NeoCard>
         </div>

@@ -12,8 +12,17 @@ import StickyNote from "@/components/neobrutalist/StickyNote.astro";
 import SpeechBubble from "@/components/neobrutalist/SpeechBubble.astro";
 import RobotMascot from "@/components/neobrutalist/RobotMascot.astro";
 import { Icon } from "astro-icon/components";
-import { CONTACT, SITE, AVAILABLE_FOR, OWNER, SERVICES } from "@/consts";
+import {
+  CONTACT,
+  CONTACT_FORM,
+  SITE,
+  AVAILABLE_FOR,
+  OWNER,
+  SERVICES,
+} from "@/consts";
 import { faqPage, breadcrumbList } from "@/lib/seo";
+
+const formEnabled = CONTACT_FORM.ACCESS_KEY !== "";
 
 const tones = ["yellow", "pink", "cyan", "green", "red", "blue", "purple"] as const;
 
@@ -112,6 +121,86 @@ const faq = [
       </StickyNote>
     </div>
 
+    {
+      formEnabled && (
+        <NeoCard tone="paper" shadow="lg" class="!p-6 md:!p-8">
+          <p class="mono text-[11px] font-bold uppercase tracking-widest text-pink-deep mb-1">
+            ▸ Option A · just type it here
+          </p>
+          <p class="display text-2xl md:text-3xl leading-tight mb-5">
+            Send a message
+          </p>
+          <form id="contact-form" class="grid gap-4" novalidate>
+            <input type="hidden" name="access_key" value={CONTACT_FORM.ACCESS_KEY} />
+            <input type="hidden" name="subject" value="New inquiry from ansezz.com" />
+            <input type="hidden" name="from_name" value="ansezz.com contact form" />
+            {/* honeypot */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              tabindex="-1"
+              autocomplete="off"
+              class="hidden"
+              aria-hidden="true"
+            />
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="block">
+                <span class="mono text-[11px] font-bold uppercase tracking-widest block mb-1.5">
+                  Name
+                </span>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  autocomplete="name"
+                  class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-2.5 font-medium shadow-neo-xs focus:outline-none focus:shadow-neo-sm"
+                />
+              </label>
+              <label class="block">
+                <span class="mono text-[11px] font-bold uppercase tracking-widest block mb-1.5">
+                  Email
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-2.5 font-medium shadow-neo-xs focus:outline-none focus:shadow-neo-sm"
+                />
+              </label>
+            </div>
+            <label class="block">
+              <span class="mono text-[11px] font-bold uppercase tracking-widest block mb-1.5">
+                What do you need built?
+              </span>
+              <textarea
+                name="message"
+                rows="5"
+                required
+                placeholder="Scope, rough timeline, link to the product if it exists."
+                class="w-full border-[3px] border-ink rounded-[4px] bg-paper px-3 py-2.5 font-medium shadow-neo-xs focus:outline-none focus:shadow-neo-sm resize-y"
+              />
+            </label>
+            <div class="flex flex-wrap items-center gap-3">
+              <button
+                type="submit"
+                class="inline-flex items-center gap-2 border-[3px] border-ink bg-ink text-bg px-5 py-2.5 text-sm font-bold uppercase tracking-wide shadow-neo-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-md disabled:opacity-60"
+              >
+                <Icon name="lucide:send" class="h-4 w-4" />
+                <span id="contact-submit-label">Send message</span>
+              </button>
+              <p
+                id="contact-status"
+                class="text-sm font-bold"
+                role="status"
+                aria-live="polite"
+              />
+            </div>
+          </form>
+        </NeoCard>
+      )
+    }
+
     <ul class="grid gap-5 md:grid-cols-2">
       <li>
         <NeoCard
@@ -119,7 +208,6 @@ const faq = [
           tone="yellow"
           hover
           shadow="lg"
-          ariaLabel="Send email"
           class="h-full"
         >
           <div class="flex items-start gap-4">
@@ -153,7 +241,6 @@ const faq = [
           tone="ink"
           hover
           shadow="lg"
-          ariaLabel="Book 15-minute intro call"
           class="h-full text-bg"
         >
           <div class="flex items-start gap-4">
@@ -546,3 +633,11 @@ const faq = [
     </div>
   </HalftoneSection>
 </Page>
+
+{
+  formEnabled && (
+    <script>
+      import "@/scripts/contact-form";
+    </script>
+  )
+}

@@ -10,7 +10,6 @@ import NeoButton from "@/components/neobrutalist/NeoButton.astro";
 import NeoCard from "@/components/neobrutalist/NeoCard.astro";
 import BurstBadge from "@/components/neobrutalist/BurstBadge.astro";
 import StickyNote from "@/components/neobrutalist/StickyNote.astro";
-import NewsletterCallout from "@/components/home/NewsletterCallout.astro";
 import Search from "@/components/blog/Search.astro";
 import { Icon } from "astro-icon/components";
 import { getReadingTime } from "@/lib/reading";
@@ -234,7 +233,6 @@ const blogBreadcrumbLd = breadcrumbList([
           </div>
           <a
             href={`/blog/${featured.id}/`}
-            aria-label={`Read ${featured.data.title}`}
             data-neo-hover
             class="group block border-[3px] border-ink rounded-[4px] shadow-neo-lg bg-yellow overflow-hidden transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-xl"
           >
@@ -303,9 +301,9 @@ const blogBreadcrumbLd = breadcrumbList([
                 ▸ {visible.length} of {rest.length} · paginated below
               </p>
             </div>
-            <NeoButton href="#newsletter" variant="secondary" size="md">
-              <Icon name="lucide:mail" class="h-4 w-4" />
-              Subscribe
+            <NeoButton href="/rss.xml" variant="secondary" size="md">
+              <Icon name="lucide:rss" class="h-4 w-4" />
+              RSS
             </NeoButton>
           </div>
           <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -381,9 +379,5 @@ const blogBreadcrumbLd = breadcrumbList([
         </nav>
       )
     }
-  </div>
-
-  <div id="newsletter">
-    <NewsletterCallout />
   </div>
 </Page>
