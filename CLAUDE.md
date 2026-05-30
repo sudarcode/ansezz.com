@@ -77,9 +77,9 @@ Composites: `src/components/home/*`, `src/components/blog/*`, `src/components/wo
 
 Required Cloudflare settings:
 
-- **Build image: v3** (Settings → Build & deployments → Build image). v1 ships Node 18, Astro 6 needs ≥22.12.
-- **Env var**: `NODE_VERSION=22`
+- **Build image: v3** (Settings → Build & deployments → Build image). Older images ship Node 18; the site targets Node 24 LTS.
+- **Env var**: `NODE_VERSION=24`
 - Framework preset: Astro
 - Build output dir: `dist`
 
-Repo pins: `.nvmrc` (22), `.node-version` (22.12.0), `package.json` `packageManager` (pnpm@10.8.1). `public/_headers` + `public/_redirects` honored automatically.
+Repo pins: `.nvmrc` (24) + `.node-version` (24) select the **Node 24 LTS** runtime for deploys; `package.json` `engines.node` is the broader compatibility floor (`>=22.12.0`, so local dev on 22 still works) + `packageManager` (pnpm@10.8.1). `engine-strict=true` in `.npmrc`. `public/_headers` + `public/_redirects` honored automatically.
