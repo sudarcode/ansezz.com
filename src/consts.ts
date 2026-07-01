@@ -1,7 +1,7 @@
 export const SITE = {
-  URL: "https://ansezz.com",
+  URL: "https://www.sudarblogger.com",
   TITLE:
-    "Anass Ez-zouaine — Senior Backend Engineer · Software Architect · AI Engineer",
+    "Sudar Blogger - Peronal Blogger Lamongan",
   SHORT_TITLE: "ansezz",
   DESCRIPTION:
     "Senior Lead Backend Engineer, Software Architect, and AI Engineer. 12+ years building production Laravel SaaS, Shopify Plus apps, and AI features (Claude, MCP, RAG, agentic systems). Remote-first since 2014.",
@@ -84,7 +84,7 @@ export const SOCIALS = [
   { NAME: "RSS", HREF: "/rss.xml", ICON: "lucide:rss" },
 ];
 
-export const X_HANDLE = "ansezz";
+export const X_HANDLE = "sudar";
 
 export const NAV = [
   { LABEL: "Home", HREF: "/" },
