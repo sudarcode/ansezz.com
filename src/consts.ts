@@ -2,12 +2,12 @@ export const SITE = {
   URL: "https://www.sudarblogger.com",
   TITLE:
     "Sudar Blogger - Peronal Blogger Lamongan",
-  SHORT_TITLE: "ansezz",
+  SHORT_TITLE: "sudar",
   DESCRIPTION:
     "Senior Lead Backend Engineer, Software Architect, and AI Engineer. 12+ years building production Laravel SaaS, Shopify Plus apps, and AI features (Claude, MCP, RAG, agentic systems). Remote-first since 2014.",
   EMAIL: "me@ansezz.com",
   PHONE: "+212679405863",
-  PHONE_DISPLAY: "+212 679 40 58 63",
+  PHONE_DISPLAY: "+6258 5539 9521",
   BOOKING_URL: "https://calendar.app.google/x1eeuSb9UuMGF4pD9",
   RESUME_URL: "/Anass-Ez-zouaine-Resume.pdf",
   LOCATION: "Meknes, Morocco",
@@ -15,7 +15,7 @@ export const SITE = {
 };
 
 export const OWNER = {
-  NAME: "Anass Ez-zouaine",
+  NAME: "Sudar Blogger",
   ROLES: ["Senior Lead Backend Engineer", "Software Architect", "AI Engineer"],
   HIGHLIGHT: "AI Engineer",
   TAGLINE:
